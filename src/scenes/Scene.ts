@@ -4,7 +4,7 @@ import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
 
 export class Scene extends Container{
-
+    
     private cartel: GenericPanel;
  
     private start: PointButton;
@@ -40,7 +40,7 @@ export class Scene extends Container{
         this.start.y = this.cartel.y+80
         this.start.scale.x=1.2;
         this.start.scale.y=1.2;
-        this.start.on("buttonClick", this.onButtonClick, this)
+        this.start.on("pointerClick", this.habilityClick, this)
         }
 
         { /* A Button */
@@ -51,7 +51,7 @@ export class Scene extends Container{
         this.buttonA.y = 540
         this.buttonA.scale.x=1;
         this.buttonA.scale.y=1;
-        this.buttonA.on("buttonClick", this.onButtonClick, this)
+        this.buttonA.on("pointerClick", this.onButtonA, this)
         }
 
         { /* B Button */
@@ -62,7 +62,7 @@ export class Scene extends Container{
         this.buttonB.y = 430
         this.buttonB.scale.x=1;
         this.buttonB.scale.y=1;
-        this.buttonB.on("buttonClick", this.onButtonClick, this)
+        this.buttonB.on("pointerClick", this.onButtonB, this)
         }
 
         { /* Move Up */
@@ -73,7 +73,7 @@ export class Scene extends Container{
         this.moveUp.y = 480
         this.moveUp.scale.x=1.5;
         this.moveUp.scale.y=1.5;
-        this.moveUp.on("buttonClick", this.onButtonClick, this)
+        this.moveUp.on("pointerClick", this.UpMove, this)
         }
 
         { /* Move Down */
@@ -84,7 +84,7 @@ export class Scene extends Container{
         this.moveDown.y = 620
         this.moveDown.scale.x=1.5;
         this.moveDown.scale.y=1.5;
-        this.moveDown.on("buttonClick", this.onButtonClick, this)
+        this.moveDown.on("pointerClick", this.DownMove, this)
         }
         { /* Move Left */
         this.moveLeft=new PointButton(Texture.from("lineDark00.png"), 
@@ -94,7 +94,7 @@ export class Scene extends Container{
         this.moveLeft.y = 550
         this.moveLeft.scale.x=1.5;
         this.moveLeft.scale.y=1.5;
-        this.moveLeft.on("buttonClick", this.onButtonClick, this)
+        this.moveLeft.on("pointerClick", this.LeftMove, this)
         }
         { /* Move Right */
         this.moveRight=new PointButton(Texture.from("lineDark01.png"), 
@@ -104,7 +104,7 @@ export class Scene extends Container{
         this.moveRight.y = 550
         this.moveRight.scale.x=1.5;
         this.moveRight.scale.y=1.5;
-        this.moveRight.on("buttonClick", this.onButtonClick, this)
+        this.moveRight.on("pointerClick", this.RightMove, this)
         }
 
         // Sound ON-OFF
@@ -127,7 +127,7 @@ export class Scene extends Container{
         this.pause.y = 40
         this.pause.scale.x=1.45;
         this.pause.scale.y=1.45;
-        this.pause.on("buttonClick", this.onButtonClick, this)
+        this.pause.on("pointerClick", this.onPause, this)
         }
 
         this.addChild(this.cartel);
@@ -145,8 +145,33 @@ export class Scene extends Container{
             )
     }
 
-    private onButtonClick(): void {
-        console.log("Apreté start", this);
+    update(_deltaTime: number) {
+        throw new Error("Method not implemented.");
+    }
+    
+    private onPause(): void {
+        console.log("Pusimos pausa", this);
+    }
+    private onButtonB(): void {
+        console.log("Presionando la tecla B", this);
+    }
+    private onButtonA(): void {
+        console.log("Presionando la tecla A", this);
+    }
+    private habilityClick(): void {
+        console.log("Usando la habilidad especial", this);
+    }
+    private RightMove(): void {
+        console.log("Derecha", this);
+    }
+    private LeftMove(): void {
+        console.log("Izquierda", this);
+    }
+    private DownMove(): void {
+        console.log("Abajo", this);
+    }
+    private UpMove(): void {
+        console.log("Arriba", this);
     }
 }
 
