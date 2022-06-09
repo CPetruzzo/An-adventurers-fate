@@ -151,27 +151,35 @@ export class Scene extends Container{
     
     private onPause(): void {
         console.log("Pusimos pausa", this);
+    
     }
     private onButtonB(): void {
         console.log("Presionando la tecla B", this);
     }
-    private onButtonA(): void {
-        console.log("Presionando la tecla A", this);
+    private onButtonA(event: PointerEvent): void {
+        console.log("Presionando la tecla A", this, event);
+    
     }
     private habilityClick(): void {
         console.log("Usando la habilidad especial", this);
     }
+
     private RightMove(): void {
         console.log("Derecha", this);
+        
     }
+    
     private LeftMove(): void {
         console.log("Izquierda", this);
     }
+
     private DownMove(): void {
         console.log("Abajo", this);
     }
+    
     private UpMove(): void {
         console.log("Arriba", this);
     }
 }
+
 

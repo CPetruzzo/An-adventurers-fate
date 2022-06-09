@@ -1,0 +1,155 @@
+{
+	"frames": {
+		"An adventurer's fate (1).png": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 1280,
+				"h": 720
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1280,
+				"h": 720
+			},
+			"sourceSize": {
+				"w": 1280,
+				"h": 720
+			}
+		},
+		"BACK.png": {
+			"frame": {
+				"x": 1,
+				"y": 723,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		},
+		"BACK hundido.png": {
+			"frame": {
+				"x": 357,
+				"y": 723,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		},
+		"CONFIG.png": {
+			"frame": {
+				"x": 713,
+				"y": 723,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		},
+		"CONFIG hundido.png": {
+			"frame": {
+				"x": 1,
+				"y": 867,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		},
+		"START.png": {
+			"frame": {
+				"x": 357,
+				"y": 867,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		},
+		"START hundido.png": {
+			"frame": {
+				"x": 713,
+				"y": 867,
+				"w": 354,
+				"h": 142
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 354,
+				"h": 142
+			},
+			"sourceSize": {
+				"w": 354,
+				"h": 142
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet (7).png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 1282,
+			"h": 1010
+		},
+		"scale": "1"
+	}
+}

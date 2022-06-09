@@ -1,6 +1,6 @@
 import { Application, Loader, Ticker} from 'pixi.js'
 import { assets } from './assets';
-import { GameScene } from './scenes/GameScene';
+import { GameStartScene } from './scenes/GameStartScene';
 import { Keyboard } from './utils/Keyboard';
 
 export const WIDTH=1280;
@@ -45,7 +45,7 @@ let currentScene:any = undefined;
 
 Loader.shared.onComplete.add(()=>{
 
-	currentScene = new GameScene();
+	currentScene = new GameStartScene();
 	app.stage.addChild(currentScene);
 
 	Ticker.shared.add(function(deltaFrame) {

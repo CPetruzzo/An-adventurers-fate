@@ -1,10 +1,11 @@
+import { sound } from "@pixi/sound";
 import { Container, Texture } from "pixi.js";
-import { Button } from "./Button";
+import { PointButton } from "./PointButton";
 
 export class ToggleButton extends Container{
     public static readonly TOGGLE_EVENT:string = "toggledButtonEvent";
-    private btnOn:Button;
-    private btnOff:Button;
+    private btnOn:PointButton;
+    private btnOff:PointButton;
     private _state: boolean = true;
     public get state(): boolean {
         return this._state;
@@ -16,11 +17,11 @@ export class ToggleButton extends Container{
     constructor(texUp:Texture, texDown:Texture){
         super();
 
-        this.btnOn = new Button(texUp, texDown, texUp);
-        this.btnOff = new Button(texDown, texUp, texDown);
+        this.btnOn = new PointButton(texUp, texDown, texUp);
+        this.btnOff = new PointButton(texDown, texUp, texDown);
 
-        this.btnOn.on("buttonClick", this.toggle, this);
-        this.btnOff.on("buttonClick", this.toggle, this);
+        this.btnOn.on("pointerClick", this.toggle, this);
+        this.btnOff.on("pointerClick", this.toggle, this);
 
         this.btnOff.visible = false;
 
@@ -30,6 +31,7 @@ export class ToggleButton extends Container{
     public toggle(){
         this.state = !this.state;
         this.emit(ToggleButton.TOGGLE_EVENT, this.state);
+        sound.toggleMuteAll();
     }
 
     private fixState() {

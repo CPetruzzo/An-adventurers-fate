@@ -1,9 +1,11 @@
 import { AnimatedSprite, Graphics, IDestroyOptions, ObservablePoint, Rectangle, Texture } from "pixi.js";
+
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
 
 export class Player extends PhysicsContainer implements IHitBox {
+    
 
     private static readonly GRAVITY = 1000;
     private static readonly MOVE_SPEED = 350;
@@ -15,7 +17,6 @@ export class Player extends PhysicsContainer implements IHitBox {
     private bardoCrawl: AnimatedSprite;
     private bardoPunch: AnimatedSprite;
     private bardoRunPunch: AnimatedSprite;
-
 
     constructor() {
         super();
@@ -34,7 +35,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         );
         this.bardoWalk.scale.set(2);
         this.bardoWalk.animationSpeed = 0.15;
-        this.bardoWalk.anchor.set(0.55, 1.4);
+        this.bardoWalk.anchor.set(0.55,0.95);
         this.bardoWalk.play();
         this.bardoWalk.visible = false;
  
@@ -52,7 +53,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         );
         this.bardoPunch.scale.set(2);
         this.bardoPunch.animationSpeed = 0.15;
-        this.bardoPunch.anchor.set(0.55, 1.4);
+        this.bardoPunch.anchor.set(0.55, 0.95);
         this.bardoPunch.play();
         this.bardoPunch.visible = false;
 
@@ -71,7 +72,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         );
         this.bardoRunPunch.scale.set(2);
         this.bardoRunPunch.animationSpeed = 0.15;
-        this.bardoRunPunch.anchor.set(0.55, 1.4);
+        this.bardoRunPunch.anchor.set(0.5, 0.95);
         this.bardoRunPunch.play();
         this.bardoRunPunch.visible = false;
 
@@ -83,7 +84,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             false
         );
         this.bardoIdle.scale.set(2);
-        this.bardoIdle.anchor.set(0.55, 1.4)
+        this.bardoIdle.anchor.set(0.55, 0.95)
         this.bardoIdle.visible = true;
         this.bardoIdle.play();
         this.bardoIdle.animationSpeed = 0.15;
@@ -102,9 +103,9 @@ export class Player extends PhysicsContainer implements IHitBox {
         );
         this.bardoCrawl.scale.set(2);
         this.bardoCrawl.animationSpeed = 0.15;
-        this.bardoCrawl.anchor.set(0.45, 1.4);
+        this.bardoCrawl.anchor.set(0.45, 0.95);
         this.bardoCrawl.play();
-       
+        this.bardoCrawl.visible = false;
 
         //BARDO JUMP 
         this.bardoJump = new AnimatedSprite([
@@ -116,32 +117,41 @@ export class Player extends PhysicsContainer implements IHitBox {
             false
         );
         this.bardoJump.scale.set(2);
-        this.bardoJump.anchor.set(0.45, 1.3)
-        this.bardoJump.visible = true;
+        this.bardoJump.anchor.set(0.45, 0.95)
         this.bardoJump.play();
         this.bardoJump.animationSpeed = 0.05;
         this.bardoJump.loop = false;
+        this.bardoJump.visible = false;
 
         // PUNTO GUÍA
         const auxZero = new Graphics();
         auxZero.beginFill(0xFF00FF);
-        auxZero.drawCircle(0, -40, 10);
+        auxZero.drawCircle(0, 0, 5);
         auxZero.endFill();
 
         // CAJAS
         this.hitbox = new Graphics();
-        this.hitbox.beginFill(0xFF00FF, 0.5);
-        this.hitbox.drawRect(-20, -80, 50, 50);
+        this.hitbox.beginFill(0xFF00FF, 0);
+        this.hitbox.drawRect(-20, -56, 50, 56);
         this.hitbox.endFill();
 
-
         this.acceleration.y = Player.GRAVITY;
-        Keyboard.down.on("KeyW", this.jump, this)
-        
 
+        // MOVIMIENTOS
+        Keyboard.down.on("KeyW", this.jump, this);
+        Keyboard.down.on("KeyS", this.crawl, this);
+        Keyboard.down.on("KeyD", this.runRight, this);
+        Keyboard.down.on("KeyA", this.runLeft, this);
+        Keyboard.down.on("KeyJ", this.punch, this);
+
+        Keyboard.up.on("KeyW", this.stopJump, this);
+        Keyboard.up.on("KeyS", this.stopCrawl, this);
+        Keyboard.up.on("KeyD", this.stopRunRight, this);
+        Keyboard.up.on("KeyA", this.stopRunLeft, this);
+        Keyboard.up.on("KeyJ", this.stopPunch, this);
 
         // this.addChild(auxZero);
-        // this.addChild(this.hitbox)
+        this.addChild(this.hitbox);
 
         // agrego todos los movimientos a la clase player
         this.addChild(
@@ -172,111 +182,13 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardoCrawl.update(deltaMS / (1000 / 60));
         this.bardoPunch.update(deltaMS / (1000 / 60));
         this.bardoRunPunch.update(deltaMS / (1000 / 60));
-
-        //  CAMINAR HACIA LA IZQUIERDA
-        //arrastrarse
-        if ((Keyboard.state.get("KeyS")) && ((Keyboard.state.get("KeyD")))) {
-            this.speed.x = Player.MOVE_SPEED;
-            this.scale.set(2, 2);
-            this.bardoCrawl.visible = true;
-            this.bardoJump.visible = false;
-            this.bardoRunPunch.visible=false;
-            this.bardoIdle.visible = false;
-            this.bardoWalk.visible = false;
-            this.bardoPunch.visible=false;
-        }
-        else if              //arrastrarse
-                ((Keyboard.state.get("KeyS")) && (Keyboard.state.get("KeyA"))) {
-                this.speed.x = -Player.MOVE_SPEED;
-                this.scale.set(-2, 2);
-                this.bardoCrawl.visible = true;
-                this.bardoPunch.visible=false;
-                this.bardoRunPunch.visible=false;
-                this.bardoJump.visible = false;
-                this.bardoIdle.visible = false;
-                this.bardoWalk.visible = false;
-        }else if (Keyboard.state.get("KeyS")){
-           
-            this.bardoCrawl.visible = true;
-                this.bardoJump.visible = false;
-                this.bardoIdle.visible = false;
-                this.bardoRunPunch.visible=false;
-                this.bardoWalk.visible = false;
-                this.bardoPunch.visible=false;
-        } else      
-        if (Keyboard.state.get("KeyA")) {
-            this.speed.x = -Player.MOVE_SPEED;
-            this.scale.set(-2, 2);
-            this.bardoWalk.visible = true;
-            this.bardoIdle.visible = false;
-            this.bardoJump.visible = false;
-            this.bardoRunPunch.visible=false;
-            this.bardoPunch.visible=false;
-            this.bardoCrawl.visible = false;
-        } else if
-            //  CAMINAR HACIA LA DERECHA
-            (Keyboard.state.get("KeyD")) {
-            this.speed.x = Player.MOVE_SPEED;
-            this.scale.set(2, 2);
-            this.bardoWalk.visible = true;
-            this.bardoIdle.visible = false;
-            this.bardoRunPunch.visible=false;
-            this.bardoPunch.visible=false;
-            this.bardoJump.visible = false;
-            this.bardoCrawl.visible = false;
-        } 
-         else/*  FRENAR  */ {
-            this.speed.x = 0;
-            this.bardoIdle.visible = true;
-            this.bardoWalk.visible = false;
-            this.bardoRunPunch.visible=false;
-            this.bardoJump.visible = false;
-            this.bardoPunch.visible=false;
-            this.bardoCrawl.visible = false;
-        }
-        // SALTAR
-        if (Keyboard.state.get("KeyW")) {
-            this.jump;
-            this.bardoJump.visible = true;
-            this.bardoRunPunch.visible=false;
-            this.bardoIdle.visible = false;
-            this.bardoWalk.visible = false;
-            this.bardoCrawl.visible = false;
-            this.bardoPunch.visible=false;
-        }
-
-        // ATACAR
-        if (((Keyboard.state.get("KeyD")) || (Keyboard.state.get("KeyA"))) && (Keyboard.state.get("KeyJ"))) {
-            this.speed.x=this.speed.x*2;
-            this.bardoJump.visible = false;
-            this.bardoIdle.visible = false;
-            this.bardoWalk.visible = false;
-            this.bardoCrawl.visible = false;
-            this.bardoPunch.visible=false;
-            this.bardoRunPunch.visible=true;
-            
-        } else 
-        
-        // ATACAR
-        if (Keyboard.state.get("KeyJ")) {
-            this.bardoJump.visible = false;
-            this.bardoIdle.visible = false;
-            this.bardoWalk.visible = false;
-            this.bardoCrawl.visible = false;
-            this.bardoPunch.visible=true;
-            this.speed.x=0;
-            this.bardoRunPunch.visible=false;
-        }
-        //DEFENDER
-        if (Keyboard.state.get("KeyK")) {
-
-        }
     }
 
 
     //  FUNCION AUXILIAR (SI NO LA TENGO SEPARADA NO PUEDO BORRARLA CUANDO ELIMINE A PLAYER)
-    private jump() {
+    public jump() {
         if (this.canJump) {
+            console.log("apreté la W!", this);
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
             this.bardoJump.visible = true;
@@ -285,6 +197,143 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.bardoJump.gotoAndPlay(0);
         }
     }
+
+    public crawl() {
+        console.log("apreté la S!", this);
+        
+        this.bardoCrawl.visible = true;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = false;
+        this.bardoWalk.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+        this.removeChild(this.hitbox);
+        this.hitbox = new Graphics();
+        this.hitbox.beginFill(0xFF00FF, 0);
+        this.hitbox.drawRect(-20, -40, 50, 40);
+        this.hitbox.endFill();
+        this.addChild(this.hitbox);
+    }
+
+    public runLeft() {
+        console.log("apreté la A!", this);
+        this.speed.x = -Player.MOVE_SPEED;
+        this.scale.set(-2, 2);
+        this.bardoWalk.visible = true;
+        this.bardoIdle.visible = false;
+        this.bardoJump.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoRunPunch.visible=false;
+        this.bardoPunch.visible=false;
+    }
+
+    public runRight() {
+        console.log("apreté la D!", this);
+        this.speed.x = Player.MOVE_SPEED;
+        this.scale.set(2, 2);
+        this.bardoWalk.visible = true;
+        this.bardoIdle.visible = false;
+        this.bardoJump.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoRunPunch.visible=false;
+        this.bardoPunch.visible=false;
+    }
+
+    public punch() {
+        console.log("apreté la J!", this);
+        this.speed.x=this.speed.x*2;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = false;
+        this.bardoWalk.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoPunch.gotoAndPlay(0);
+        this.bardoPunch.visible=true;
+        this.bardoRunPunch.visible=false;
+    }
+
+    public punchRun() {
+        console.log("apreté la J!", this);
+        this.speed.x=this.speed.x*2;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = false;
+        this.bardoWalk.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=true;
+    }
+
+    public idlePlayer() {
+        console.log("ninguna tecla presionada", this);
+        this.speed.x=0;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = true;
+        this.bardoWalk.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+    }
+
+    private stopJump() {
+        console.log("solté la W!", this);
+        
+            this.bardoCrawl.visible = false;
+            this.bardoJump.visible = false;
+            this.bardoIdle.visible = true;
+            this.bardoWalk.visible = false;
+            this.bardoPunch.visible=false;
+            this.bardoRunPunch.visible=false;
+    }
+
+    private stopCrawl() {
+        console.log("solté la S!", this);
+        this.speed.x = 0;
+        this.bardoCrawl.visible = false;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = true;
+        this.bardoWalk.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+        this.removeChild(this.hitbox);
+        this.hitbox = new Graphics();
+        this.hitbox.beginFill(0xFF00FF, 0);
+        this.hitbox.drawRect(-20, -56, 50, 56);
+        this.hitbox.endFill();
+        this.addChild(this.hitbox);
+    }
+
+    private stopRunLeft() {
+        console.log("solté la A!", this);
+        this.speed.x = 0;
+        this.scale.set(-2, 2);
+        this.bardoWalk.visible = false;
+        this.bardoIdle.visible = true;
+        this.bardoJump.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+    }
+
+    private stopRunRight() {
+        console.log("solté la D!", this);
+        this.speed.x = 0;
+        this.scale.set(2, 2);
+        this.bardoWalk.visible = false;
+        this.bardoIdle.visible = true;
+        this.bardoJump.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+    }
+
+    private stopPunch() {
+        console.log("solté la J!", this);
+        this.speed.x=this.speed.x/2;
+        this.bardoJump.visible = false;
+        this.bardoIdle.visible = true;
+        this.bardoWalk.visible = false;
+        this.bardoCrawl.visible = false;
+        this.bardoPunch.visible=false;
+        this.bardoRunPunch.visible=false;
+    }
+
 
     // me da la distancia desde el (0,0) al borde inicial de la hitbox
     public getHitBox(): Rectangle {
@@ -301,7 +350,6 @@ export class Player extends PhysicsContainer implements IHitBox {
             }
         }
         else {
-            // POR ACA ESTA MI PROBLEMA, SIEMPRE ME APARECE QUE GOLPEO DESDE ABAJO
             if (this.y > platform.y) {
                 this.y += overlap.height;
                 this.speed.y = 0;
@@ -312,5 +360,4 @@ export class Player extends PhysicsContainer implements IHitBox {
             }
         }
     }
-
 }

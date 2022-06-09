@@ -32,6 +32,7 @@ export class PointButton extends Container{
   /* PARA QUE EL pointer HAGA CLICK */
     private onPointerDown():void {
         console.log("pointer down");
+        this.emit("pointer down");
         this.spr.texture=this.down; 
     }
     private onPointerUp():void {
