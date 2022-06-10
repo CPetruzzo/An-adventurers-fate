@@ -1,31 +1,50 @@
-import { Container, Graphics, Rectangle, Sprite } from "pixi.js";
+import { Container, Graphics, NineSlicePlane, Rectangle, Texture, TextureSource } from "pixi.js";
 import { IHitBox } from "./IHitBox";
 
 export class Platform extends Container implements IHitBox {
     
+    public shape: TextureSource;
+    private tile: NineSlicePlane;
+    public num1: number;
+    public num2: number;
+    public num3: number;
+    public num4: number;
     private hitbox: Graphics;
     
-    constructor(){
+    constructor(shape: TextureSource, num1:number, num2:number, num3:number, num4:number, width: number, height: number){
         super();
         
-        const spr = Sprite.from("tileset.png");
-        spr.position.set(-140,-55)
-        spr.scale.set(2.5,1)
-        this.addChild(spr);
+        this.shape= shape;
+        this.num1= num1;
+        this.num2= num2;
+        this.num3= num3;
+        this.num4= num4;
+
+        this.tile = new NineSlicePlane(
+            Texture.from(shape),
+            this.num1,
+            this.num2,
+            this.num3,
+            this.num4,
+        );
+        this.tile.height = height;
+        this.tile.width = width;
+        this.tile.x=-(width/2);
+        this.tile.y=-(height/2);
+
+        this.addChild(this.tile);
 
         this.hitbox=new Graphics();
         this.hitbox.beginFill(0x00FF00, 0);
-        this.hitbox.drawRect(-140,-35,250,70);
+        this.hitbox.drawRect(-(width/2),-(height/2),width, height);
         this.hitbox.endFill();
-        this.hitbox.x=0;
-        this.hitbox.y=0;
         this.addChild(this.hitbox);
 
         const auxZero=new Graphics();
             auxZero.beginFill(0xFF00FF);
             auxZero.drawCircle(0,0,5);
             auxZero.endFill();
-            this.addChild(auxZero);
+            // this.addChild(auxZero);
 
     }
     

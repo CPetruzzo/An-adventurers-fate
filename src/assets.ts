@@ -16,6 +16,10 @@ export const assets = [
     // SUELO
 
     {url: "./texture.json", name:"Suelo"},
+    {url: "./tileset.png", name:"Tile"},
+
+    //AREK THE ABSOLUTE
+    {url: "./spritesheet (8).json", name:"Arek"},
 
     // PLAYER
     {url: "./spritesheet (6).json", name:"Player"},

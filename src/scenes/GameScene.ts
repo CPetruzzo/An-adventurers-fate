@@ -1,6 +1,7 @@
 import { sound } from "@pixi/sound";
 import { Container, Texture, TilingSprite } from "pixi.js";
 import { ChangeScene, HEIGHT, WIDTH } from "..";
+import { Arek } from "../games/Enemies/Arek";
 import { checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
@@ -8,6 +9,7 @@ import { GenericPanel } from "../ui/GenericPanel";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
 import { IUpdateable } from "../utils/IUpdateable";
+import { Keyboard } from "../utils/Keyboard";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { PauseScene } from "./PauseScene";
@@ -39,6 +41,9 @@ export class GameScene extends Container implements IUpdateable {
     private buttonsOff: PointButton;
     private config: PointButton;
 
+    private isPaused: boolean =false;
+    private arek: Arek;
+
 
     constructor() {
         super();
@@ -66,48 +71,75 @@ export class GameScene extends Container implements IUpdateable {
         this.playerBardo.position.y=450;
         this.world.addChild(this.playerBardo);
 
+        this.arek=new Arek();
+        this.arek.scale.set(2);
+        this.arek.position.y=250;
+        this.arek.position.x=3700;
+        this.world.addChild(this.arek);
+
         this.addChild(this.world);
 
         // LA PLATAFORMA PARA PISAR
         this.platforms = [];
-        const plat1 = new Platform();
-            plat1.scale.x=5.2;
-            plat1.scale.y=1.5;
-            plat1.position.x = 300;
-            plat1.position.y = 700;
-
-        const plat2 = new Platform();
-            plat2.scale.x=0.5
+        const plat1 = new Platform("Tile", 15,20,15,20,1000,100);
+            plat1.position.x = 50;
+            plat1.position.y = 677;
+        const plat2 = new Platform("Tile", 30,10,30,10,200,100);
             plat2.position.x = 600;
             plat2.position.y = 475;
-        const plat3 = new Platform();
-            plat3.scale.x=0.5
+        const plat3 = new Platform("Tile", 30,10,30,10,200,100);
             plat3.position.x = 760;
             plat3.position.y = 250;
-        const plat4 = new Platform();
-            plat4.scale.x=0.5
+        const plat4 = new Platform("Tile", 30,10,30,10,300,100);
             plat4.position.x = 1400;
             plat4.position.y = 150;
-        const plat5 = new Platform();
-            plat5.scale.x=5.2;
-            plat5.scale.y=1.5;
+        const plat5 = new Platform("Tile", 30,30,30,30,500,100);
             plat5.position.x = 2500;
             plat5.position.y = 700;
-        const plat6 = new Platform();
-            plat6.scale.x=0.5
+        const plat6 = new Platform("Tile", 30,30,30,30,500,100);
             plat6.position.x = 2800;
             plat6.position.y = 677;
-        const plat7 = new Platform();
-            plat7.scale.x=0.5
-            plat7.position.x = 2805;
-            plat7.position.y = 675;
-        const plat8 = new Platform();
-            plat8.scale.x=0.5
-            plat8.position.x = 2815;
-            plat8.position.y = 677;
+        const plat7 = new Platform("Tile", 30,30,30,30,500,100);
+            plat7.position.x = 3505;
+            plat7.position.y = 475;
+        const plat8 = new Platform("Tile", 30,30,30,30,500,100);
+            plat8.position.x = 3805;
+            plat8.position.y = 270;
+        const plat9 = new Platform("Tile", 30,30,30,30,500,100);
+            plat9.position.x = 4105;
+            plat9.position.y = 675;
+        const plat10 = new Platform("Tile", 30,30,30,30,500,100);
+            plat10.position.x = 3005;
+            plat10.position.y = 500;
+        const plat11 = new Platform("Tile", 30,30,30,30,500,100);
+            plat11.position.x = 4405;
+            plat11.position.y = 705;
+
+
             
-            this.world.addChild(plat1, plat2, plat3, plat4, plat5, plat6, plat7, plat8);
-            this.platforms.push(plat1, plat2, plat3, plat4, plat5, plat6, plat7, plat8);
+            this.world.addChild(plat1, 
+                 plat2, 
+                 plat3, 
+                 plat4, 
+                 plat5, 
+                 plat6, 
+                 plat7, 
+                 plat8,
+                    plat9,
+                    plat10,
+                    plat11);
+
+            this.platforms.push(plat1,
+                 plat2, 
+                 plat3, 
+                 plat4, 
+                 plat5, 
+                 plat6, 
+                 plat7, 
+                 plat8,
+                    plat9,
+                    plat10,
+                    plat11);
 
         //Habillity Circle
         this.cartel= new GenericPanel("lineDark02.png",35,35,35,35);
@@ -277,21 +309,22 @@ export class GameScene extends Container implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
             )
-
     }
     
     // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
     public update(deltaTime: number, _deltaFrame: number): void {
+        if (this.isPaused) {
+            return;
+        }
         if (this.gameOver) {
            ChangeScene(new GameOverScene());
            sound.stop("GameBGM");
-        const GameOverBGM = sound.find("PartingBGM");
+           const GameOverBGM = sound.find("PartingBGM");
            GameOverBGM.play({loop:true, volume:0.05})
-
         }
+
         this.playerBardo.update(deltaTime); //updateAnimation
         
-
         // PARALLAX
         for (let i = 0; i < this.backgrounds.length; i++) {
 			const background = this.backgrounds[i];
@@ -346,10 +379,41 @@ export class GameScene extends Container implements IUpdateable {
             (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
         }
 
+    
+
+        const pelea = checkCollision(this.playerBardo, this.arek);
+        // MODO DEFENSIVO
+        if (pelea != null && (Keyboard.state.get("KeyK"))) {
+            this.playerBardo.separate(pelea, this.arek.position);
+            this.playerBardo.speed.x=0;
+            
+        }
+        // MODO ATAQUE
+        else if (pelea != null) {
+            this.playerBardo.separate(pelea, this.arek.position);
+            if ((Keyboard.state.get("KeyJ"))){
+                this.numero++;
+                if (this.numero>50){
+                }
+                if (this.numero>75){           
+                }
+                if (this.numero>100){
+                    this.world.removeChild(this.arek);
+                }
+            }
+        }
+        // RECIBIENDO DAÑO POR NO HACER NADA
+        else if (pelea != null){
+            this.playerBardo.separate(pelea, this.arek.position);
+        }
+
+        
     }
+    
 
     private onPause(): void {
         console.log("Pusimos pausa", this);
+        this.isPaused = true;
             this.pauseScene = new PauseScene();
             this.removeChild(this.start, 
                 this.buttonA, 
@@ -365,6 +429,7 @@ export class GameScene extends Container implements IUpdateable {
 
     private offPause(): void {
         console.log("Quitamos pausa", this);
+        this.isPaused = false;
         this.removeChild(this.pauseScene, 
             this.pauseOff, this.config);
         this.addChild(this.start, 
