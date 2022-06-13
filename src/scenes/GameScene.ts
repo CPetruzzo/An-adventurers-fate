@@ -6,6 +6,7 @@ import { checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Melee } from "../games/Weapon/Melee";
+import { Range } from "../games/Weapon/Range";
 import { GenericPanel } from "../ui/GenericPanel";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
@@ -42,9 +43,15 @@ export class GameScene extends Container implements IUpdateable {
 
     private isPaused: boolean = false;
     private causingDamage: boolean = false;
+    private causingRangeDamage: boolean = false;
+
     private arek: Arek;
-    private punchDamage: number = 1;
+    private punchDamage: number = 2;
+    private rangeDamage: number = 1;
     private melee: Melee;
+    private melee2: Melee;
+    private range: Range;
+    private arekDamage: number = 1;
 
 
     constructor() {
@@ -300,6 +307,13 @@ export class GameScene extends Container implements IUpdateable {
         this.melee = new Melee();
         this.playerBardo.addChild(this.melee);
 
+        this.melee2 = new Melee();
+        this.melee2.position.x = -80;
+        this.arek.addChild(this.melee2)
+
+        this.range = new Range();
+        this.playerBardo.addChild(this.range);
+
         this.addChild(
             this.start,
             this.buttonA,
@@ -365,8 +379,14 @@ export class GameScene extends Container implements IUpdateable {
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
 
+        // JUGADOR Y ENEMIGO HACIENDO COLISION
         const pelea = checkCollision(this.playerBardo, this.arek);
+        // ARMA DE CUERPO A CUERPO Y ENEMIGO
         const pelea2 = checkCollision(this.melee, this.arek);
+        // ATAQUE DEL ENEMIGO AL JUGADOR
+        const pelea3 = checkCollision(this.melee2, this.playerBardo);
+        // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
+        const pelea4 = checkCollision(this.range, this.arek);
 
         if (pelea2 != null) {
             console.log("che deberia estar pegandole al arek")
@@ -379,6 +399,26 @@ export class GameScene extends Container implements IUpdateable {
         }
         if (pelea != null) {
             this.playerBardo.separate(pelea, this.arek.position);
+            this.playerBardo.getPlayerHurt(this.arekDamage/5);
+            if (this.playerBardo.currentHealth <= 0) {
+                this.world.removeChild(this.playerBardo);
+                this.gameOver = true;
+            }
+        }
+        if (pelea3 != null) {
+            this.playerBardo.getPlayerHurt(this.arekDamage);
+            if (this.playerBardo.currentHealth <= 0) {
+                this.world.removeChild(this.playerBardo);
+                this.gameOver = true;
+            }
+        }
+        if (pelea4 != null) {
+            if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
+                this.arek.getEnemyHurt(this.rangeDamage);
+                if (this.arek.currentHealth <= 0) {
+                    this.world.removeChild(this.arek);
+                }
+            }
         }
     }
 
@@ -454,14 +494,14 @@ export class GameScene extends Container implements IUpdateable {
     private onButtonB(): void {
         console.log("Presionando la tecla B", this);
         this.playerBardo.punchRun();
+        this.causingRangeDamage = true;
+        this.causingDamage = false;
     }
 
     private onButtonA(): void {
         console.log("Presionando la tecla A", this);
         this.playerBardo.punch();
         this.causingDamage = true;
-        this.punchDamage = 5;
-
     }
     private habilityClick(): void {
         console.log("Usando la habilidad especial", this);

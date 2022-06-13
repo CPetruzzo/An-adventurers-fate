@@ -1,4 +1,4 @@
-import { AnimatedSprite, Graphics, IDestroyOptions, ObservablePoint, Rectangle, Texture } from "pixi.js";
+import { AnimatedSprite, Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text, Texture } from "pixi.js";
 
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
@@ -17,6 +17,9 @@ export class Player extends PhysicsContainer implements IHitBox {
     private bardoCrawl: AnimatedSprite;
     private bardoPunch: AnimatedSprite;
     private bardoRunPunch: AnimatedSprite;
+
+    public healthOnScreen: Text;
+    public currentHealth: number = 100;
 
     constructor() {
         super();
@@ -162,6 +165,13 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.bardoPunch,
             this.bardoRunPunch,
             )
+
+        let initialHealth: number = 100;
+        let currentHealth: number = initialHealth;
+        this.healthOnScreen = new Text(`${currentHealth}`+ "HP", { fontSize: 40, fontFamily: ("Arial") });
+        this.addChild(this.healthOnScreen);
+        this.healthOnScreen.x = -60;
+        this.healthOnScreen.y = -130;
 
     }
 
@@ -361,10 +371,10 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
     }
 
-    // public getPlayerHurt(damage: number) {
-    //     this.currentHealth -= damage;
-    //     this.healthOnScreen.text = `${this.currentHealth}` + "HP";
-    //     console.log("Enemy health: " + this.currentHealth);       
-    // }
-
+    public getPlayerHurt(damage: number) {
+        this.currentHealth -= damage;
+        this.healthOnScreen.text = `${this.currentHealth}` + "HP";
+        // se me da vuelta cuando miro hacia la izquierda, como hacer para que quede fijo en la pantalla?
+        console.log("Enemy health: " + this.currentHealth);       
+    }
 }

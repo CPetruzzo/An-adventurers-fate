@@ -69,5 +69,8 @@ export class Enemy extends PhysicsContainer implements IHitBox {
             this.healthOnScreen.text = `${this.currentHealth}` + "HP";
             console.log("Enemy health: " + this.currentHealth);       
         }
-    }
+    
 
+    
+
+}
