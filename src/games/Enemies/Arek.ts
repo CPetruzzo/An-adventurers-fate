@@ -52,6 +52,5 @@ export class Arek extends Enemy {
         this.arekIdle.update(deltaMS / (1000 / 60));
     }
 
-
-
+  
 }

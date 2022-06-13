@@ -42,7 +42,10 @@ export class GameScene extends Container implements IUpdateable {
     private config: PointButton;
 
     private isPaused: boolean =false;
+    private causingDamage: boolean = false;
     private arek: Arek;
+
+    private punchDamage: number = 10;
 
 
     constructor() {
@@ -391,23 +394,19 @@ export class GameScene extends Container implements IUpdateable {
         // MODO ATAQUE
         else if (pelea != null) {
             this.playerBardo.separate(pelea, this.arek.position);
-            if ((Keyboard.state.get("KeyJ"))){
-                this.numero++;
-                if (this.numero>50){
+            if ((this.causingDamage || Keyboard.state.get("KeyJ"))){
+                    this.arek.getEnemyHurt(this.punchDamage);
+                    this.arek.currentHealth -= 5;
+                //     this.world.removeChild(this.arek);
+                // }
+        
                 }
-                if (this.numero>75){           
                 }
-                if (this.numero>100){
-                    this.world.removeChild(this.arek);
-                }
-            }
-        }
+
         // RECIBIENDO DAÑO POR NO HACER NADA
         else if (pelea != null){
             this.playerBardo.separate(pelea, this.arek.position);
         }
-
-        
     }
     
 
@@ -487,6 +486,9 @@ export class GameScene extends Container implements IUpdateable {
     private onButtonA(): void {
         console.log("Presionando la tecla A", this);
         this.playerBardo.punch();
+        this.causingDamage = true;
+        this.punchDamage = 5;
+
     }
     private habilityClick(): void {
         console.log("Usando la habilidad especial", this);
@@ -517,5 +519,4 @@ export class GameScene extends Container implements IUpdateable {
         console.log("Detenido", this);
         this.playerBardo.idlePlayer();
     }
-
 }
