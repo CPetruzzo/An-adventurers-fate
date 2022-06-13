@@ -365,10 +365,8 @@ export class GameScene extends Container implements IUpdateable {
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
 
-
         const pelea = checkCollision(this.playerBardo, this.arek);
         const pelea2 = checkCollision(this.melee, this.arek);
-        
         
         if (pelea2 != null) {
             console.log("che deberia estar pegandole al arek")

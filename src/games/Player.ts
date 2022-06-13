@@ -360,4 +360,11 @@ export class Player extends PhysicsContainer implements IHitBox {
             }
         }
     }
+
+    // public getPlayerHurt(damage: number) {
+    //     this.currentHealth -= damage;
+    //     this.healthOnScreen.text = `${this.currentHealth}` + "HP";
+    //     console.log("Enemy health: " + this.currentHealth);       
+    // }
+
 }
