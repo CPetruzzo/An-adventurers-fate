@@ -367,21 +367,18 @@ export class GameScene extends Container implements IUpdateable {
 
         const pelea = checkCollision(this.playerBardo, this.arek);
         const pelea2 = checkCollision(this.melee, this.arek);
-        
+
         if (pelea2 != null) {
             console.log("che deberia estar pegandole al arek")
-                if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
-                    this.arek.getEnemyHurt(this.punchDamage);
-                    if (this.arek.currentHealth <= 0) {
-                        this.world.removeChild(this.arek);
-                    }
+            if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
+                this.arek.getEnemyHurt(this.punchDamage);
+                if (this.arek.currentHealth <= 0) {
+                    this.world.removeChild(this.arek);
                 }
             }
-            if (pelea != null) {
-                this.playerBardo.separate(pelea, this.arek.position);
-            
-
-            
+        }
+        if (pelea != null) {
+            this.playerBardo.separate(pelea, this.arek.position);
         }
     }
 
