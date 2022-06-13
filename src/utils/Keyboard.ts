@@ -34,5 +34,4 @@ porque no hice un new porque lo hice private no tengo this*/
         Keyboard.up.emit(e.code)
         Keyboard.state.set(e.code, false);
     }
-
 }
