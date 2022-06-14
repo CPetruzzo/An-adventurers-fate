@@ -123,6 +123,20 @@ export class GameScene extends Container implements IUpdateable {
         const plat11 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
         plat11.position.x = 4405;
         plat11.position.y = 705;
+        const plat12 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
+        plat12.position.x = 4755;
+        plat12.position.y = 500;
+        const plat13 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
+        plat13.position.x = 5005;
+        plat13.position.y = 700;
+        const plat14 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
+        plat14.position.x = 5405;
+        plat14.position.y = 500;
+        const plat15 = new Platform("Tile", 30, 10, 30, 10, 200, 100);
+        plat15.position.x = 6000;
+        plat15.position.y = 475;
+        
+
 
         this.world.addChild(plat1,
             plat2,
@@ -134,7 +148,12 @@ export class GameScene extends Container implements IUpdateable {
             plat8,
             plat9,
             plat10,
-            plat11);
+            plat11,
+            plat12,
+            plat13,
+            plat14,
+            plat15,
+            );
 
         this.platforms.push(plat1,
             plat2,
@@ -146,7 +165,12 @@ export class GameScene extends Container implements IUpdateable {
             plat8,
             plat9,
             plat10,
-            plat11);
+            plat11,
+            plat12,
+            plat13,
+            plat14,
+            plat15,
+            );
 
         //Habillity Circle
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
@@ -375,6 +399,7 @@ export class GameScene extends Container implements IUpdateable {
             this.playerBardo.canJump = true;
             this.gameOver = true;
         }
+        
 
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
