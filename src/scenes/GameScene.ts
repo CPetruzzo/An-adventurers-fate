@@ -5,6 +5,7 @@ import { Arek } from "../games/Enemies/Arek";
 import { checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
+import { Potion } from "../games/Potion";
 import { Melee } from "../games/Weapon/Melee";
 import { Range } from "../games/Weapon/Range";
 import { GenericPanel } from "../ui/GenericPanel";
@@ -40,6 +41,7 @@ export class GameScene extends Container implements IUpdateable {
     private buttonsOn: PointButton;
     private buttonsOff: PointButton;
     private config: PointButton;
+    private potions: Potion[];
 
     private isPaused: boolean = false;
     private causingDamage: boolean = false;
@@ -338,6 +340,13 @@ export class GameScene extends Container implements IUpdateable {
         this.range = new Range();
         this.playerBardo.addChild(this.range);
 
+        this.potions = [];
+        const pot1 = new Potion("CONFIG.png");
+        pot1.scale.set(0.1);
+        pot1.position.set(3000, 580)
+        this.world.addChild(pot1);
+        this.potions.push(pot1);
+        
         this.addChild(
             this.start,
             this.buttonA,
@@ -406,12 +415,27 @@ export class GameScene extends Container implements IUpdateable {
 
         // JUGADOR Y ENEMIGO HACIENDO COLISION
         const pelea = checkCollision(this.playerBardo, this.arek);
+
+        if (pelea != null) {
+            this.playerBardo.separate(pelea, this.arek.position);
+            this.playerBardo.getPlayerHurt(this.arekDamage/5);
+            if (this.playerBardo.currentHealth <= 0) {
+                this.world.removeChild(this.playerBardo);
+                this.gameOver = true;
+            }
+        }
+
+        for (let potion of this.potions) {
+            const overlap = checkCollision(this.playerBardo, potion);
+            if (overlap != null) {
+                console.log("tomé la poción")
+                potion.destroy();
+                this.playerBardo.drinkPotion(50);
+            }
+        }
+
         // ARMA DE CUERPO A CUERPO Y ENEMIGO
         const pelea2 = checkCollision(this.melee, this.arek);
-        // ATAQUE DEL ENEMIGO AL JUGADOR
-        const pelea3 = checkCollision(this.melee2, this.playerBardo);
-        // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
-        const pelea4 = checkCollision(this.range, this.arek);
 
         if (pelea2 != null) {
             console.log("che deberia estar pegandole al arek")
@@ -422,21 +446,23 @@ export class GameScene extends Container implements IUpdateable {
                 }
             }
         }
-        if (pelea != null) {
-            this.playerBardo.separate(pelea, this.arek.position);
-            this.playerBardo.getPlayerHurt(this.arekDamage/5);
-            if (this.playerBardo.currentHealth <= 0) {
-                this.world.removeChild(this.playerBardo);
-                this.gameOver = true;
-            }
-        }
+
+        // ATAQUE DEL ENEMIGO AL JUGADOR
+        const pelea3 = checkCollision(this.melee2, this.playerBardo);
+
         if (pelea3 != null) {
+            this.arek.attackArek();
             this.playerBardo.getPlayerHurt(this.arekDamage);
             if (this.playerBardo.currentHealth <= 0) {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
             }
         }
+        else {this.arek.idleArek();}
+
+        // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
+        const pelea4 = checkCollision(this.range, this.arek);    
+        
         if (pelea4 != null) {
             if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
                 this.arek.getEnemyHurt(this.rangeDamage);
@@ -520,7 +546,6 @@ export class GameScene extends Container implements IUpdateable {
         console.log("Presionando la tecla B", this);
         this.playerBardo.punchRun();
         this.causingRangeDamage = true;
-        this.causingDamage = false;
     }
 
     private onButtonA(): void {
@@ -530,6 +555,7 @@ export class GameScene extends Container implements IUpdateable {
     }
     private habilityClick(): void {
         console.log("Usando la habilidad especial", this);
+        this.playerBardo.jump();
     }
 
     private RightMove(): void {
@@ -556,5 +582,7 @@ export class GameScene extends Container implements IUpdateable {
     private Stop(): void {
         console.log("Detenido", this);
         this.playerBardo.idlePlayer();
+        this.causingRangeDamage = false;
+        this.causingDamage = false;
     }
 }

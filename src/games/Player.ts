@@ -20,6 +20,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public healthOnScreen: Text;
     public currentHealth: number = 100;
+    public maxHealth: number = 100;
 
     constructor() {
         super();
@@ -376,5 +377,14 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.healthOnScreen.text = `${this.currentHealth}` + "HP";
         // se me da vuelta cuando miro hacia la izquierda, como hacer para que quede fijo en la pantalla?
         console.log("Enemy health: " + this.currentHealth);       
+    }
+
+    public drinkPotion(healthRecovered: number) {
+        this.currentHealth += healthRecovered;
+        if (this.currentHealth > this.maxHealth) {
+            this.currentHealth = this.maxHealth;
+        }
+        this.healthOnScreen.text = `${this.currentHealth}` + "HP";
+        console.log("Player health: " + this.currentHealth);
     }
 }

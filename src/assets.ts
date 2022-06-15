@@ -20,6 +20,8 @@ export const assets = [
 
     //AREK THE ABSOLUTE
     {url: "./spritesheet (8).json", name:"Arek"},
+    {url: "./ArekIdle.json", name:"ArekIdle"},
+    
 
     // PLAYER
     {url: "./spritesheet (6).json", name:"Player"},

@@ -9,7 +9,7 @@ export class Enemy extends PhysicsContainer implements IHitBox {
     public static readonly GRAVITY = 1000;
     public hitbox: Graphics;
     public healthOnScreen: Text;
-    public currentHealth: number = 100;
+    public currentHealth: number = 200;
 
     constructor() {
         super();

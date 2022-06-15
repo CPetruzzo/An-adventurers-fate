@@ -5,13 +5,14 @@ export class Arek extends Enemy {
 
     public canJump = true;
     private arekIdle: AnimatedSprite;
+    public arekAttack: AnimatedSprite;
     static MOVE_SPEED: number = 200;
 
     constructor() {
         super();
 
         //BARDO RUN
-        this.arekIdle = new AnimatedSprite(
+        this.arekAttack = new AnimatedSprite(
             [
                 Texture.from("00.png"),
                 Texture.from("01.png"),
@@ -25,6 +26,24 @@ export class Arek extends Enemy {
                 Texture.from("09.png"),
                 Texture.from("10.png"),
             
+            ],
+            true
+        );
+        this.arekAttack.scale.set(1);
+        this.arekAttack.animationSpeed = 0.15;
+        this.arekAttack.anchor.set(0.55,0.95);
+        this.arekAttack.play();
+        this.arekAttack.visible = false;
+
+        //BARDO RUN
+        this.arekIdle = new AnimatedSprite(
+            [
+                Texture.from("0.png"),
+                Texture.from("1.png"),
+                Texture.from("2.png"),
+                Texture.from("3.png"),
+                Texture.from("4.png"),
+                Texture.from("5.png"),            
             ],
             true
         );
@@ -43,6 +62,7 @@ export class Arek extends Enemy {
         // agrego todos los movimientos a la clase player
         this.addChild(
             this.arekIdle,
+            this.arekAttack,
             )
     }
 
@@ -52,5 +72,14 @@ export class Arek extends Enemy {
         this.arekIdle.update(deltaMS / (1000 / 60));
     }
 
+    public attackArek(){
+        this.arekAttack.visible = true;
+        this.arekIdle.visible = false;
+    }
+
+    public idleArek(){
+        this.arekAttack.visible = false;
+        this.arekIdle.visible = true;
+    }
   
 }
