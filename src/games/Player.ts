@@ -170,7 +170,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         let initialHealth: number = 100;
         let currentHealth: number = initialHealth;
         this.healthOnScreen = new Text(`${currentHealth}`+ "HP", { fontSize: 40, fontFamily: ("Arial") });
-        this.addChild(this.healthOnScreen);
+        // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
 
@@ -387,4 +387,6 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.healthOnScreen.text = `${this.currentHealth}` + "HP";
         console.log("Player health: " + this.currentHealth);
     }
+
+   
 }

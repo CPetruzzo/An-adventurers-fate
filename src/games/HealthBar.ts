@@ -1,32 +1,29 @@
-import { Container, NineSlicePlane, Texture, TextureSource} from "pixi.js";
+import { AnimatedSprite, Texture, TextureSource} from "pixi.js";
+import { PhysicsContainer } from "./PhysicsContainer";
 
-export class HealthBar extends Container{
+export class HealthBar extends PhysicsContainer{
+    
 
     public shape: TextureSource;
-    private bar: NineSlicePlane;
-    public leftwidth: number;
-    public topheight: number;
-    public rightwidth: number;
-    public bottomheight: number;
+    private bar: AnimatedSprite;
 
 
-    constructor(shape: TextureSource, leftwidth:number, topheight:number, currentHP:number, bottomheight:number, ){
+    constructor(shape: TextureSource, width: number, height: number){
 
         super();
         this.shape= shape;
-        this.leftwidth= leftwidth;
-        this.topheight= topheight;
-        this.rightwidth= currentHP;
-        this.bottomheight= bottomheight;
-        
-        this.bar = new NineSlicePlane(
-            Texture.from(shape),
-            this.leftwidth,
-            this.topheight,
-            this.rightwidth,
-            this.bottomheight,
+            
+        this.bar = new AnimatedSprite([
+            Texture.from(shape),]
         );
+        this.bar.width= width;
+        this.bar.height= height;
+        this.bar.position.set(30, 28);
         
         this.addChild(this.bar);        
+    }
+
+    public override update(deltaMS: number) {
+        this.bar.update(deltaMS / (1000 / 60));
     }
 }

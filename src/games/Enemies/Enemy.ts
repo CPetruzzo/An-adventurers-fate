@@ -71,6 +71,6 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         }
     
 
-    
+
 
 }

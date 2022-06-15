@@ -22,12 +22,17 @@ export const assets = [
     {url: "./spritesheet (8).json", name:"Arek"},
     {url: "./ArekIdle.json", name:"ArekIdle"},
     
-
     // PLAYER
     {url: "./spritesheet (6).json", name:"Player"},
 
     // MUSIQUITA
     {url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM",},
     {url: "./StageOne/FinalBattle.mp3", name: "GameBGM",},
-    {url: "./StageOne/Parting.mp3", name: "PartingBGM",}
+    {url: "./StageOne/Parting.mp3", name: "PartingBGM",},
+
+    // POTION
+    {url: "./StageOne/Potion.png", name: "Potion",},
+
+    //health bar
+    {url: "./HealthBar.png", name: "HealthBar",},
 ]

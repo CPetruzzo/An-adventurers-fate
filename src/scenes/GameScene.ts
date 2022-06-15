@@ -2,6 +2,7 @@ import { sound } from "@pixi/sound";
 import { Container, Texture, TilingSprite } from "pixi.js";
 import { ChangeScene, HEIGHT, WIDTH } from "..";
 import { Arek } from "../games/Enemies/Arek";
+import { HealthBar } from "../games/HealthBar";
 import { checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
@@ -55,6 +56,8 @@ export class GameScene extends Container implements IUpdateable {
     private range: Range;
     private arekDamage: number = 1;
 
+    private HPbar: HealthBar;
+    
 
     constructor() {
         super();
@@ -225,10 +228,10 @@ export class GameScene extends Container implements IUpdateable {
             this.moveUp = new PointButton(Texture.from("lineDark48.png"),
                 Texture.from("lineLight01.png"),
                 Texture.from("lineDark48.png"));
-            this.moveUp.x = 160
-            this.moveUp.y = 480
-            this.moveUp.scale.x = 1.5;
-            this.moveUp.scale.y = 1.5;
+            this.moveUp.x = 180
+            this.moveUp.y = 440
+            this.moveUp.scale.x = 1.8;
+            this.moveUp.scale.y = 1.8;
             this.moveUp.on("pointer down", this.UpMove, this)
             this.moveUp.on("pointerClick", this.Stop, this)
         }
@@ -237,10 +240,10 @@ export class GameScene extends Container implements IUpdateable {
             this.moveDown = new PointButton(Texture.from("lineDark05.png"),
                 Texture.from("lineLight08.png"),
                 Texture.from("lineDark05.png"));
-            this.moveDown.x = 160
+            this.moveDown.x = 180
             this.moveDown.y = 620
-            this.moveDown.scale.x = 1.5;
-            this.moveDown.scale.y = 1.5;
+            this.moveDown.scale.x = 1.8;
+            this.moveDown.scale.y = 1.8;
             this.moveDown.on("pointer down", this.DownMove, this)
             this.moveDown.on("pointerClick", this.Stop, this)
         }
@@ -249,9 +252,9 @@ export class GameScene extends Container implements IUpdateable {
                 Texture.from("lineLight03.png"),
                 Texture.from("lineDark00.png"));
             this.moveLeft.x = 100
-            this.moveLeft.y = 550
-            this.moveLeft.scale.x = 1.5;
-            this.moveLeft.scale.y = 1.5;
+            this.moveLeft.y = 530
+            this.moveLeft.scale.x = 1.8;
+            this.moveLeft.scale.y = 1.8;
             this.moveLeft.on("pointer down", this.LeftMove, this)
             this.moveLeft.on("pointerClick", this.Stop, this)
         }
@@ -259,10 +262,10 @@ export class GameScene extends Container implements IUpdateable {
             this.moveRight = new PointButton(Texture.from("lineDark01.png"),
                 Texture.from("lineLight04.png"),
                 Texture.from("lineDark01.png"));
-            this.moveRight.x = 220
-            this.moveRight.y = 550
-            this.moveRight.scale.x = 1.5;
-            this.moveRight.scale.y = 1.5;
+            this.moveRight.x = 260
+            this.moveRight.y = 530
+            this.moveRight.scale.x = 1.8;
+            this.moveRight.scale.y = 1.8;
             this.moveRight.on("pointer down", this.RightMove, this)
             this.moveRight.on("pointerClick", this.Stop, this)
         }
@@ -341,11 +344,14 @@ export class GameScene extends Container implements IUpdateable {
         this.playerBardo.addChild(this.range);
 
         this.potions = [];
-        const pot1 = new Potion("CONFIG.png");
+        const pot1 = new Potion("Potion");
         pot1.scale.set(0.1);
         pot1.position.set(3000, 580)
         this.world.addChild(pot1);
         this.potions.push(pot1);
+
+        this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+        this.addChild(this.HPbar);
         
         this.addChild(
             this.start,
@@ -374,6 +380,7 @@ export class GameScene extends Container implements IUpdateable {
         }
 
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
+        this.HPbar.update(deltaTime); // Actualizacion del barra de vida
 
         // PARALLAX
         for (let i = 0; i < this.backgrounds.length; i++) {
@@ -419,6 +426,9 @@ export class GameScene extends Container implements IUpdateable {
         if (pelea != null) {
             this.playerBardo.separate(pelea, this.arek.position);
             this.playerBardo.getPlayerHurt(this.arekDamage/5);
+            this.HPbar.destroy();
+                this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+                this.addChild(this.HPbar);
             if (this.playerBardo.currentHealth <= 0) {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
@@ -431,6 +441,9 @@ export class GameScene extends Container implements IUpdateable {
                 console.log("tomé la poción")
                 potion.destroy();
                 this.playerBardo.drinkPotion(50);
+                this.HPbar.destroy();
+                this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+                this.addChild(this.HPbar);
             }
         }
 
@@ -453,6 +466,9 @@ export class GameScene extends Container implements IUpdateable {
         if (pelea3 != null) {
             this.arek.attackArek();
             this.playerBardo.getPlayerHurt(this.arekDamage);
+            this.HPbar.destroy();
+            this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+            this.addChild(this.HPbar);
             if (this.playerBardo.currentHealth <= 0) {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
