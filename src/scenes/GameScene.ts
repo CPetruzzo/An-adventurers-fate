@@ -61,7 +61,7 @@ export class GameScene extends Container implements IUpdateable {
     private HPbar: HealthBar;
     private HPbar2: HealthBar;
     private chest: Potion;
-    
+
 
     constructor() {
         super();
@@ -96,9 +96,9 @@ export class GameScene extends Container implements IUpdateable {
         this.world.addChild(this.arek);
 
         new Tween(this.arek)
-        .to({ x: 3700 }, 3000)
-        .start().onComplete(this.arekToRight.bind(this));
-        
+            .to({ x: 3700 }, 3000)
+            .start().onComplete(this.arekToRight.bind(this));
+
 
         this.addChild(this.world);
 
@@ -151,8 +151,8 @@ export class GameScene extends Container implements IUpdateable {
         plat15.position.y = 475;
         const plat16 = new Platform("Tile", 30, 10, 30, 10, 500, 100);
         plat16.position.x = 6350;
-        plat16.position.y = 250;   
-        
+        plat16.position.y = 250;
+
 
         this.world.addChild(plat1,
             plat2,
@@ -170,7 +170,7 @@ export class GameScene extends Container implements IUpdateable {
             plat14,
             plat15,
             plat16,
-            );
+        );
 
         this.platforms.push(plat1,
             plat2,
@@ -188,14 +188,14 @@ export class GameScene extends Container implements IUpdateable {
             plat14,
             plat15,
             plat16,
-            );
+        );
 
         //Habillity Circle
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
 
-        this.chest = new Potion("ChestBox", 850,600,0.025,0.05);
-        this.chest.scale.set(-0.15,0.15);
+        this.chest = new Potion("ChestBox", 850, 600, 0.025, 0.05);
+        this.chest.scale.set(-0.15, 0.15);
         this.chest.position.set(6350, 125);
         this.world.addChild(this.chest);
 
@@ -251,7 +251,7 @@ export class GameScene extends Container implements IUpdateable {
             this.moveUp.scale.x = 1.8;
             this.moveUp.scale.y = 1.8;
             this.moveUp.on("pointer down", this.UpMove, this)
-            
+
         }
 
         { /* Move Down */
@@ -352,7 +352,7 @@ export class GameScene extends Container implements IUpdateable {
         this.addChild(this.cartel);
 
         this.melee = new Melee();
-        this.melee.position.x=-10
+        this.melee.position.x = -10
         this.playerBardo.addChild(this.melee);
 
         this.melee2 = new Melee();
@@ -363,26 +363,26 @@ export class GameScene extends Container implements IUpdateable {
         this.playerBardo.addChild(this.range);
 
         this.potions = [];
-        const pot1 = new Potion("Potion", 200,200);
+        const pot1 = new Potion("Potion", 200, 200);
         pot1.scale.set(0.1);
         pot1.position.set(3000, 580)
         this.world.addChild(pot1);
         this.potions.push(pot1);
 
-        const pot2 = new Potion("Potion",200,200);
+        const pot2 = new Potion("Potion", 200, 200);
         pot2.scale.set(0.1);
         pot2.position.set(4850, 600);
         this.world.addChild(pot2);
         this.potions.push(pot2);
-                    
 
-        this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+
+        this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
         this.addChild(this.HPbar);
 
-        this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
-        
+
         this.addChild(
             this.start,
             this.buttonA,
@@ -446,7 +446,7 @@ export class GameScene extends Container implements IUpdateable {
             this.playerBardo.canJump = true;
             this.gameOver = true;
         }
-        
+
 
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
@@ -456,10 +456,10 @@ export class GameScene extends Container implements IUpdateable {
 
         if (pelea != null) {
             this.playerBardo.separate(pelea, this.arek.position);
-            this.playerBardo.getPlayerHurt(this.arekDamage/5);
+            this.playerBardo.getPlayerHurt(this.arekDamage / 5);
             this.HPbar.destroy();
-                this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
-                this.addChild(this.HPbar);
+            this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
+            this.addChild(this.HPbar);
             if (this.playerBardo.currentHealth <= 0) {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
@@ -471,14 +471,14 @@ export class GameScene extends Container implements IUpdateable {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
                 console.log("tomé la poción")
-            sound.play("PotionSound1");
-            
-                
+                sound.play("PotionSound1");
+
+
                 potion.destroy();
                 this.playerBardo.drinkPotion(50);
-                
+
                 this.HPbar.destroy();
-                this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+                this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
                 this.addChild(this.HPbar);
             }
         }
@@ -491,7 +491,7 @@ export class GameScene extends Container implements IUpdateable {
             if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
                 this.arek.getEnemyHurt(this.punchDamage);
                 this.HPbar2.destroy();
-                this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+                this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
                 this.HPbar2.position.set(-120, -145);
                 this.arek.addChild(this.HPbar2);
                 if (this.arek.currentHealth <= 0) {
@@ -507,23 +507,23 @@ export class GameScene extends Container implements IUpdateable {
             this.arek.attackArek();
             this.playerBardo.getPlayerHurt(this.arekDamage);
             this.HPbar.destroy();
-            this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
+            this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
             this.addChild(this.HPbar);
             if (this.playerBardo.currentHealth <= 0) {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
             }
         }
-        else {this.arek.idleArek();}
+        else { this.arek.idleArek(); }
 
         // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
-        const pelea4 = checkCollision(this.range, this.arek);    
-        
+        const pelea4 = checkCollision(this.range, this.arek);
+
         if (pelea4 != null) {
             if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
                 this.arek.getEnemyHurt(this.rangeDamage);
                 this.HPbar2.destroy();
-                this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+                this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
                 this.HPbar2.position.set(-120, -145);
                 this.arek.addChild(this.HPbar2);
                 if (this.arek.currentHealth <= 0) {
@@ -532,8 +532,7 @@ export class GameScene extends Container implements IUpdateable {
             }
         }
 
-
-        const fin = checkCollision (this.playerBardo, this.chest);
+        const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.chest.destroy();
             ChangeScene(new WinScene());
@@ -549,24 +548,24 @@ export class GameScene extends Container implements IUpdateable {
     private arekToLeft(): void {
         this.arek.scale.set(2, 2);
         new Tween(this.arek)
-        .from({ x: 4000})
+            .from({ x: 4000 })
             .to({ x: 3700 }, 3000)
             .start()
             .onComplete(this.arekIdleRight.bind(this));
 
     }
 
-    private arekIdleLeft():void {
+    private arekIdleLeft(): void {
         new Tween(this.arek.idleArek)
-        .from({ x: 3700})
+            .from({ x: 3700 })
             .to({ x: 3700 }, 3000)
             .start()
             .onComplete(this.arekToLeft.bind(this));
     }
 
-    private arekIdleRight():void {
+    private arekIdleRight(): void {
         new Tween(this.arek.idleArek)
-        .from({ x: 3800})
+            .from({ x: 3800 })
             .to({ x: 3800 }, 3000)
             .start()
             .onComplete(this.arekToRight.bind(this));
@@ -575,7 +574,7 @@ export class GameScene extends Container implements IUpdateable {
     private arekToRight(): void {
         this.arek.scale.set(-2, 2);
         new Tween(this.arek)
-        .from({ x: 3600})
+            .from({ x: 3600 })
             .to({ x: 3900 }, 3000)
             .start()
             .onComplete(this.arekIdleLeft.bind(this));

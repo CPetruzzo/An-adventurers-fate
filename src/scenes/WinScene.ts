@@ -1,5 +1,5 @@
 import { AnimatedSprite, Container, Texture } from "pixi.js";
-import {  Tween } from "tweedle.js";
+import { Tween } from "tweedle.js";
 
 export class WinScene extends Container {
 
@@ -7,7 +7,6 @@ export class WinScene extends Container {
     private closebox: AnimatedSprite;
 
     constructor() {
-
 
         super();
 
@@ -39,7 +38,7 @@ export class WinScene extends Container {
         this.closebox.animationSpeed = 0.15;
         this.closebox.position.set(700, 130);
         this.closebox.play();
-    
+
 
         new Tween(this.box)
             .to({ x: 700, alpha: 1 }, 1000,)
@@ -52,10 +51,10 @@ export class WinScene extends Container {
         console.log("Opened complete, now it's time to close it");
         this.removeChild(this.box);
         this.addChild(this.closebox);
-        this.closebox.position.x=700;
+        this.closebox.position.x = 700;
         this.closebox.gotoAndPlay(0);
         new Tween(this.closebox)
-        .from({ x: 700})
+            .from({ x: 700 })
             .to({ x: 300 }, 1000)
             .start()
             .onComplete(this.Opening.bind(this));
@@ -65,10 +64,10 @@ export class WinScene extends Container {
         console.log("Maybe close it again");
         this.removeChild(this.closebox);
         this.addChild(this.box);
-        this.box.position.x=300;
+        this.box.position.x = 300;
         this.box.gotoAndPlay(0);
         new Tween(this.box)
-        .from({ x: 300})
+            .from({ x: 300 })
             .to({ x: 700 }, 1000)
             .start().
             onComplete(this.ClosingIt.bind(this));

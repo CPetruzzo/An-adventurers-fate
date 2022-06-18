@@ -1,5 +1,5 @@
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader';
-import { Application, Loader, Ticker} from 'pixi.js'
+import { Application, Loader, Ticker } from 'pixi.js'
 import { Group } from 'tweedle.js';
 import { assets } from './assets';
 // import { GameScene } from './scenes/GameScene';
@@ -8,8 +8,8 @@ import { GameStartScene } from './scenes/GameStartScene';
 // import { TweenScene } from './scenes/TweenScene';
 import { Keyboard } from './utils/Keyboard';
 
-export const WIDTH=1280;
-export const HEIGHT=720;
+export const WIDTH = 1280;
+export const HEIGHT = 720;
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -21,17 +21,17 @@ const app = new Application({
 });
 
 Keyboard.initialize(); /* lo llamo una vez y nunca mas */
-window.addEventListener("resize", ()=>{
+window.addEventListener("resize", () => {
 	console.log("resized!");
-	const scaleX= window.innerWidth / app.screen.width;
-	const scaleY= window.innerHeight / app.screen.height;
-	const scale= Math.min(scaleX, scaleY)
+	const scaleX = window.innerWidth / app.screen.width;
+	const scaleY = window.innerHeight / app.screen.height;
+	const scale = Math.min(scaleX, scaleY)
 
-	const gameWidth= Math.round(app.screen.width * scale);
-	const gameHeight= Math.round(app.screen.height * scale);
+	const gameWidth = Math.round(app.screen.width * scale);
+	const gameHeight = Math.round(app.screen.height * scale);
 
-	const marginHorizontal= Math.floor((window.innerWidth - gameWidth) / 2);
-	const marginVertical= Math.floor((window.innerHeight - gameHeight) / 2);
+	const marginHorizontal = Math.floor((window.innerWidth - gameWidth) / 2);
+	const marginVertical = Math.floor((window.innerHeight - gameHeight) / 2);
 
 	app.view.style.width = gameWidth + "px";
 	app.view.style.height = gameHeight + "px";
@@ -42,31 +42,32 @@ window.addEventListener("resize", ()=>{
 	app.view.style.marginTop = marginVertical + "px";
 	app.view.style.marginBottom = marginVertical + "px";
 });
-window.dispatchEvent(new Event ("resize"));
+window.dispatchEvent(new Event("resize"));
 
 Loader.registerPlugin(WebfontLoaderPlugin);
 
 Loader.shared.add(assets);
 
-let currentScene:any = undefined;
+let currentScene: any = undefined;
 
-Loader.shared.onComplete.add(()=>{
+Loader.shared.onComplete.add(() => {
 
 	currentScene = new GameStartScene();
 	app.stage.addChild(currentScene);
 
-	Ticker.shared.add(function(deltaFrame) {
+	Ticker.shared.add(function (deltaFrame) {
 		Group.shared.update();
-		if (currentScene.update){
-		currentScene.update(Ticker.shared.deltaMS,deltaFrame)};
+		if (currentScene.update) {
+			currentScene.update(Ticker.shared.deltaMS, deltaFrame)
+		};
 	});
 
 });
 
-export function ChangeScene(newScene:any){
+export function ChangeScene(newScene: any) {
 	currentScene.destroy();
 	app.stage.addChild(newScene);
-	currentScene=newScene;
+	currentScene = newScene;
 }
 
 Loader.shared.load();
