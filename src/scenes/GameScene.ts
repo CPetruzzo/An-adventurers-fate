@@ -57,6 +57,7 @@ export class GameScene extends Container implements IUpdateable {
     private arekDamage: number = 1;
 
     private HPbar: HealthBar;
+    private HPbar2: HealthBar;
     
 
     constructor() {
@@ -197,7 +198,7 @@ export class GameScene extends Container implements IUpdateable {
             this.start.scale.x = 1.2;
             this.start.scale.y = 1.2;
             this.start.on("pointer down", this.habilityClick, this)
-            this.start.on("pointerClick", this.Stop, this)
+
         }
 
         { /* A Button */
@@ -233,7 +234,7 @@ export class GameScene extends Container implements IUpdateable {
             this.moveUp.scale.x = 1.8;
             this.moveUp.scale.y = 1.8;
             this.moveUp.on("pointer down", this.UpMove, this)
-            this.moveUp.on("pointerClick", this.Stop, this)
+            
         }
 
         { /* Move Down */
@@ -350,8 +351,19 @@ export class GameScene extends Container implements IUpdateable {
         this.world.addChild(pot1);
         this.potions.push(pot1);
 
+        const pot2 = new Potion("Potion");
+        pot2.scale.set(0.1);
+        pot2.position.set(4850, 600);
+        this.world.addChild(pot2);
+        this.potions.push(pot2);
+                    
+
         this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
         this.addChild(this.HPbar);
+
+        this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+        this.HPbar2.position.set(-120, -145);
+        this.arek.addChild(this.HPbar2);
         
         this.addChild(
             this.start,
@@ -381,6 +393,7 @@ export class GameScene extends Container implements IUpdateable {
 
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
+        this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
 
         // PARALLAX
         for (let i = 0; i < this.backgrounds.length; i++) {
@@ -435,6 +448,7 @@ export class GameScene extends Container implements IUpdateable {
             }
         }
 
+        // TOMANDO MI POCION
         for (let potion of this.potions) {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
@@ -454,6 +468,10 @@ export class GameScene extends Container implements IUpdateable {
             console.log("che deberia estar pegandole al arek")
             if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
                 this.arek.getEnemyHurt(this.punchDamage);
+                this.HPbar2.destroy();
+                this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+                this.HPbar2.position.set(-120, -145);
+                this.arek.addChild(this.HPbar2);
                 if (this.arek.currentHealth <= 0) {
                     this.world.removeChild(this.arek);
                 }
@@ -482,6 +500,10 @@ export class GameScene extends Container implements IUpdateable {
         if (pelea4 != null) {
             if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
                 this.arek.getEnemyHurt(this.rangeDamage);
+                this.HPbar2.destroy();
+                this.HPbar2 = new HealthBar("HealthBar", (100*((this.arek.currentHealth)/100)), 10);
+                this.HPbar2.position.set(-120, -145);
+                this.arek.addChild(this.HPbar2);
                 if (this.arek.currentHealth <= 0) {
                     this.world.removeChild(this.arek);
                 }

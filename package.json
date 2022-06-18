@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "@pixi/sound": "^4.2.0",
-    "pixi.js": "^6.3.0"
+    "pixi-webfont-loader": "^1.0.2",
+    "pixi.js": "^6.3.0",
+    "tweedle.js": "^2.0.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.4",

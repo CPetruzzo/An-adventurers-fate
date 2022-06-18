@@ -9,7 +9,7 @@ export class Enemy extends PhysicsContainer implements IHitBox {
     public static readonly GRAVITY = 1000;
     public hitbox: Graphics;
     public healthOnScreen: Text;
-    public currentHealth: number = 200;
+    public currentHealth: number = 150;
 
     constructor() {
         super();
@@ -31,10 +31,10 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         this.addChild(this.hitbox);
 
         // let currentScene:any = undefined;
-        let initialHealth: number = 100;
+        let initialHealth: number = 150;
         let currentHealth: number = initialHealth;
         this.healthOnScreen = new Text(`${currentHealth}`+ "HP", { fontSize: 40, fontFamily: ("Arial") });
-        this.addChild(this.healthOnScreen);
+        // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
     }

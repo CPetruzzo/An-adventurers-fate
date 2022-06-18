@@ -1,0 +1,135 @@
+{
+  "frames": {
+    "nro1.png": {
+      "frame": {
+        "x": 7,
+        "y": 7,
+        "w": 326,
+        "h": 308
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 149,
+        "w": 326,
+        "h": 308
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 475
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "nro2.png": {
+      "frame": {
+        "x": 347,
+        "y": 7,
+        "w": 331,
+        "h": 339
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 118,
+        "w": 331,
+        "h": 339
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 475
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "nro3.png": {
+      "frame": {
+        "x": 692,
+        "y": 7,
+        "w": 340,
+        "h": 374
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 83,
+        "w": 340,
+        "h": 374
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 475
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "nro5.png": {
+      "frame": {
+        "x": 1046,
+        "y": 7,
+        "w": 407,
+        "h": 401
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 56,
+        "w": 407,
+        "h": 401
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 475
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "nro4.png": {
+      "frame": {
+        "x": 1467,
+        "y": 7,
+        "w": 365,
+        "h": 405
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 52,
+        "w": 365,
+        "h": 405
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 475
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "chestboxs.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1839,
+      "h": 419
+    },
+    "scale": 1
+  }
+}

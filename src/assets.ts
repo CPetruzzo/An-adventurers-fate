@@ -24,6 +24,7 @@ export const assets = [
     
     // PLAYER
     {url: "./spritesheet (6).json", name:"Player"},
+    {url: "./spritesheet (10).json", name:"PlayerBow"},
 
     // MUSIQUITA
     {url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM",},
@@ -32,7 +33,14 @@ export const assets = [
 
     // POTION
     {url: "./StageOne/Potion.png", name: "Potion",},
+    {url: "./chestboxs.json", name: "Chest",},
+    
 
     //health bar
     {url: "./HealthBar.png", name: "HealthBar",},
+
+    // FONTS
+    {url: "./fonts/ST02R.TTF", name: "Letra1"},
+    // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
+    
 ]

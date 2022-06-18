@@ -1,6 +1,10 @@
+import { WebfontLoaderPlugin } from 'pixi-webfont-loader';
 import { Application, Loader, Ticker} from 'pixi.js'
+import { Group } from 'tweedle.js';
 import { assets } from './assets';
-import { GameStartScene } from './scenes/GameStartScene';
+// import { Config } from './scenes/Config';
+// import { GameStartScene } from './scenes/GameStartScene';
+import { TweenScene } from './scenes/TweenScene';
 import { Keyboard } from './utils/Keyboard';
 
 export const WIDTH=1280;
@@ -39,16 +43,19 @@ window.addEventListener("resize", ()=>{
 });
 window.dispatchEvent(new Event ("resize"));
 
+Loader.registerPlugin(WebfontLoaderPlugin);
+
 Loader.shared.add(assets);
 
 let currentScene:any = undefined;
 
 Loader.shared.onComplete.add(()=>{
 
-	currentScene = new GameStartScene();
+	currentScene = new TweenScene();
 	app.stage.addChild(currentScene);
 
 	Ticker.shared.add(function(deltaFrame) {
+		Group.shared.update();
 		if (currentScene.update){
 		currentScene.update(Ticker.shared.deltaMS,deltaFrame)};
 	});

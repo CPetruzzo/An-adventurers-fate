@@ -1,0 +1,315 @@
+{
+	"frames": {
+		"adventurer-bow-00.png": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-01.png": {
+			"frame": {
+				"x": 53,
+				"y": 1,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-02.png": {
+			"frame": {
+				"x": 105,
+				"y": 1,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-03.png": {
+			"frame": {
+				"x": 1,
+				"y": 40,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-04.png": {
+			"frame": {
+				"x": 53,
+				"y": 40,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-05.png": {
+			"frame": {
+				"x": 105,
+				"y": 40,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-06.png": {
+			"frame": {
+				"x": 1,
+				"y": 79,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-07.png": {
+			"frame": {
+				"x": 53,
+				"y": 79,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-08.png": {
+			"frame": {
+				"x": 105,
+				"y": 79,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-00.png": {
+			"frame": {
+				"x": 1,
+				"y": 118,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-01.png": {
+			"frame": {
+				"x": 53,
+				"y": 118,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-02.png": {
+			"frame": {
+				"x": 105,
+				"y": 118,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-03.png": {
+			"frame": {
+				"x": 157,
+				"y": 1,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-04.png": {
+			"frame": {
+				"x": 157,
+				"y": 40,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		},
+		"adventurer-bow-jump-05.png": {
+			"frame": {
+				"x": 157,
+				"y": 79,
+				"w": 50,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 37
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet (10).png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 208,
+			"h": 156
+		},
+		"scale": "1"
+	}
+}
