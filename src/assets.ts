@@ -30,6 +30,9 @@ export const assets = [
     {url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM",},
     {url: "./StageOne/FinalBattle.mp3", name: "GameBGM",},
     {url: "./StageOne/Parting.mp3", name: "PartingBGM",},
+        // SOUND EFFECTS
+    {url: "./sounds/GamePotion.mp3", name: "PotionSound1",},
+
 
     // POTION
     {url: "./StageOne/Potion.png", name: "Potion",},

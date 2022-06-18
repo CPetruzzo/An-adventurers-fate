@@ -1,28 +1,25 @@
 import { Container, Texture} from "pixi.js";
 import { ChangeScene } from "..";
-import { GenericText } from "../ui/GenericText";
+// import { GenericText } from "../ui/GenericText";
 import { PointButton } from "../ui/PointButton";
-
-
 import { GameStartScene } from "./GameStartScene";
+
 
 export class Config extends Container {
 
-    /* private buttonMouse: Sprite; */
     private buttonMouse: PointButton;
-
 
     constructor() {
         super();
 
-        const cuadrodetexto = new GenericText("Como estas? Este es un texto de para probar."
-            + "\n" +
-            "Si no te gusta esto, puedes volver al inicio."
-            + "\n" +
-            "Si te gusta el juego, puedes continuar con el juego."
-            + "\n" +
-            "Y si no te gusta el juego, podes salir del todo.", "Supertext02", 40);
-        this.addChild(cuadrodetexto);
+        // const cuadrodetexto = new GenericText("Como estas? Este es un texto de para probar."
+        //     + "\n" +
+        //     "Si no te gusta esto, puedes volver al inicio."
+        //     + "\n" +
+        //     "Si te gusta el juego, puedes continuar con el juego."
+        //     + "\n" +
+        //     "Y si no te gusta el juego, podes salir del todo.", "Supertext02", 73);
+        // this.addChild(cuadrodetexto);
 
         { /* START:                 COMO QUEDÓ EL BOTON DE START AL FINAL*/
             this.buttonMouse = new PointButton(Texture.from("BACK.png"),

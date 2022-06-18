@@ -23,7 +23,7 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         // CAJAS
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
-        this.hitbox.drawRect(-40, -130, 130, 130);
+        this.hitbox.drawRect(-70, -130, 145, 130);
         this.hitbox.endFill();
 
         this.acceleration.y = Enemy.GRAVITY;

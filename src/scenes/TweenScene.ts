@@ -52,6 +52,7 @@ export class TweenScene extends Container {
         console.log("Opened complete, now it's time to close it");
         this.removeChild(this.box);
         this.addChild(this.closebox);
+        this.closebox.position.x=700;
         this.closebox.gotoAndPlay(0);
         new Tween(this.closebox)
         .from({ x: 700})
@@ -61,7 +62,7 @@ export class TweenScene extends Container {
     }
 
     public Opening(): void {
-        console.log("Opened complete, now it's time to close it");
+        console.log("Maybe close it again");
         this.removeChild(this.closebox);
         this.addChild(this.box);
         this.box.position.x=300;
@@ -69,6 +70,7 @@ export class TweenScene extends Container {
         new Tween(this.box)
         .from({ x: 300})
             .to({ x: 700 }, 1000)
-            .start();
+            .start().
+            onComplete(this.ClosingIt.bind(this));
     }
 }

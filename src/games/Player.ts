@@ -218,7 +218,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         // CAJAS
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
-        this.hitbox.drawRect(-20, -56, 50, 56);
+        this.hitbox.drawRect(-20, -56, 40, 56);
         this.hitbox.endFill();
 
         this.acceleration.y = Player.GRAVITY;
@@ -449,7 +449,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
-        this.hitbox.drawRect(-20, -56, 50, 56);
+        this.hitbox.drawRect(-20, -56, 40, 56);
         this.hitbox.endFill();
         this.addChild(this.hitbox);
     }

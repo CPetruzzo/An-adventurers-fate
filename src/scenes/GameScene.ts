@@ -1,5 +1,6 @@
 import { sound } from "@pixi/sound";
 import { Container, Texture, TilingSprite } from "pixi.js";
+import { Tween } from "tweedle.js";
 import { ChangeScene, HEIGHT, WIDTH } from "..";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
@@ -91,6 +92,11 @@ export class GameScene extends Container implements IUpdateable {
         this.arek.position.y = 250;
         this.arek.position.x = 3700;
         this.world.addChild(this.arek);
+
+        new Tween(this.arek)
+        .to({ x: 3700 }, 3000)
+        .start().onComplete(this.arekToRight.bind(this));
+        
 
         this.addChild(this.world);
 
@@ -335,10 +341,11 @@ export class GameScene extends Container implements IUpdateable {
         this.addChild(this.cartel);
 
         this.melee = new Melee();
+        this.melee.position.x=-10
         this.playerBardo.addChild(this.melee);
 
         this.melee2 = new Melee();
-        this.melee2.position.x = -80;
+        this.melee2.position.x = -90;
         this.arek.addChild(this.melee2)
 
         this.range = new Range();
@@ -453,8 +460,12 @@ export class GameScene extends Container implements IUpdateable {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
                 console.log("tomé la poción")
+            sound.play("PotionSound1");
+            
+                
                 potion.destroy();
                 this.playerBardo.drinkPotion(50);
+                
                 this.HPbar.destroy();
                 this.HPbar = new HealthBar("HealthBar", (275*((this.playerBardo.currentHealth)/100)), 25);
                 this.addChild(this.HPbar);
@@ -511,6 +522,46 @@ export class GameScene extends Container implements IUpdateable {
         }
     }
 
+    // private createPlatforms(): void {
+    //     const platform = new Platform(0, HEIGHT - 50, WIDTH, 50);
+    //     this.platforms.push(platform);
+    //     this.world.addChild(platform);
+    // }    
+
+    private arekToLeft(): void {
+        this.arek.scale.set(2, 2);
+        new Tween(this.arek)
+        .from({ x: 4000})
+            .to({ x: 3700 }, 3000)
+            .start()
+            .onComplete(this.arekIdleRight.bind(this));
+
+    }
+
+    private arekIdleLeft():void {
+        new Tween(this.arek.idleArek)
+        .from({ x: 3700})
+            .to({ x: 3700 }, 3000)
+            .start()
+            .onComplete(this.arekToLeft.bind(this));
+    }
+
+    private arekIdleRight():void {
+        new Tween(this.arek.idleArek)
+        .from({ x: 3800})
+            .to({ x: 3800 }, 3000)
+            .start()
+            .onComplete(this.arekToRight.bind(this));
+    }
+
+    private arekToRight(): void {
+        this.arek.scale.set(-2, 2);
+        new Tween(this.arek)
+        .from({ x: 3600})
+            .to({ x: 3900 }, 3000)
+            .start()
+            .onComplete(this.arekIdleLeft.bind(this));
+    }
 
     private onPause(): void {
         console.log("Pusimos pausa", this);
