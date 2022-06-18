@@ -18,6 +18,7 @@ import { Keyboard } from "../utils/Keyboard";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { PauseScene } from "./PauseScene";
+import { WinScene } from "./WinScene";
 
 export class GameScene extends Container implements IUpdateable {
 
@@ -59,6 +60,7 @@ export class GameScene extends Container implements IUpdateable {
 
     private HPbar: HealthBar;
     private HPbar2: HealthBar;
+    private chest: Potion;
     
 
     constructor() {
@@ -147,8 +149,10 @@ export class GameScene extends Container implements IUpdateable {
         const plat15 = new Platform("Tile", 30, 10, 30, 10, 200, 100);
         plat15.position.x = 6000;
         plat15.position.y = 475;
+        const plat16 = new Platform("Tile", 30, 10, 30, 10, 500, 100);
+        plat16.position.x = 6350;
+        plat16.position.y = 250;   
         
-
 
         this.world.addChild(plat1,
             plat2,
@@ -165,6 +169,7 @@ export class GameScene extends Container implements IUpdateable {
             plat13,
             plat14,
             plat15,
+            plat16,
             );
 
         this.platforms.push(plat1,
@@ -182,11 +187,17 @@ export class GameScene extends Container implements IUpdateable {
             plat13,
             plat14,
             plat15,
+            plat16,
             );
 
         //Habillity Circle
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
+
+        this.chest = new Potion("ChestBox", 850,600,0.025,0.05);
+        this.chest.scale.set(-0.15,0.15);
+        this.chest.position.set(6350, 125);
+        this.world.addChild(this.chest);
 
         //Container para HealthBar
         this.barra = new GenericPanel("lineDark03.png", 80, 80, 80, 80);
@@ -352,13 +363,13 @@ export class GameScene extends Container implements IUpdateable {
         this.playerBardo.addChild(this.range);
 
         this.potions = [];
-        const pot1 = new Potion("Potion");
+        const pot1 = new Potion("Potion", 200,200);
         pot1.scale.set(0.1);
         pot1.position.set(3000, 580)
         this.world.addChild(pot1);
         this.potions.push(pot1);
 
-        const pot2 = new Potion("Potion");
+        const pot2 = new Potion("Potion",200,200);
         pot2.scale.set(0.1);
         pot2.position.set(4850, 600);
         this.world.addChild(pot2);
@@ -519,6 +530,13 @@ export class GameScene extends Container implements IUpdateable {
                     this.world.removeChild(this.arek);
                 }
             }
+        }
+
+
+        const fin = checkCollision (this.playerBardo, this.chest);
+        if (fin != null) {
+            this.chest.destroy();
+            ChangeScene(new WinScene());
         }
     }
 

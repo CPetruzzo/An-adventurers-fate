@@ -1,7 +1,7 @@
 import { AnimatedSprite, Container, Texture } from "pixi.js";
 import {  Tween } from "tweedle.js";
 
-export class TweenScene extends Container {
+export class WinScene extends Container {
 
     private box: AnimatedSprite;
     private closebox: AnimatedSprite;

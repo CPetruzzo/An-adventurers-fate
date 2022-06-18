@@ -14,7 +14,6 @@ export const assets = [
     {url: "./StageOne/B5.png", name:"B5"},
 
     // SUELO
-
     {url: "./texture.json", name:"Suelo"},
     {url: "./tileset.png", name:"Tile"},
 
@@ -33,12 +32,11 @@ export const assets = [
         // SOUND EFFECTS
     {url: "./sounds/GamePotion.mp3", name: "PotionSound1",},
 
-
     // POTION
     {url: "./StageOne/Potion.png", name: "Potion",},
     {url: "./chestboxs.json", name: "Chest",},
+    {url: "./StageOne/ChestBox.png", name: "ChestBox",},
     
-
     //health bar
     {url: "./HealthBar.png", name: "HealthBar",},
 
