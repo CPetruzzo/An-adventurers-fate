@@ -1,75 +1,68 @@
-import { AnimatedSprite, Container, Texture } from "pixi.js";
+import { AnimatedSprite, Container, Sprite, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
+import { PointButton } from "../ui/PointButton";
 
 export class WinScene extends Container {
 
-    private box: AnimatedSprite;
-    private closebox: AnimatedSprite;
+
+    private box: PointButton;
+    public finish: boolean = false;
+    private openingBox: AnimatedSprite;
+    private award: Sprite;
 
     constructor() {
 
         super();
 
-        this.box = new AnimatedSprite([
+        // IMAGEN DE LA CAJA SIN MOVERSE HECHA BOTON PARA QUE SE ABRA
+        this.box = new PointButton(Texture.from("nro1.png"),
             Texture.from("nro1.png"),
-            Texture.from("nro2.png"),
-            Texture.from("nro3.png"),
-            Texture.from("nro4.png"),
-            Texture.from("nro5.png"),
-        ], true
-        );
-        this.box.loop = false;
-        this.box.visible = true;
-        this.box.animationSpeed = 0.15;
-        this.box.position.set(300, 130);
-        this.box.play();
+            Texture.from("nro1.png"))
+        this.box.position.set(625, 368);
+        this.box.on("pointerClick", this.onBoxClick, this)
         this.addChild(this.box);
 
-        this.closebox = new AnimatedSprite([
-            Texture.from("nro5.png"),
-            Texture.from("nro4.png"),
-            Texture.from("nro3.png"),
-            Texture.from("nro2.png"),
+        // IMAGEN DE LA CAJA ABRIENDOSE
+        this.openingBox = new AnimatedSprite([
             Texture.from("nro1.png"),
-        ], true
+            Texture.from("nro2.png"),
+            Texture.from("nro3.png"),
+            Texture.from("nro4.png"),
+            Texture.from("nro5.png"),
+        ], false
         );
-        this.closebox.loop = false;
-        this.closebox.visible = true;
-        this.closebox.animationSpeed = 0.15;
-        this.closebox.position.set(700, 130);
-        this.closebox.play();
+        this.openingBox.loop = false;
+        this.openingBox.visible = true;
+        this.openingBox.animationSpeed = 0.007;
+        this.openingBox.position.set(400, 130);
 
-
-        new Tween(this.box)
-            .to({ x: 700, alpha: 1 }, 1000,)
-            .start()
-            .onComplete(this.ClosingIt.bind(this));
-
+        // IMAGEN DEL PREMIO
+        this.award = new Sprite(Texture.from("SwordPrize"));
+        this.award.position.set(500, 230);
+        this.award.scale.set(5);
+        this.award.visible=false;
     }
 
-    public ClosingIt(): void {
-        console.log("Opened complete, now it's time to close it");
+    public update(deltaTime: number) {
+        this.openingBox.update(deltaTime);
+    }
+
+    // FUNCION QUE SE EJECUTA CUANDO SE HACE CLICK EN LA CAJA
+    public onBoxClick(): void {
         this.removeChild(this.box);
-        this.addChild(this.closebox);
-        this.closebox.position.x = 700;
-        this.closebox.gotoAndPlay(0);
-        new Tween(this.closebox)
-            .from({ x: 700 })
-            .to({ x: 300 }, 1000)
-            .start()
-            .onComplete(this.Opening.bind(this));
+        this.addChild(this.openingBox);
+        this.openingBox.play();
+        new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
     }
 
-    public Opening(): void {
-        console.log("Maybe close it again");
-        this.removeChild(this.closebox);
-        this.addChild(this.box);
-        this.box.position.x = 300;
-        this.box.gotoAndPlay(0);
-        new Tween(this.box)
-            .from({ x: 300 })
-            .to({ x: 700 }, 1000)
-            .start().
-            onComplete(this.ClosingIt.bind(this));
+    private Award(): void {
+
+        this.addChild(this.award);
+        this.award.visible=true;
+        new Tween(this.award)
+        .to({ x: 400, y:130 }, 2000)
+        .start();
     }
+
 }
+

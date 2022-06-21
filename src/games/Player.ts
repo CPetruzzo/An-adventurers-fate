@@ -19,7 +19,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     private bardoRunPunch: AnimatedSprite;
     private bardoBow: AnimatedSprite;
     private bardoJumpBow: AnimatedSprite;
-    private bardoHurted: AnimatedSprite;
+    // private bardoHurted: AnimatedSprite;
     public healthOnScreen: Text;
     public currentHealth: number = 100;
     public maxHealth: number = 100;
@@ -50,23 +50,23 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardoWalk.visible = false;
 
         //BARDO HURTED
-        this.bardoHurted = new AnimatedSprite(
-            [
-                Texture.from("adventurer-knock-dwn-00"),
-                Texture.from("adventurer-knock-dwn-01"),
-                Texture.from("adventurer-knock-dwn-02"),
-                Texture.from("adventurer-knock-dwn-03"),
-                Texture.from("adventurer-knock-dwn-04"),
-                Texture.from("adventurer-knock-dwn-05"),
-                Texture.from("adventurer-knock-dwn-06"),
-            ],
-            false
-        );
-        this.bardoHurted.scale.set(2);
-        this.bardoHurted.animationSpeed = 0.05;
-        this.bardoHurted.anchor.set(0.55, 0.95);
-        this.bardoHurted.play();
-        this.bardoHurted.visible = false;
+        // this.bardoHurted = new AnimatedSprite(
+        //     [
+        //         Texture.from("adventurer-knock-down-00"),
+        //         Texture.from("adventurer-knock-down-01"),
+        //         Texture.from("adventurer-knock-down-02"),
+        //         Texture.from("adventurer-knock-down-03"),
+        //         Texture.from("adventurer-knock-down-04"),
+        //         Texture.from("adventurer-knock-down-05"),
+        //         Texture.from("adventurer-knock-down-06"),
+        //     ],
+        //     false
+        // );
+        // this.bardoHurted.scale.set(2);
+        // this.bardoHurted.animationSpeed = 0.05;
+        // this.bardoHurted.anchor.set(0.55, 0.95);
+        // this.bardoHurted.play();
+        // this.bardoHurted.visible = false;
 
         //BARDO GET UP
         this.bardoGetUp = new AnimatedSprite([
@@ -246,7 +246,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         // agrego todos los movimientos a la clase player
         this.addChild(
             this.bardoWalk,
-            this.bardoHurted,
+            // this.bardoHurted,
             this.bardoIdle,
             this.bardoJump,
             this.bardoCrawl,
@@ -270,7 +270,23 @@ export class Player extends PhysicsContainer implements IHitBox {
     public override destroy(options: boolean | IDestroyOptions | undefined) {
         super.destroy(options);
 
-        Keyboard.down.off("KeyW", this.jump);
+        Keyboard.down.off("KeyW", this.jump, this);
+        Keyboard.down.off("KeyS", this.crawl, this);
+        Keyboard.down.off("KeyD", this.runRight, this);
+        Keyboard.down.off("KeyA", this.runLeft, this);
+        Keyboard.down.off("KeyJ", this.punch, this);
+        Keyboard.down.off("KeyL", this.bow, this);
+        Keyboard.down.off("KeyK", this.jumpBow, this);
+
+        Keyboard.up.off("KeyW", this.stopJump, this);
+        Keyboard.up.off("KeyS", this.stopCrawl, this);
+        Keyboard.up.off("KeyD", this.stopRunRight, this);
+        Keyboard.up.off("KeyA", this.stopRunLeft, this);
+        Keyboard.up.off("KeyJ", this.stopPunch, this);
+        Keyboard.up.off("KeyL", this.stopBow, this);
+        Keyboard.up.off("KeyK", this.stopJumpBow, this);
+
+
     }
 
     //  MOVIMIENTOS
@@ -291,7 +307,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     //  FUNCION AUXILIAR (SI NO LA TENGO SEPARADA NO PUEDO BORRARLA CUANDO ELIMINE A PLAYER)
     public jump() {
         if (this.canJump) {
-            console.log("apreté la W!", this);
+            // console.log("apreté la W!", this);
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
             this.bardoJump.visible = true;
@@ -307,7 +323,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public crawl() {
-        console.log("apreté la S!", this);
+        // console.log("apreté la S!", this);
 
         this.bardoCrawl.visible = true;
         this.bardoJump.visible = false;
@@ -326,7 +342,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runLeft() {
-        console.log("apreté la A!", this);
+        // console.log("apreté la A!", this);
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
         this.bardoWalk.visible = true;
@@ -340,7 +356,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runRight() {
-        console.log("apreté la D!", this);
+        // console.log("apreté la D!", this);
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
         this.bardoWalk.visible = true;
@@ -354,7 +370,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punch() {
-        console.log("apreté la J!", this);
+        // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
         this.bardoJump.visible = false;
         this.bardoIdle.visible = false;
@@ -368,7 +384,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punchRun() {
-        console.log("apreté la J!", this);
+        // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
         this.bardoJump.visible = false;
         this.bardoIdle.visible = false;
@@ -382,7 +398,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public idlePlayer() {
-        console.log("ninguna tecla presionada", this);
+        // console.log("ninguna tecla presionada", this);
         this.speed.x = 0;
         this.bardoJump.visible = false;
         this.bardoIdle.visible = true;
@@ -393,7 +409,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public fall(){
-        this.bardoHurted.visible = true;
+        // this.bardoHurted.visible = true;
         this.bardoIdle.visible = false;
         this.bardoWalk.visible = false;
         this.bardoJump.visible = false;
@@ -427,7 +443,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopJump() {
-        console.log("solté la W!", this);
+        // console.log("solté la W!", this);
 
         this.bardoCrawl.visible = false;
         this.bardoJump.visible = false;
@@ -438,7 +454,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopCrawl() {
-        console.log("solté la S!", this);
+        // console.log("solté la S!", this);
         this.speed.x = 0;
         this.bardoCrawl.visible = false;
         this.bardoJump.visible = false;
@@ -455,7 +471,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunLeft() {
-        console.log("solté la A!", this);
+        // console.log("solté la A!", this);
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardoWalk.visible = false;
@@ -466,7 +482,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunRight() {
-        console.log("solté la D!", this);
+        // console.log("solté la D!", this);
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardoWalk.visible = false;
@@ -477,7 +493,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopPunch() {
-        console.log("solté la J!", this);
+        // console.log("solté la J!", this);
         this.speed.x = this.speed.x / 2;
         this.bardoJump.visible = false;
         this.bardoIdle.visible = true;

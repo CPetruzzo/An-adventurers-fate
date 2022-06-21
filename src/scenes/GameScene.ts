@@ -26,7 +26,7 @@ export class GameScene extends Container implements IUpdateable {
     private world: Container;
     public numero: number = 0;
     private backgrounds: TilingSprite[];
-    gameOver: boolean = false;
+    public gameOver: boolean = false;
     private cartel: GenericPanel;
     private start: PointButton;
     private buttonA: PointButton;
@@ -61,6 +61,8 @@ export class GameScene extends Container implements IUpdateable {
     private HPbar: HealthBar;
     private HPbar2: HealthBar;
     private chest: Potion;
+    private win: WinScene;
+    public winStage: boolean = false;
 
 
     constructor() {
@@ -375,13 +377,14 @@ export class GameScene extends Container implements IUpdateable {
         this.world.addChild(pot2);
         this.potions.push(pot2);
 
-
         this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
         this.addChild(this.HPbar);
 
         this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
+
+        this.win= new WinScene();
 
         this.addChild(
             this.start,
@@ -395,6 +398,7 @@ export class GameScene extends Container implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
         )
+        
     }
 
     // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
@@ -408,10 +412,11 @@ export class GameScene extends Container implements IUpdateable {
             const GameOverBGM = sound.find("PartingBGM");
             GameOverBGM.play({ loop: true, volume: 0.05 })
         }
-
+ 
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
+        this.win.update(deltaTime); // Actualizacion del caja al final de la partida
 
         // PARALLAX
         for (let i = 0; i < this.backgrounds.length; i++) {
@@ -535,7 +540,12 @@ export class GameScene extends Container implements IUpdateable {
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.chest.destroy();
-            ChangeScene(new WinScene());
+            console.log("gane");      
+            this.addChild(this.win);
+            if (this.winStage || Keyboard.state.get("KeyM")) {
+                console.log("openingBox");
+                this.win.onBoxClick();
+            }
         }
     }
 
@@ -581,7 +591,7 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private onPause(): void {
-        console.log("Pusimos pausa", this);
+        // console.log("Pusimos pausa", this);
         this.isPaused = true;
         this.pauseScene = new PauseScene();
         this.removeChild(this.start,
@@ -597,7 +607,7 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private offPause(): void {
-        console.log("Quitamos pausa", this);
+        // console.log("Quitamos pausa", this);
         this.isPaused = false;
         this.removeChild(this.pauseScene,
             this.pauseOff, this.config);
@@ -612,7 +622,7 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private removeButtons(): void {
-        console.log("Quitamos botones", this);
+        // console.log("Quitamos botones", this);
         this.removeChild(this.start,
             this.buttonA,
             this.buttonB,
@@ -627,7 +637,7 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private showButtons(): void {
-        console.log("Mostramos botones", this);
+        // console.log("Mostramos botones", this);
         this.removeChild(this.buttonsOff);
         this.addChild(this.start,
             this.buttonA,
@@ -642,51 +652,52 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private onConfigClick(): void {
-        console.log("Apreté Config", this);
+        // console.log("Apreté Config", this);
         ChangeScene(new Config());
         sound.stop("GameBGM");
     }
 
 
     private onButtonB(): void {
-        console.log("Presionando la tecla B", this);
+        // console.log("Presionando la tecla B", this);
         this.playerBardo.punchRun();
         this.causingRangeDamage = true;
     }
 
     private onButtonA(): void {
-        console.log("Presionando la tecla A", this);
+        // console.log("Presionando la tecla A", this);
         this.playerBardo.punch();
         this.causingDamage = true;
     }
     private habilityClick(): void {
-        console.log("Usando la habilidad especial", this);
+        // console.log("Usando la habilidad especial", this);
         this.playerBardo.jump();
+        this.winStage=true;
     }
 
     private RightMove(): void {
-        console.log("Derecha", this);
+        // console.log("Derecha", this);
         this.playerBardo.runRight();
     }
 
     private LeftMove(): void {
-        console.log("Izquierda", this);
+        // console.log("Izquierda", this);
         this.playerBardo.runLeft();
     }
 
     private DownMove(): void {
-        console.log("Abajo", this);
+        // console.log("Abajo", this);
         this.playerBardo.crawl();
 
     }
 
     private UpMove(): void {
-        console.log("Arriba", this);
+        // console.log("Arriba", this);
         this.playerBardo.jump();
     }
 
     private Stop(): void {
-        console.log("Detenido", this);
+        // console.log("Detenido", this);
         this.playerBardo.idlePlayer();
         this.causingRangeDamage = false;
         this.causingDamage = false;

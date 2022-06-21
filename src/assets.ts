@@ -44,4 +44,11 @@ export const assets = [
     { url: "./fonts/ST02R.TTF", name: "Letra1" },
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
 
+    //MAPS
+    { url: "./Maps/Map1.jpg", name: "Map1" },
+    { url: "./Maps/Map2.jpg", name: "Map2" },
+
+    // AWARDS
+    { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },
+    { url: "./StageOne/RingsSwordsPotions.json", name: "RingsSwordsPotions" },
 ]

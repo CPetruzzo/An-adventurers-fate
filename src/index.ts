@@ -2,10 +2,11 @@ import { WebfontLoaderPlugin } from 'pixi-webfont-loader';
 import { Application, Loader, Ticker } from 'pixi.js'
 import { Group } from 'tweedle.js';
 import { assets } from './assets';
+// import { GameStartScene } from './scenes/GameStartScene';
 // import { GameScene } from './scenes/GameScene';
 // import { Config } from './scenes/Config';
-import { GameStartScene } from './scenes/GameStartScene';
-// import { TweenScene } from './scenes/TweenScene';
+// import { MapScene } from './scenes/MapScene';
+import { WinScene } from './scenes/WinScene';
 import { Keyboard } from './utils/Keyboard';
 
 export const WIDTH = 1280;
@@ -52,7 +53,7 @@ let currentScene: any = undefined;
 
 Loader.shared.onComplete.add(() => {
 
-	currentScene = new GameStartScene();
+	currentScene = new WinScene();
 	app.stage.addChild(currentScene);
 
 	Ticker.shared.add(function (deltaFrame) {

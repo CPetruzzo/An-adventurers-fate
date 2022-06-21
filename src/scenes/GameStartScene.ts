@@ -5,7 +5,8 @@ import { PointButton } from "../ui/PointButton";
 
 import { ToggleButton } from "../ui/ToggleButton";
 import { Config } from "./Config";
-import { GameScene } from "./GameScene";
+// import { GameScene } from "./GameScene";
+import { MapScene } from "./MapScene";
 
 export class GameStartScene extends Container {
 
@@ -75,7 +76,7 @@ export class GameStartScene extends Container {
 
     onStartClick(): void {
         console.log("Apreté Config", this);
-        ChangeScene(new GameScene());
+        ChangeScene(new MapScene());
         this.removeChild(this);
         sound.stop("StartBGM");
     }
