@@ -1,11 +1,15 @@
-import { Container, Texture} from "pixi.js";
-import { ChangeScene } from "..";
+import { Texture} from "pixi.js";
 // import { GenericText } from "../ui/GenericText";
 import { PointButton } from "../ui/PointButton";
+import { SceneBase } from "../utils/SceneBase";
+import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 
 
-export class Config extends Container {
+export class Config extends SceneBase {
+
+    public update(): void {
+    }
 
     private buttonMouse: PointButton;
 
@@ -41,7 +45,6 @@ export class Config extends Container {
     //BUTTON.TS            HACER FUNCIONAR EL NUEVO BOTÓN  
     private onButtonClick(): void {
         console.log("Apreté volver", this);
-        ChangeScene(new GameStartScene());
-        this.removeChild(this);
+        SceneManager.changeScene(new GameStartScene());
     }
 }

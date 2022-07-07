@@ -31,6 +31,7 @@ export const assets = [
     { url: "./StageOne/Parting.mp3", name: "PartingBGM", },
     // SOUND EFFECTS
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1", },
+    { url: "./sounds/MinecraftChest.mp3", name: "Chest1", },
 
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },
@@ -50,5 +51,5 @@ export const assets = [
 
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },
-    { url: "./StageOne/RingsSwordsPotions.json", name: "RingsSwordsPotions" },
+    { url: "./RingsSwordsPotions.json", name: "RingsSwordsPotions" },
 ]

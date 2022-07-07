@@ -1,14 +1,20 @@
 import { sound } from "@pixi/sound";
-import { Container, Sprite, Texture } from "pixi.js";
-import { ChangeScene } from "..";
+import {  Sprite, Texture } from "pixi.js";
+// import { ChangeScene } from "..";
 import { PointButton } from "../ui/PointButton";
 
 import { ToggleButton } from "../ui/ToggleButton";
+import { SceneBase } from "../utils/SceneBase";
+import { SceneManager } from "../utils/SceneManager";
 import { Config } from "./Config";
-// import { GameScene } from "./GameScene";
 import { MapScene } from "./MapScene";
+// import { Config } from "./Config";
+// import { GameScene } from "./GameScene";
+// import { MapScene } from "./MapScene";
 
-export class GameStartScene extends Container {
+export class GameStartScene extends SceneBase {
+
+    public update(): void {}
 
     private buttonSound: ToggleButton;
     private BG: Sprite;
@@ -69,15 +75,13 @@ export class GameStartScene extends Container {
     
     onConfigClick(): void {
         console.log("Apreté Config", this);
-        ChangeScene(new Config());
-        this.removeChild(this);
+        SceneManager.changeScene(new Config());
         sound.stop("StartBGM");
     }
 
     onStartClick(): void {
         console.log("Apreté Config", this);
-        ChangeScene(new MapScene());
-        this.removeChild(this);
+        SceneManager.changeScene(new MapScene());
         sound.stop("StartBGM");
     }
 

@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { AnimatedSprite, Container, Sprite, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
@@ -9,10 +10,11 @@ export class WinScene extends Container {
     public finish: boolean = false;
     private openingBox: AnimatedSprite;
     private award: Sprite;
+    public winStage: boolean = false;
 
     constructor() {
 
-        super();
+        super();     
 
         // IMAGEN DE LA CAJA SIN MOVERSE HECHA BOTON PARA QUE SE ABRA
         this.box = new PointButton(Texture.from("nro1.png"),
@@ -48,10 +50,16 @@ export class WinScene extends Container {
     }
 
     // FUNCION QUE SE EJECUTA CUANDO SE HACE CLICK EN LA CAJA
+
+    public Box(){
+        this.winStage=true;
+    }
+
     public onBoxClick(): void {
         this.removeChild(this.box);
         this.addChild(this.openingBox);
         this.openingBox.play();
+        sound.play("Chest1");
         new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
     }
 
@@ -62,7 +70,10 @@ export class WinScene extends Container {
         new Tween(this.award)
         .to({ x: 400, y:130 }, 2000)
         .start();
+        console.log("Award");
     }
+
+    
 
 }
 

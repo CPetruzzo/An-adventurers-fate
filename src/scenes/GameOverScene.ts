@@ -1,11 +1,15 @@
 import { sound } from "@pixi/sound";
-import { Container, Sprite, Texture } from "pixi.js";
-import { ChangeScene } from "..";
+import { Sprite, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
+import { SceneBase } from "../utils/SceneBase";
+import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 
-export class GameOverScene extends Container {
+export class GameOverScene extends SceneBase {
+
+    public update(): void {}
+    
 
     private buttonSound: ToggleButton;
     private BG: Sprite;
@@ -46,8 +50,7 @@ export class GameOverScene extends Container {
     }
     onLoseClick(): void {
         console.log("Apreté Config", this);
-        ChangeScene(new GameStartScene());
-        this.removeChild(this);
+        SceneManager.changeScene(new GameStartScene());
         sound.stop("PartingBGM");
     }
 }

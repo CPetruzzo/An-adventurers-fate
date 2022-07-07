@@ -1,7 +1,6 @@
 import { sound } from "@pixi/sound";
 import { Container, Texture, TilingSprite } from "pixi.js";
 import { Tween } from "tweedle.js";
-import { ChangeScene, HEIGHT, WIDTH } from "..";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
 import { checkCollision } from "../games/IHitBox";
@@ -15,12 +14,14 @@ import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
 import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
-import { Config } from "./Config";
-import { GameOverScene } from "./GameOverScene";
+import { SceneManager } from "../utils/SceneManager";
 import { PauseScene } from "./PauseScene";
 import { WinScene } from "./WinScene";
+import { Config } from "./Config";
+import { GameOverScene } from "./GameOverScene";
+import { SceneBase } from "../utils/SceneBase";
 
-export class GameScene extends Container implements IUpdateable {
+export class GameScene extends SceneBase implements IUpdateable {
 
     private playerBardo: Player;
     private world: Container;
@@ -63,6 +64,7 @@ export class GameScene extends Container implements IUpdateable {
     private chest: Potion;
     private win: WinScene;
     public winStage: boolean = false;
+    public nextStage: boolean = false;
 
 
     constructor() {
@@ -402,15 +404,21 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
-    public update(deltaTime: number, _deltaFrame: number): void {
+    public update(_deltaFrame: number, deltaTime: number): void {
         if (this.isPaused) {
             return;
         }
+
         if (this.gameOver) {
-            ChangeScene(new GameOverScene());
+            SceneManager.changeScene(new GameOverScene());
             sound.stop("GameBGM");
             const GameOverBGM = sound.find("PartingBGM");
             GameOverBGM.play({ loop: true, volume: 0.05 })
+        }
+
+        if (this.nextStage) { 
+            SceneManager.changeScene(new WinScene());
+            sound.stop("GameBGM");
         }
  
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
@@ -446,15 +454,15 @@ export class GameScene extends Container implements IUpdateable {
         }
 
         // LIMITE INFERIOR
-        if (this.playerBardo.y > (HEIGHT)) {
-            this.playerBardo.y = (HEIGHT);
+        if (this.playerBardo.y > (SceneManager.HEIGHT)) {
+            this.playerBardo.y = (SceneManager.HEIGHT);
             this.playerBardo.canJump = true;
             this.gameOver = true;
         }
 
 
         // CAMARA SEGUÍ A MI PERSONAJE
-        (this.world.x = - this.playerBardo.x * this.worldTransform.a + WIDTH / 3)
+        (this.world.x = - this.playerBardo.x * this.worldTransform.a + SceneManager.WIDTH / 3)
 
         // JUGADOR Y ENEMIGO HACIENDO COLISION
         const pelea = checkCollision(this.playerBardo, this.arek);
@@ -542,11 +550,24 @@ export class GameScene extends Container implements IUpdateable {
             this.chest.destroy();
             console.log("gane");      
             this.addChild(this.win);
-            if (this.winStage || Keyboard.state.get("KeyM")) {
+            if (Keyboard.state.get("KeyM")) {
                 console.log("openingBox");
                 this.win.onBoxClick();
+                this.Waiting();
             }
+            
         }
+    }
+
+    private Waiting(): void {
+        console.log("waiting");  
+        new Tween(this.win).to({}, 3000).start().onComplete(this.NextStage.bind(this));
+        
+    }
+
+    public NextStage(): void {
+        console.log("next stage");
+        this.nextStage = true;
     }
 
     // private createPlatforms(): void {
@@ -652,8 +673,7 @@ export class GameScene extends Container implements IUpdateable {
     }
 
     private onConfigClick(): void {
-        // console.log("Apreté Config", this);
-        ChangeScene(new Config());
+        SceneManager.changeScene(new Config());
         sound.stop("GameBGM");
     }
 
