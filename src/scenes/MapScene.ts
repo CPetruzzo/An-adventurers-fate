@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { Container, Graphics, IDestroyOptions, Sprite, Text, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
@@ -24,6 +25,9 @@ export class MapScene extends SceneBase implements IUpdateable {
     constructor() {
 
         super();
+
+        const mapMsc = sound.find("MapBGM");
+        mapMsc.play({ loop: true, volume: 0.05 })
 
         this.world = new Container();
         this.addChild(this.world);
@@ -166,7 +170,9 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private onStageOneClick() {
+        sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
+        
     }
 
 }

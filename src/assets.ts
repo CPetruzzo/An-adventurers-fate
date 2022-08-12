@@ -29,6 +29,9 @@ export const assets = [
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
     { url: "./StageOne/FinalBattle.mp3", name: "GameBGM", },
     { url: "./StageOne/Parting.mp3", name: "PartingBGM", },
+    { url: "./StartMenu/Earth.mp3", name: "MapBGM", },
+    { url: "./StageOne/WinItem.mp3", name: "ItemBGM", },
+
     // SOUND EFFECTS
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1", },
     { url: "./sounds/MinecraftChest.mp3", name: "Chest1", },

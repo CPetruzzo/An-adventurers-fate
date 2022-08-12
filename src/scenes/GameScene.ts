@@ -20,6 +20,7 @@ import { WinScene } from "./WinScene";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
+import { MapScene } from "./MapScene";
 
 export class GameScene extends SceneBase implements IUpdateable {
 
@@ -466,7 +467,6 @@ export class GameScene extends SceneBase implements IUpdateable {
 
         // JUGADOR Y ENEMIGO HACIENDO COLISION
         const pelea = checkCollision(this.playerBardo, this.arek);
-
         if (pelea != null) {
             this.playerBardo.separate(pelea, this.arek.position);
             this.playerBardo.getPlayerHurt(this.arekDamage / 5);
@@ -498,7 +498,6 @@ export class GameScene extends SceneBase implements IUpdateable {
 
         // ARMA DE CUERPO A CUERPO Y ENEMIGO
         const pelea2 = checkCollision(this.melee, this.arek);
-
         if (pelea2 != null) {
             console.log("che deberia estar pegandole al arek")
             if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
@@ -515,7 +514,6 @@ export class GameScene extends SceneBase implements IUpdateable {
 
         // ATAQUE DEL ENEMIGO AL JUGADOR
         const pelea3 = checkCollision(this.melee2, this.playerBardo);
-
         if (pelea3 != null) {
             this.arek.attackArek();
             this.playerBardo.getPlayerHurt(this.arekDamage);
@@ -531,7 +529,6 @@ export class GameScene extends SceneBase implements IUpdateable {
 
         // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
         const pelea4 = checkCollision(this.range, this.arek);
-
         if (pelea4 != null) {
             if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
                 this.arek.getEnemyHurt(this.rangeDamage);
@@ -545,6 +542,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             }
         }
 
+        // FIN DE LA PANTALLA - CHESTBOX
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.chest.destroy();
@@ -552,7 +550,12 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.addChild(this.win);
             if (Keyboard.state.get("KeyM")) {
                 console.log("openingBox");
+                sound.stop("GameBGM");
+                sound.stop("PotionSound1");
                 this.win.onBoxClick();
+                const winbgm=sound.find("ItemBGM");
+                winbgm.volume=0.2;
+                winbgm.play();
                 this.Waiting();
             }
             
@@ -561,20 +564,18 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     private Waiting(): void {
         console.log("waiting");  
-        new Tween(this.win).to({}, 3000).start().onComplete(this.NextStage.bind(this));
+        new Tween(this.win).to({}, 5000).start().onComplete(this.NextStage.bind(this));
         
     }
 
     public NextStage(): void {
         console.log("next stage");
         this.nextStage = true;
+        sound.stop("ItemBGM");
+        SceneManager.changeScene(new MapScene());
     }
 
-    // private createPlatforms(): void {
-    //     const platform = new Platform(0, HEIGHT - 50, WIDTH, 50);
-    //     this.platforms.push(platform);
-    //     this.world.addChild(platform);
-    // }    
+    // TWEENS DE LOS MOVIMIENTOS DE AREK
 
     private arekToLeft(): void {
         this.arek.scale.set(2, 2);
@@ -585,7 +586,6 @@ export class GameScene extends SceneBase implements IUpdateable {
             .onComplete(this.arekIdleRight.bind(this));
 
     }
-
     private arekIdleLeft(): void {
         new Tween(this.arek.idleArek)
             .from({ x: 3700 })
@@ -593,7 +593,6 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekToLeft.bind(this));
     }
-
     private arekIdleRight(): void {
         new Tween(this.arek.idleArek)
             .from({ x: 3800 })
@@ -601,7 +600,6 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekToRight.bind(this));
     }
-
     private arekToRight(): void {
         this.arek.scale.set(-2, 2);
         new Tween(this.arek)
@@ -610,6 +608,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekIdleLeft.bind(this));
     }
+
+    // BOTON DE PAUSE
 
     private onPause(): void {
         // console.log("Pusimos pausa", this);
@@ -626,9 +626,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.addChild(this.pauseScene,
             this.pauseOff, this.config);
     }
-
     private offPause(): void {
-        // console.log("Quitamos pausa", this);
         this.isPaused = false;
         this.removeChild(this.pauseScene,
             this.pauseOff, this.config);
@@ -642,8 +640,10 @@ export class GameScene extends SceneBase implements IUpdateable {
         );
     }
 
+
+    // BOTONES ON - OFF
+
     private removeButtons(): void {
-        // console.log("Quitamos botones", this);
         this.removeChild(this.start,
             this.buttonA,
             this.buttonB,
@@ -658,7 +658,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     private showButtons(): void {
-        // console.log("Mostramos botones", this);
         this.removeChild(this.buttonsOff);
         this.addChild(this.start,
             this.buttonA,
@@ -672,6 +671,9 @@ export class GameScene extends SceneBase implements IUpdateable {
         );
     }
 
+    
+    // UI DE MOVIMIENTOS
+
     private onConfigClick(): void {
         SceneManager.changeScene(new Config());
         sound.stop("GameBGM");
@@ -679,45 +681,37 @@ export class GameScene extends SceneBase implements IUpdateable {
 
 
     private onButtonB(): void {
-        // console.log("Presionando la tecla B", this);
         this.playerBardo.punchRun();
         this.causingRangeDamage = true;
     }
 
     private onButtonA(): void {
-        // console.log("Presionando la tecla A", this);
         this.playerBardo.punch();
         this.causingDamage = true;
     }
     private habilityClick(): void {
-        // console.log("Usando la habilidad especial", this);
         this.playerBardo.jump();
         this.winStage=true;
     }
 
     private RightMove(): void {
-        // console.log("Derecha", this);
         this.playerBardo.runRight();
     }
 
     private LeftMove(): void {
-        // console.log("Izquierda", this);
         this.playerBardo.runLeft();
     }
 
     private DownMove(): void {
-        // console.log("Abajo", this);
         this.playerBardo.crawl();
 
     }
 
     private UpMove(): void {
-        // console.log("Arriba", this);
         this.playerBardo.jump();
     }
 
     private Stop(): void {
-        // console.log("Detenido", this);
         this.playerBardo.idlePlayer();
         this.causingRangeDamage = false;
         this.causingDamage = false;

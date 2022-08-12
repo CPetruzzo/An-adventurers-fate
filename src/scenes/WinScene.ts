@@ -65,6 +65,8 @@ export class WinScene extends Container {
 
     private Award(): void {
 
+        sound.stop("Chest1");
+
         this.addChild(this.award);
         this.award.visible=true;
         new Tween(this.award)
