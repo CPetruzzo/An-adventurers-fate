@@ -6,13 +6,17 @@ import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
+import { GameStartScene } from "./GameStartScene";
 // import { GameScene } from "./GameScene";
 
 
 const RED = 0xAA0000;
 
 export class MapScene extends SceneBase implements IUpdateable {
-
+    
+    private book: PointButton;
+    // private soundOnOff: PointButton;
+    private menuBag: PointButton; 
     private graphicRed: Graphics;
     private map: Sprite;
     public minScale: number = 1;
@@ -21,13 +25,23 @@ export class MapScene extends SceneBase implements IUpdateable {
     private world: Container;
     private infoText: Text;
     public currentHeight: number = SceneManager.HEIGHT;
+    private bookOpened: Sprite;
+    private closeBook: PointButton;
+    private cartel: Sprite;
+    private shield: PointButton;
+    private button1: PointButton;
+    private button2: PointButton;
+    private buttonClose: PointButton;
+    private backMenu: PointButton;
+    private textoViejo: Text;
+    private Hp: Text;
+    private PStrenght: Text;
+    private BStrenght: Text;
+    
 
     constructor() {
 
         super();
-
-        const mapMsc = sound.find("MapBGM");
-        mapMsc.play({ loop: true, volume: 0.05 })
 
         this.world = new Container();
         this.addChild(this.world);
@@ -43,7 +57,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.graphicRed.drawRect(-50, -50, 50, 50);
         this.world.addChild(this.graphicRed);
 
-        this.stageOne = new PointButton(Texture.from("lineLight26.png"),
+        this.stageOne = new PointButton(Texture.from("lineDark23.png"),
             Texture.from("lineLight26.png"),
             Texture.from("lineLight26.png"));
         this.stageOne.x = 580
@@ -77,8 +91,156 @@ export class MapScene extends SceneBase implements IUpdateable {
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
 
 
-        this.infoText = new Text("", { fontFamily: "Arial", fontSize: 48, fill: 0xFFFFFF });
-        this.addChild(this.infoText);
+        this.infoText = new Text("", { fontFamily: "WindSong", fontSize: 48, fill: 0xFFFFFF });
+        // this.addChild(this.infoText);
+
+
+        this.book = new PointButton(Texture.from("BookOff"),
+            Texture.from("Book"),
+            Texture.from("Book"));
+        this.book.scale.set(0.3);
+        this.book.x = 380;
+        this.book.y = 650;
+        this.book.on("pointerClick", this.onBook, this);
+        this.addChild(this.book);
+
+        this.shield = new PointButton(Texture.from("ShieldOff"),
+            Texture.from("Shield"),
+            Texture.from("Shield"));
+            this.shield.scale.set(0.25);
+        this.shield.x = 240;
+        this.shield.y = 640;
+        this.shield.on("pointerClick", this.onShieldClick, this);
+        this.addChild(this.shield);
+
+        this.menuBag = new PointButton(Texture.from("BagOff"),
+            Texture.from("Bag"),
+            Texture.from("Bag"));
+        this.menuBag.scale.set(-0.3, 0.3);
+        this.menuBag.x = 100;
+        this.menuBag.y = 650;
+        this.menuBag.on("pointerClick", this.onMenuBagClick, this);
+        this.addChild(this.menuBag);
+
+
+        // OPEN BOOK
+
+        this.bookOpened = Sprite.from("BookOpened");
+        this.bookOpened.x = 150;
+        this.bookOpened.y = 50;
+        this.bookOpened.scale.set(0.7);
+        
+        this.closeBook = new PointButton(Texture.from("lineDark30.png"),
+            Texture.from("lineDark30.png"),
+            Texture.from("lineDark30.png"));
+        this.closeBook.x = 1020;
+        this.closeBook.y=150;
+        this.closeBook.on("pointerClick", this.onBookClose, this)
+        
+
+        // DATOS DEL JUGADOR
+
+        this.backMenu = new PointButton(Texture.from("backToMenu"),
+            Texture.from("backToMenu"),
+            Texture.from("backToMenu"));
+        this.backMenu.x = 1170;
+        this.backMenu.y = 50;
+        this.backMenu.scale.set(0.8);
+        this.backMenu.on("pointerClick", this.onBackMenu, this);
+        this.addChild(this.backMenu);
+
+        this.cartel= Sprite.from("Cartel");
+        this.cartel.x=470;
+        this.cartel.y=200;  
+        
+        this.button1 = new PointButton(Texture.from("MapButtonOff"),
+            Texture.from("MapButton"),
+            Texture.from("MapButton"));
+        this.button1.x = 630
+        this.button1.y = 420
+        this.button1.scale.x = 0.8;
+        this.button1.scale.y = 0.8;
+        this.button1.on("pointerClick", this.onMenu, this);
+
+        this.button2 = new PointButton(Texture.from("MapButtonOff"),
+            Texture.from("MapButton"),
+            Texture.from("MapButton"));
+        this.button2.x = 630;
+        this.button2.y = 350;
+        this.button2.scale.set(0.8)
+        this.button2.on("pointerClick", this.onStageOneClick, this)
+
+        this.buttonClose= new PointButton(Texture.from("ButtonClose"),
+            Texture.from("ButtonClose"),
+            Texture.from("ButtonClose"));
+        this.buttonClose.position.set(755,225);
+        this.buttonClose.scale.set(0.8);
+        this.buttonClose.on("pointerClick", this.onCloseClick, this)            
+
+
+        // // NOMBRE DEL JUGADOR
+        let texto = prompt("Introduce tu nombre");
+        if (texto!=null){
+        this.textoViejo = new Text(texto, { fontFamily: "WindSong", fontSize: 48, fill:  0X1819 });
+        } else {
+            this.textoViejo = new Text("Jugador", { fontFamily: "WindSong", fontSize: 48, fill:  0X1819 });;
+        }
+        const mapMsc = sound.find("MapBGM");
+        mapMsc.play({ loop: true, volume: 0.05 })
+        this.textoViejo.x = 350;
+        this.textoViejo.y = 120;
+
+
+        this.Hp= new Text("Max hp: 100", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
+        this.Hp.position.set(250, 300);
+        this.PStrenght= new Text("Punch: 5 hp", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
+        this.PStrenght.position.set(250, 350);
+        this.BStrenght = new Text("Bow: 2 hp", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
+        this.BStrenght.position.set(250, 400);
+
+
+    }
+
+    onShieldClick(): void {
+        throw new Error("Method not implemented.");
+    }
+
+    onCloseClick(): void {
+        this.removeChild(this.buttonClose);
+        this.removeChild(this.cartel);
+        this.removeChild(this.button1);
+        this.removeChild(this.button2);
+        this.addChild(this.backMenu);
+    }
+
+    private onMenuBagClick(): void {
+        throw new Error("Method not implemented.");
+    }
+
+    private onBackMenu(): void {
+        this.removeChild(this.backMenu);
+        this.addChild(this.cartel);
+        this.addChild(this.button1);
+        this.addChild(this.button2);
+        this.addChild(this.buttonClose);
+    }
+
+    private onBook(): void {
+        this.addChild(this.bookOpened);
+        this.addChild(this.closeBook);
+        this.addChild(this.textoViejo);
+
+        this.addChild(this.Hp, this.PStrenght, this.BStrenght);
+
+        this.removeChild(this.book);
+    }
+
+    onBookClose() {
+        this.removeChild(this.bookOpened);
+        this.removeChild(this.closeBook);
+        this.removeChild(this.textoViejo);
+        this.removeChild(this.Hp, this.PStrenght, this.BStrenght);
+        this.addChild(this.book);    
     }
 
     public override destroy(options: boolean | IDestroyOptions | undefined) {
@@ -175,4 +337,8 @@ export class MapScene extends SceneBase implements IUpdateable {
         
     }
 
+    private onMenu(){
+        sound.stop("MapBGM");
+        SceneManager.changeScene(new GameStartScene());
+    }
 }

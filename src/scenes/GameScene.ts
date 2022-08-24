@@ -564,7 +564,7 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     private Waiting(): void {
         console.log("waiting");  
-        new Tween(this.win).to({}, 5000).start().onComplete(this.NextStage.bind(this));
+        new Tween(this.win).to({}, 6000).start().onComplete(this.NextStage.bind(this));
         
     }
 

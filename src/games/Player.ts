@@ -1,4 +1,5 @@
 import { AnimatedSprite, Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text, Texture } from "pixi.js";
+import { Tween } from "tweedle.js";
 
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
@@ -24,6 +25,8 @@ export class Player extends PhysicsContainer implements IHitBox {
     public currentHealth: number = 100;
     public maxHealth: number = 100;
     private bardoGetUp: AnimatedSprite;
+    public canPunch: boolean= true;
+    public punchDamage: number = 2;
     
     
 
@@ -99,6 +102,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             ],
             false
         );
+        this.bardoPunch.loop=true;
         this.bardoPunch.scale.set(2);
         this.bardoPunch.animationSpeed = 0.15;
         this.bardoPunch.anchor.set(0.55, 0.95);
@@ -232,11 +236,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         Keyboard.down.on("KeyL", this.bow, this);
         Keyboard.down.on("KeyK", this.jumpBow, this);
 
-        Keyboard.up.on("KeyW", this.stopJump, this);
-        Keyboard.up.on("KeyS", this.stopCrawl, this);
+        // Keyboard.up.on("KeyW", this.stopJump, this);
+        // Keyboard.up.on("KeyS", this.stopCrawl, this);
         Keyboard.up.on("KeyD", this.stopRunRight, this);
         Keyboard.up.on("KeyA", this.stopRunLeft, this);
-        Keyboard.up.on("KeyJ", this.stopPunch, this);
+        // Keyboard.up.on("KeyJ", this.stopPunch, this);
         Keyboard.up.on("KeyL", this.stopBow, this);
         Keyboard.up.on("KeyK", this.stopJumpBow, this);
 
@@ -277,7 +281,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         Keyboard.down.off("KeyJ", this.punch, this);
         Keyboard.down.off("KeyL", this.bow, this);
         Keyboard.down.off("KeyK", this.jumpBow, this);
-
+        
         Keyboard.up.off("KeyW", this.stopJump, this);
         Keyboard.up.off("KeyS", this.stopCrawl, this);
         Keyboard.up.off("KeyD", this.stopRunRight, this);
@@ -288,6 +292,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
 
     }
+
 
     //  MOVIMIENTOS
     public override update(deltaMS: number) {
@@ -370,18 +375,30 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punch() {
+        if(this.canPunch) {
         // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
+        
         this.bardoJump.visible = false;
         this.bardoIdle.visible = false;
         this.bardoWalk.visible = false;
         this.bardoCrawl.visible = false;
-        this.bardoPunch.gotoAndPlay(0);
-        this.bardoPunch.visible = true;
-        this.bardoRunPunch.visible = false
+        this.bardoRunPunch.visible = false;
         this.bardoBow.visible = false;
         this.bardoJumpBow.visible = false;
+
+        this.bardoPunch.visible = true;
+        this.bardoPunch.gotoAndPlay(0);
+        this.bardoPunch.play();
+
+        this.canPunch=false;
+        this.punchDamage = 2;
+        new Tween(this.bardoPunch).to({ }, 550).start().onComplete(() => {
+            this.canPunch=true;
+            this.stopPunch();
+        } );
     }
+}
 
     public punchRun() {
         // console.log("apreté la J!", this);
@@ -492,7 +509,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardoRunPunch.visible = false;
     }
 
-    private stopPunch() {
+    public stopPunch() {
         // console.log("solté la J!", this);
         this.speed.x = this.speed.x / 2;
         this.bardoJump.visible = false;
@@ -555,7 +572,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     public getPlayerHurt(damage: number) {
         this.currentHealth -= damage;
         this.healthOnScreen.text = `${this.currentHealth}` + "HP";
-        console.log("Enemy health: " + this.currentHealth);
+        console.log("Player health: " + this.currentHealth);
     }
 
     public drinkPotion(healthRecovered: number) {

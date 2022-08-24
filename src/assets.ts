@@ -51,6 +51,18 @@ export const assets = [
     //MAPS
     { url: "./Maps/Map1.jpg", name: "Map1" },
     { url: "./Maps/Map2.jpg", name: "Map2" },
+    { url: "./Maps/bag.png", name: "Bag" },
+    { url: "./Maps/bagOff.png", name: "BagOff" },
+    { url: "./Maps/shield.png", name: "Shield" },
+    { url: "./Maps/shieldOff.png", name: "ShieldOff" },
+    { url: "./Maps/book.png", name: "Book" },
+    { url: "./Maps/bookOff.png", name: "BookOff" },
+    { url: "./Maps/bookOpened.png", name: "BookOpened" },
+    { url: "./Maps/cartel.png", name: "Cartel" },
+    { url: "./Maps/button.png", name: "MapButton" },
+    { url: "./Maps/buttonOff.png", name: "MapButtonOff" },
+    { url: "./Maps/buttonClose.png", name: "ButtonClose" },
+    { url: "./Maps/backToMenu.png", name: "backToMenu" },
 
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },

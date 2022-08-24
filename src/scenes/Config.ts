@@ -14,6 +14,7 @@ export class Config extends SceneBase {
     private buttonMouse: PointButton;
 
     public mostrarEscrito: boolean = false;
+    // public textoViejo: BitmapText;
 
     constructor() {
         super();
@@ -38,6 +39,15 @@ export class Config extends SceneBase {
             this.buttonMouse.scale.x = 0.5;
             this.buttonMouse.scale.y = 0.5;
             this.buttonMouse.on("pointerClick", this.onButtonClick, this);
+
+
+        //     // NOMBRE DEL JUGADOR
+        // let texto = prompt("Introduce tu nombre");
+        // if (texto!=null){
+        // // this.textoViejo = new BitmapText(texto, { fontName: "Supertext02" });
+        // } else {
+        //     // this.textoViejo = new BitmapText("Jugador", { fontName: "Supertext02" });
+        // }
 
 
             { // ADD.CHILD:             AGREGANDO TODO CON ADDCHILDS
@@ -76,7 +86,13 @@ export class Config extends SceneBase {
                 console.log(subtexto[i]);
                 sound.play("PotionSound1");
             }
-        }}
+        }
+
+        
+    }
+
+
+        
 
         // codigo para escribir letras de un texto una por una
 
