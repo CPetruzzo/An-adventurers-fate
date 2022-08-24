@@ -43,6 +43,8 @@ export class MapScene extends SceneBase implements IUpdateable {
     private salir: Text;
     private salirSi: Text;
     private salirNo : Text;
+    public MapUp: PointButton;
+    public MapDown: PointButton;
 
 
     constructor() {
@@ -63,7 +65,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.graphicRed.lineStyle({ color: RED, width: 10 });
         this.graphicRed.beginFill(RED, 0.3);
         this.graphicRed.drawRect(-50, -50, 50, 50);
-        this.world.addChild(this.graphicRed);
+        // this.world.addChild(this.graphicRed);
 
         this.stageOne = new PointButton(Texture.from("lineDark23.png"),
             Texture.from("lineLight26.png"),
@@ -179,7 +181,25 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.button2.x = 630;
         this.button2.y = 350;
         this.button2.scale.set(0.8)
-        this.button2.on("pointerClick", this.onMenu, this)
+        this.button2.on("pointerClick", this.onMenu, this);
+
+        this.MapUp = new PointButton(Texture.from("UpDown"),
+            Texture.from("UpDown"),
+            Texture.from("UpDown"));
+        this.MapUp.x = 1210;
+        this.MapUp.y = 320;
+        this.MapUp.scale.set(0.5,0.4)
+        this.MapUp.on("pointerClick", this.onMapUp, this);
+        this.addChild(this.MapUp);
+
+        this.MapDown = new PointButton(Texture.from("UpDown"),
+            Texture.from("UpDown"),
+            Texture.from("UpDown"));
+        this.MapDown.x = 1210;
+        this.MapDown.y = 400;
+        this.MapDown.scale.set(0.5,-0.4)
+        this.MapDown.on("pointerClick", this.onMapDown, this)
+        this.addChild(this.MapDown);
 
         this.buttonClose = new PointButton(Texture.from("ButtonClose"),
             Texture.from("ButtonClose"),
@@ -231,7 +251,13 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     }
 
+    onMapUp(){
+        this.world.position.y+=10;
+    }
 
+    onMapDown(){
+        this.world.position.y-=10;
+    }
 
     onShieldClick(): void {
         throw new Error("Method not implemented.");
@@ -386,4 +412,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameStartScene());
     }
+
+
+    
 }

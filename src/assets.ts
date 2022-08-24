@@ -65,6 +65,8 @@ export const assets = [
     { url: "./Maps/backToMenu.png", name: "backToMenu" },
     { url: "./Maps/player.png", name: "PlayerMap" },
     { url: "./Maps/marco.png", name: "MarcoMap" },
+    { url: "./Maps/updown.png", name: "UpDown" },
+    
 
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },

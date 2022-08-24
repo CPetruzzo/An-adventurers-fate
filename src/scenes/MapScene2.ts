@@ -42,6 +42,13 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     private marcoTopLeft: Sprite;
     public texto!: string | null;
     private stageTwo: PointButton;
+    private salir: Text;
+    private salirSi: Text;
+    private salirNo : Text;
+    public MapUp: PointButton;
+    public MapDown: PointButton;
+    marcoBottomRight: any;
+
 
 
     constructor() {
@@ -182,6 +189,25 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.button2.scale.set(0.8)
         this.button2.on("pointerClick", this.onStageOneClick, this)
 
+        this.MapUp = new PointButton(Texture.from("UpDown"),
+            Texture.from("UpDown"),
+            Texture.from("UpDown"));
+        this.MapUp.x = 1210;
+        this.MapUp.y = 320;
+        this.MapUp.scale.set(0.5,0.4)
+        this.MapUp.on("pointerClick", this.onMapUp, this);
+        this.addChild(this.MapUp);
+
+        this.MapDown = new PointButton(Texture.from("UpDown"),
+            Texture.from("UpDown"),
+            Texture.from("UpDown"));
+        this.MapDown.x = 1210;
+        this.MapDown.y = 400;
+        this.MapDown.scale.set(0.5,-0.4)
+        this.MapDown.on("pointerClick", this.onMapDown, this)
+        this.addChild(this.MapDown);
+
+
         this.buttonClose = new PointButton(Texture.from("ButtonClose"),
             Texture.from("ButtonClose"),
             Texture.from("ButtonClose"));
@@ -213,17 +239,45 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.marcoTopLeft = Sprite.from("MarcoMap");
         this.marcoTopLeft.scale.set(-0.4, 0.4);
         this.marcoTopLeft.position.set(400, 200);
+
+        this.marcoBottomRight = Sprite.from("MarcoMap");
+        this.marcoBottomRight.scale.set(0.4, 0.4);
+        this.marcoBottomRight.position.set(600, 350);
+
+        this.salir = new Text("¿Desea Salir?", Tangerine);
+        this.salir.position.set(540, 270);
+
+        this.salirSi = new Text("Si", Tangerine);
+        this.salirSi.position.set(600, 328);
+
+        this.salirNo = new Text("No", Tangerine);
+        this.salirNo.position.set(587, 396);
+
     }
+
+
+    onMapUp(){
+        this.world.position.y+=10;
+    }
+
+    onMapDown(){
+        this.world.position.y-=10;
+    }
+
 
     onShieldClick(): void {
         throw new Error("Method not implemented.");
     }
 
     onCloseClick(): void {
-        this.removeChild(this.buttonClose);
-        this.removeChild(this.cartel);
-        this.removeChild(this.button1);
-        this.removeChild(this.button2);
+        this.removeChild(this.buttonClose, 
+            this.cartel, 
+            this.button1, 
+            this.button2,
+            this.salir,
+            this.salirSi,
+            this.salirNo,
+            );
         this.addChild(this.backMenu);
     }
 
@@ -233,10 +287,14 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
     private onBackMenu(): void {
         this.removeChild(this.backMenu);
-        this.addChild(this.cartel);
-        this.addChild(this.button1);
-        this.addChild(this.button2);
-        this.addChild(this.buttonClose);
+        this.addChild(this.cartel, 
+            this.button1,
+            this.button2, 
+            this.buttonClose,
+            this.salir,
+            this.salirSi,
+            this.salirNo,
+            );
     }
 
     private onBook(): void {
@@ -247,7 +305,9 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.Hp,
             this.PStrenght,
             this.BStrenght,
-            this.marcoTopLeft);
+            this.marcoTopLeft,
+            this.marcoBottomRight,
+            );
 
         this.removeChild(this.book);
     }
