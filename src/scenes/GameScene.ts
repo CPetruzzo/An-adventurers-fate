@@ -20,7 +20,8 @@ import { WinScene } from "./WinScene";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
-import { MapScene } from "./MapScene";
+// import { MapScene } from "./MapScene";
+import { MapScene2 } from "./MapScene2";
 
 export class GameScene extends SceneBase implements IUpdateable {
 
@@ -572,7 +573,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         console.log("next stage");
         this.nextStage = true;
         sound.stop("ItemBGM");
-        SceneManager.changeScene(new MapScene());
+        SceneManager.changeScene(new MapScene2());
     }
 
     // TWEENS DE LOS MOVIMIENTOS DE AREK

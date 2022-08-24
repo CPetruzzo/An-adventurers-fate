@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Graphics, IDestroyOptions, Sprite, Text, Texture } from "pixi.js";
+import { Container, Graphics, IDestroyOptions, Sprite, Text, TextStyle, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
@@ -13,10 +13,10 @@ import { GameStartScene } from "./GameStartScene";
 const RED = 0xAA0000;
 
 export class MapScene extends SceneBase implements IUpdateable {
-    
+
     private book: PointButton;
     // private soundOnOff: PointButton;
-    private menuBag: PointButton; 
+    private menuBag: PointButton;
     private graphicRed: Graphics;
     private map: Sprite;
     public minScale: number = 1;
@@ -33,11 +33,17 @@ export class MapScene extends SceneBase implements IUpdateable {
     private button2: PointButton;
     private buttonClose: PointButton;
     private backMenu: PointButton;
-    private textoViejo: Text;
+    private textoViejo!: Text;
     private Hp: Text;
     private PStrenght: Text;
     private BStrenght: Text;
-    
+    private player: Sprite;
+    private marcoTopLeft: Sprite;
+    static texto: string | null;
+    private salir: Text;
+    private salirSi: Text;
+    private salirNo : Text;
+
 
     constructor() {
 
@@ -45,6 +51,8 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         this.world = new Container();
         this.addChild(this.world);
+
+        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
 
         this.map = new Sprite(Texture.from("Map1"));
         this.world.addChild(this.map);
@@ -82,16 +90,19 @@ export class MapScene extends SceneBase implements IUpdateable {
         pointOnMap3.scale.set(0.8);
         pointOnMap3.position.set(990, 400);
 
+    
         const pointOnMap4 = new Sprite(Texture.from("lineLight26.png"));
         this.map.addChild(pointOnMap4);
         pointOnMap4.scale.set(0.8);
         pointOnMap4.position.set(70, 450);
 
+
+        
         Keyboard.down.on("NumpadAdd", () => this.world.scale.set(this.world.scale.x + 0.1));
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
 
 
-        this.infoText = new Text("", { fontFamily: "WindSong", fontSize: 48, fill: 0xFFFFFF });
+        this.infoText = new Text("", Tangerine);
         // this.addChild(this.infoText);
 
 
@@ -107,7 +118,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.shield = new PointButton(Texture.from("ShieldOff"),
             Texture.from("Shield"),
             Texture.from("Shield"));
-            this.shield.scale.set(0.25);
+        this.shield.scale.set(0.25);
         this.shield.x = 240;
         this.shield.y = 640;
         this.shield.on("pointerClick", this.onShieldClick, this);
@@ -129,14 +140,14 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.bookOpened.x = 150;
         this.bookOpened.y = 50;
         this.bookOpened.scale.set(0.7);
-        
+
         this.closeBook = new PointButton(Texture.from("lineDark30.png"),
             Texture.from("lineDark30.png"),
             Texture.from("lineDark30.png"));
         this.closeBook.x = 1020;
-        this.closeBook.y=150;
+        this.closeBook.y = 150;
         this.closeBook.on("pointerClick", this.onBookClose, this)
-        
+
 
         // DATOS DEL JUGADOR
 
@@ -149,10 +160,10 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.backMenu.on("pointerClick", this.onBackMenu, this);
         this.addChild(this.backMenu);
 
-        this.cartel= Sprite.from("Cartel");
-        this.cartel.x=470;
-        this.cartel.y=200;  
-        
+        this.cartel = Sprite.from("Cartel");
+        this.cartel.x = 470;
+        this.cartel.y = 200;
+
         this.button1 = new PointButton(Texture.from("MapButtonOff"),
             Texture.from("MapButton"),
             Texture.from("MapButton"));
@@ -160,7 +171,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.button1.y = 420
         this.button1.scale.x = 0.8;
         this.button1.scale.y = 0.8;
-        this.button1.on("pointerClick", this.onMenu, this);
+        this.button1.on("pointerClick", this.onCloseClick, this);
 
         this.button2 = new PointButton(Texture.from("MapButtonOff"),
             Texture.from("MapButton"),
@@ -168,48 +179,73 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.button2.x = 630;
         this.button2.y = 350;
         this.button2.scale.set(0.8)
-        this.button2.on("pointerClick", this.onStageOneClick, this)
+        this.button2.on("pointerClick", this.onMenu, this)
 
-        this.buttonClose= new PointButton(Texture.from("ButtonClose"),
+        this.buttonClose = new PointButton(Texture.from("ButtonClose"),
             Texture.from("ButtonClose"),
             Texture.from("ButtonClose"));
-        this.buttonClose.position.set(755,225);
+        this.buttonClose.position.set(755, 225);
         this.buttonClose.scale.set(0.8);
-        this.buttonClose.on("pointerClick", this.onCloseClick, this)            
+        this.buttonClose.on("pointerClick", this.onCloseClick, this)
 
 
         // // NOMBRE DEL JUGADOR
-        let texto = prompt("Introduce tu nombre");
-        if (texto!=null){
-        this.textoViejo = new Text(texto, { fontFamily: "WindSong", fontSize: 48, fill:  0X1819 });
+        MapScene.texto = prompt("Introduce tu nombre");
+        if (MapScene.texto != (null)) {
+            this.textoViejo = new Text("Nombre: " + MapScene.texto, Tangerine);
         } else {
-            this.textoViejo = new Text("Jugador", { fontFamily: "WindSong", fontSize: 48, fill:  0X1819 });;
+            this.textoViejo = new Text("Jugador", Tangerine);;
         }
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
-        this.textoViejo.x = 350;
+        this.textoViejo.x = 250;
         this.textoViejo.y = 120;
 
 
-        this.Hp= new Text("Max hp: 100", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
-        this.Hp.position.set(250, 300);
-        this.PStrenght= new Text("Punch: 5 hp", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
-        this.PStrenght.position.set(250, 350);
-        this.BStrenght = new Text("Bow: 2 hp", { fontFamily: "WindSong", fontSize: 42, fill:  0X1819 });
-        this.BStrenght.position.set(250, 400);
+        this.Hp = new Text("Max hp: 100", Tangerine);
+        this.Hp.position.set(320, 270);
+        
+        this.PStrenght = new Text("Punch: 5 hp", Tangerine);
+        this.PStrenght.position.set(320, 320);
+        
+        this.BStrenght = new Text("Bow: 2 hp", Tangerine);
+        this.BStrenght.position.set(320, 370);
+
+        this.player = Sprite.from("PlayerMap");
+        this.player.scale.set(0.45);
+        this.player.position.set(530, 80);
+
+        this.marcoTopLeft = Sprite.from("MarcoMap");
+        this.marcoTopLeft.scale.set(-0.4, 0.4);
+        this.marcoTopLeft.position.set(400, 200);
+
+        this.salir = new Text("¿Desea Salir?", Tangerine);
+        this.salir.position.set(540, 270);
+
+        this.salirSi = new Text("Si", Tangerine);
+        this.salirSi.position.set(600, 328);
+
+        this.salirNo = new Text("No", Tangerine);
+        this.salirNo.position.set(587, 396);
 
 
     }
+
+
 
     onShieldClick(): void {
         throw new Error("Method not implemented.");
     }
 
     onCloseClick(): void {
-        this.removeChild(this.buttonClose);
-        this.removeChild(this.cartel);
-        this.removeChild(this.button1);
-        this.removeChild(this.button2);
+        this.removeChild(this.buttonClose, 
+            this.cartel, 
+            this.button1, 
+            this.button2,
+            this.salir,
+            this.salirSi,
+            this.salirNo,
+            );
         this.addChild(this.backMenu);
     }
 
@@ -219,28 +255,39 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onBackMenu(): void {
         this.removeChild(this.backMenu);
-        this.addChild(this.cartel);
-        this.addChild(this.button1);
-        this.addChild(this.button2);
-        this.addChild(this.buttonClose);
+        this.addChild(this.cartel, 
+            this.button1,
+            this.button2, 
+            this.buttonClose,
+            this.salir,
+            this.salirSi,
+            this.salirNo,
+            );
     }
 
     private onBook(): void {
-        this.addChild(this.bookOpened);
-        this.addChild(this.closeBook);
-        this.addChild(this.textoViejo);
-
-        this.addChild(this.Hp, this.PStrenght, this.BStrenght);
+        this.addChild(this.bookOpened,
+            this.closeBook,
+            this.textoViejo,
+            this.player,
+            this.Hp,
+            this.PStrenght,
+            this.BStrenght,
+            this.marcoTopLeft);
 
         this.removeChild(this.book);
     }
+    private onBookClose() {
+        this.removeChild(this.bookOpened,
+            this.closeBook,
+            this.textoViejo,
+            this.Hp,
+            this.PStrenght,
+            this.BStrenght,
+            this.player,
+            this.marcoTopLeft);
 
-    onBookClose() {
-        this.removeChild(this.bookOpened);
-        this.removeChild(this.closeBook);
-        this.removeChild(this.textoViejo);
-        this.removeChild(this.Hp, this.PStrenght, this.BStrenght);
-        this.addChild(this.book);    
+        this.addChild(this.book);
     }
 
     public override destroy(options: boolean | IDestroyOptions | undefined) {
@@ -251,7 +298,6 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         this.infoText.text = "Player position inside the world: " +
             this.graphicRed.x.toFixed(1) + ", " + this.graphicRed.y.toFixed(1);
-
 
         if (Keyboard.state.get("ArrowRight")) {
             this.graphicRed.x += 0.1 * deltaTime;
@@ -293,7 +339,6 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         // LIMITES DE MOVIMIENTO DEL MAPA
 
-
         if (this.world.scale.x === this.minScale) {
             this.world.scale.x = this.minScale;
             this.world.scale.y = this.minScale;
@@ -303,14 +348,15 @@ export class MapScene extends SceneBase implements IUpdateable {
         if (this.world.position.x > 0) {
             this.world.position.x = 0;
         }
-        if (this.world.scale.x==this.minScale) {
+        if (this.world.scale.x == this.minScale) {
             this.world.position.x = 0;
         }
-        if (this.world.scale.x==this.minScale+0.1)  {
+        if (this.world.scale.x == this.minScale + 0.1) {
             if (this.world.position.x < -128) {
                 this.world.position.x = -128;
             }
         }
+
         // LIMITE INFERIOR
         if (this.world.y > 238) {
             this.world.y = 238
@@ -334,10 +380,9 @@ export class MapScene extends SceneBase implements IUpdateable {
     private onStageOneClick() {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
-        
     }
 
-    private onMenu(){
+    private onMenu() {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameStartScene());
     }
