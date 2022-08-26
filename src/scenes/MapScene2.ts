@@ -57,6 +57,8 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     private itemWeapon2: Sprite;
     private itemWeapon3: Sprite;
     private level: Text;
+    private itemSword: Sprite;
+
 
     constructor() {
 
@@ -298,6 +300,11 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.itemWeapon3.scale.set(0.25);
         this.itemWeapon3.position.set(630,350);
         
+        this.itemSword = Sprite.from("itemSword");
+        this.itemSword.scale.set(-0.08,0.08);
+        this.itemSword.position.set(560,380);
+
+
         this.level = new Text("Level: 2", Tangerine);
         this.level.position.set(350 , 505);
     }
@@ -320,6 +327,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.itemWeapon1,
             this.itemWeapon2,
             this.itemWeapon3,
+            this.itemSword,
             );
 
     }
@@ -332,6 +340,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.itemWeapon1,
             this.itemWeapon2,
             this.itemWeapon3,
+            this.itemSword,
             );
         
     }

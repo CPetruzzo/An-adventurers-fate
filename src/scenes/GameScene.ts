@@ -353,7 +353,6 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.config.scale.y = 0.5;
         this.config.on("pointerClick", this.onConfigClick, this)
 
-        this.addChild(this.cartel);
 
         this.melee = new Melee();
         this.melee.position.x = -10
@@ -389,6 +388,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.win= new WinScene();
 
         this.addChild(
+            this.cartel,
             this.start,
             this.buttonA,
             this.buttonB,
@@ -483,7 +483,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
                 console.log("tomé la poción")
-                sound.play("PotionSound1");
+                sound.play("PotionSound1", {volume: 0.5});
 
 
                 potion.destroy();
@@ -545,12 +545,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.chest.destroy();     
-            this.addChild(this.win);
-            if (Keyboard.state.get("KeyM")) {
-                sound.stopAll();
-                this.win.onBoxClick();
-            }
-            
+            this.addChild(this.win);            
         }
     }
 

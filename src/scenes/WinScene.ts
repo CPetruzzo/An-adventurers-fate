@@ -41,9 +41,9 @@ export class WinScene extends Container {
         this.openingBox.position.set(400, 130);
 
         // IMAGEN DEL PREMIO
-        this.award = new Sprite(Texture.from("SwordPrize"));
+        this.award = new Sprite(Texture.from("itemSword"));
         this.award.position.set(500, 230);
-        this.award.scale.set(5);
+        this.award.scale.set(0.2);
         this.award.visible=false;
     }
 
@@ -70,7 +70,7 @@ export class WinScene extends Container {
         
         this.addChild(this.award);
         this.award.visible=true;
-        
+
         sound.stop("Chest1");
         const winbgm=sound.find("ItemBGM");
                 winbgm.volume=0.2;

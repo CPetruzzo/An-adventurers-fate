@@ -297,6 +297,8 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.itemWeapon3 = Sprite.from("itemShield");
         this.itemWeapon3.scale.set(0.25);
         this.itemWeapon3.position.set(630,350);
+
+
      
         this.level = new Text("Level: 1", Tangerine);
         this.level.position.set(350 , 505);

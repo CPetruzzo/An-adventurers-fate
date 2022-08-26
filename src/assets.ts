@@ -12,6 +12,8 @@ export const assets = [
     { url: "./StageOne/B3.png", name: "B3" },
     { url: "./StageOne/B4.png", name: "B4" },
     { url: "./StageOne/B5.png", name: "B5" },
+    { url: "./StartMenu/SETTINGS.png", name: "B6" },
+    
 
     // SUELO
     { url: "./texture.json", name: "Suelo" },
@@ -72,7 +74,8 @@ export const assets = [
     { url: "./Maps/pieDePag.png", name: "pie" },
     { url: "./Maps/backShield.png", name: "backShield" },
     { url: "./Maps/itemShield.png", name: "itemShield" },
-    
+    { url: "./Maps/swordBlade.png", name: "itemSword" },
+        
 
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },

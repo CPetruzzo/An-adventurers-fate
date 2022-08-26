@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Sprite, Texture } from "pixi.js";
+import { Container, Sprite, Text, TextStyle, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
 import { SceneManager } from "../utils/SceneManager";
@@ -13,12 +13,18 @@ export class PauseScene extends Container {
     private cartel: Sprite;
     button1: PointButton;
     button2: PointButton;
+    salirSi: Text;
+    salirNo: Text;
+    reiniciar: Text;
 
 
     constructor() {
         super();
 
         // this.BG=new Sprite(Texture.from("PAUSA"));
+
+        
+        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
 
         this.cartel = Sprite.from("Cartel");
         this.cartel.x = 470;
@@ -53,12 +59,26 @@ export class PauseScene extends Container {
             console.log("toggle changed to:", newState)
         })
 
+        this.reiniciar = new Text("Pausado", Tangerine);
+        this.reiniciar.position.set(560, 250);
+
+
+        this.salirSi = new Text("Reiniciar", Tangerine);
+        this.salirSi.position.set(560, 328);
+
+        this.salirNo = new Text("Salir", Tangerine);
+        this.salirNo.position.set(590, 396);
+
+
         this.addChild(
             // this.BG,
             this.buttonSound,
             this.cartel,
             this.button1,
-            this.button2
+            this.button2,
+            this.salirNo,
+            this.salirSi,
+            this.reiniciar,
             )
     }
 
