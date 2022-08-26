@@ -20,8 +20,6 @@ import { WinScene } from "./WinScene";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
-// import { MapScene } from "./MapScene";
-import { MapScene2 } from "./MapScene2";
 
 export class GameScene extends SceneBase implements IUpdateable {
 
@@ -546,36 +544,17 @@ export class GameScene extends SceneBase implements IUpdateable {
         // FIN DE LA PANTALLA - CHESTBOX
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
-            this.chest.destroy();
-            console.log("gane");      
+            this.chest.destroy();     
             this.addChild(this.win);
             if (Keyboard.state.get("KeyM")) {
-                console.log("openingBox");
-                sound.stop("GameBGM");
-                sound.stop("PotionSound1");
+                sound.stopAll();
                 this.win.onBoxClick();
-                const winbgm=sound.find("ItemBGM");
-                winbgm.volume=0.2;
-                winbgm.play();
-                this.Waiting();
             }
             
         }
     }
 
-    private Waiting(): void {
-        console.log("waiting");  
-        new Tween(this.win).to({}, 6000).start().onComplete(this.NextStage.bind(this));
-        
-    }
-
-    public NextStage(): void {
-        console.log("next stage");
-        this.nextStage = true;
-        sound.stop("ItemBGM");
-        SceneManager.changeScene(new MapScene2());
-    }
-
+    
     // TWEENS DE LOS MOVIMIENTOS DE AREK
 
     private arekToLeft(): void {
@@ -625,12 +604,16 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.moveRight
         );
         this.addChild(this.pauseScene,
-            this.pauseOff, this.config);
+            this.pauseOff, 
+            // this.config
+            );
     }
     private offPause(): void {
         this.isPaused = false;
         this.removeChild(this.pauseScene,
-            this.pauseOff, this.config);
+            this.pauseOff, 
+            // this.config
+            );
         this.addChild(this.start,
             this.buttonA,
             this.buttonB,

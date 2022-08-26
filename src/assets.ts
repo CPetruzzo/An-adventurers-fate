@@ -33,8 +33,10 @@ export const assets = [
     { url: "./StageOne/WinItem.mp3", name: "ItemBGM", },
 
     // SOUND EFFECTS
-    { url: "./sounds/GamePotion.mp3", name: "PotionSound1", },
-    { url: "./sounds/MinecraftChest.mp3", name: "Chest1", },
+    { url: "./sounds/GamePotion.mp3", name: "PotionSound1" },
+    { url: "./sounds/MinecraftChest.mp3", name: "Chest1" },
+    { url: "./sounds/bookPage.mp3", name: "SoundBook" },
+    
 
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },
@@ -66,6 +68,10 @@ export const assets = [
     { url: "./Maps/player.png", name: "PlayerMap" },
     { url: "./Maps/marco.png", name: "MarcoMap" },
     { url: "./Maps/updown.png", name: "UpDown" },
+    { url: "./Maps/nombre.png", name: "nombreMarco" },
+    { url: "./Maps/pieDePag.png", name: "pie" },
+    { url: "./Maps/backShield.png", name: "backShield" },
+    { url: "./Maps/itemShield.png", name: "itemShield" },
     
 
     // AWARDS

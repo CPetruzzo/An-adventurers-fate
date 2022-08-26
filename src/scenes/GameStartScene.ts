@@ -1,6 +1,6 @@
 import { sound } from "@pixi/sound";
-import {  Sprite, Texture } from "pixi.js";
-// import { ChangeScene } from "..";
+import { Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 
 import { ToggleButton } from "../ui/ToggleButton";
@@ -8,13 +8,11 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { Config } from "./Config";
 import { MapScene } from "./MapScene";
-// import { Config } from "./Config";
-// import { GameScene } from "./GameScene";
-// import { MapScene } from "./MapScene";
 
 export class GameStartScene extends SceneBase {
+    private titulo: Text;
 
-    public update(): void {}
+    public update(): void { }
 
     private buttonSound: ToggleButton;
     private BG: Sprite;
@@ -24,10 +22,17 @@ export class GameStartScene extends SceneBase {
     constructor() {
         super();
 
+        const letra = new TextStyle({ fontFamily: "Quintessential", fontSize: 100, fill: 0X1819 });
+
         const BGM = sound.find("StartBGM");
-        BGM.play({loop:true, volume:0.05})
-        
-        this.BG=new Sprite(Texture.from("An adventurer's fate (1).png"));
+        BGM.play({ loop: true, volume: 0.05 })
+
+        // this.BG=new Sprite(Texture.from("An adventurer's fate (1).png"));
+
+        this.BG = new Sprite(Texture.from("GameStartScene1.png"));
+        this.BG.scale.set(2.9);
+        this.BG.position.set(0, 0);
+
 
         // Sound ON-OFF
         this.buttonSound = new ToggleButton(
@@ -41,38 +46,40 @@ export class GameStartScene extends SceneBase {
             console.log("toggle changed to:", newState)
         })
 
-        this.config= new PointButton(Texture.from("CONFIG.png"),
-        Texture.from("CONFIG hundido.png"),
-        Texture.from("CONFIG.png"))
+        
+        this.titulo = new Text("An adventurer's fate", letra);
+        this.titulo.position.set(250,200);
+        
+
+        this.config = new PointButton(Texture.from("CONFIG.png"),
+            Texture.from("CONFIG hundido.png"),
+            Texture.from("CONFIG.png"))
         this.config.x = 650
         this.config.y = 500
-        this.config.scale.x=0.5;
-        this.config.scale.y=0.5;
+        this.config.scale.x = 0.5;
+        this.config.scale.y = 0.5;
         this.config.on("pointerClick", this.onConfigClick, this)
+
+        new Tween(this.BG).from({x:0 , y: 0}).to({x:0 , y: -500},15000).start().onComplete(this.BGdown.bind(this));
+
+        this.start = new PointButton(Texture.from("START.png"),
+            Texture.from("START hundido.png"),
+            Texture.from("START.png"))
+        this.start.x = 650
+        this.start.y = 400
+        this.start.scale.x = 0.5;
+        this.start.scale.y = 0.5;
+        this.start.on("pointerClick", this.onStartClick, this)
 
         this.addChild(
             this.BG,
             this.buttonSound,
             this.config,
-            )
-
-            this.start= new PointButton(Texture.from("START.png"),
-            Texture.from("START hundido.png"),
-            Texture.from("START.png"))
-            this.start.x = 650
-            this.start.y = 400
-            this.start.scale.x=0.5;
-            this.start.scale.y=0.5;
-            this.start.on("pointerClick", this.onStartClick, this)
-    
-            this.addChild(
-                this.BG,
-                this.buttonSound,
-                this.config,
-                this.start
-                )
+            this.start,
+            this.titulo,
+        )
     }
-    
+
     onConfigClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new Config());
@@ -83,6 +90,14 @@ export class GameStartScene extends SceneBase {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new MapScene());
         sound.stop("StartBGM");
+    }
+
+    BGdown(): void {
+        new Tween(this.BG).from({x:0 , y: -500}).to({x:0 , y: 0},15000).start().onComplete(this.BGup.bind(this));
+    }
+
+    BGup(): void{
+        new Tween(this.BG).from({x:0 , y: 0}).to({x:0 , y: -500},15000).start().onComplete(this.BGdown.bind(this));
     }
 
 }

@@ -36,6 +36,13 @@ export class LoaderScene extends SceneBase {
         Loader.registerPlugin(WebfontLoaderPlugin);
         Loader.shared.add(assets);
         Loader.shared.add({ name: 'From Google 2', url: 'https://fonts.googleapis.com/css2?family=Tangerine&display=swap' });
+        Loader.shared.add({ name: 'From Google 3', url: 'https://fonts.googleapis.com/css2?family=Quintessential&display=swap' });
+
+        
+        
+  
+
+
         Loader.shared.onComplete.once(this.whenLoadFinishes.bind(this));
         Loader.shared.load();
         Loader.shared.onProgress.add(Loader=>this.setBarPercent(Loader.progress));
