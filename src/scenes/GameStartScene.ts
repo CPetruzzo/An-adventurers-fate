@@ -8,9 +8,11 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { Config } from "./Config";
 import { MapScene } from "./MapScene";
+import { TextScene } from "./TextScene";
 
 export class GameStartScene extends SceneBase {
     private titulo: Text;
+    private textscene: PointButton;
 
     public update(): void { }
 
@@ -71,13 +73,29 @@ export class GameStartScene extends SceneBase {
         this.start.scale.y = 0.5;
         this.start.on("pointerClick", this.onStartClick, this)
 
+        
+        this.textscene = new PointButton(Texture.from("START.png"),
+            Texture.from("START hundido.png"),
+            Texture.from("START.png"))
+        this.textscene.x = 650
+        this.textscene.y = 600
+        this.textscene.scale.x = 0.5;
+        this.textscene.scale.y = 0.5;
+        this.textscene.on("pointerClick", this.onTextClick, this)
+
         this.addChild(
             this.BG,
             this.buttonSound,
             this.config,
             this.start,
+            this.textscene,
             this.titulo,
         )
+    }
+    onTextClick():void {
+        console.log("Apreté Config", this);
+        SceneManager.changeScene(new TextScene());
+        sound.stop("StartBGM");
     }
 
     onConfigClick(): void {
