@@ -5,6 +5,8 @@ export const assets = [
     { url: "./spritesheet (7).json", name: "MenuButtons" },
     { url: "./PauseMenu/PAUSA.png", name: "PAUSA" },
     { url: "./StageOne/Lose.png", name: "LOSE" },
+    { url: "./READ.png", name: "READ" },
+    
 
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
@@ -38,7 +40,7 @@ export const assets = [
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1" },
     { url: "./sounds/MinecraftChest.mp3", name: "Chest1" },
     { url: "./sounds/bookPage.mp3", name: "SoundBook" },
-    
+    { url: "./sounds/Escritura.mp3", name: "handWriting" },
 
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },

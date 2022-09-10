@@ -1,120 +1,117 @@
 // import { sound } from "@pixi/sound";
-import { Graphics, Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { sound } from "@pixi/sound";
+import { Graphics, Text, TextStyle, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
-// import { Tween } from "tweedle.js";
-// import Typed from "typed.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 
-
 export class TextScene extends SceneBase {
 
-    // private buttonText: PointButton;
     private buttonMouse: PointButton;
-
     public mostrarEscrito: boolean = false;
-    public settings: Sprite;
     public title: Text;
     public panelTexto: Graphics;
     public buttonText: PointButton;
     public fondo: Graphics;
-
-    // public textoViejo: BitmapText;
+    public title2: Text;
+    public panelTexto2: Graphics;
 
     constructor() {
         super();
 
-        const TangerineTitle = new TextStyle({ fontFamily: "Tangerine", fontSize: 130, fill: 0X1819 });
+        this.fondo = new Graphics();
+        this.fondo.beginFill(0xff3, 1);
+        this.fondo.drawRect(0, SceneManager.HEIGHT - 350, SceneManager.WIDTH, 350);
+        this.fondo.endFill();
 
-
-        this.settings = Sprite.from("An adventurer's fate.png");
-
-
+        const TangerineTitle = new TextStyle({ fontFamily: "Tangerine", fontSize: 100, fill: 0X111 });
 
         this.buttonMouse = new PointButton(Texture.from("BACK.png"),
             Texture.from("BACK hundido.png"),
             Texture.from("BACK.png"));
-        this.buttonMouse.x = 650
-        this.buttonMouse.y = 670
+        this.buttonMouse.x = SceneManager.WIDTH - this.buttonMouse.width / 4
+        this.buttonMouse.y = this.buttonMouse.height / 4
         this.buttonMouse.scale.x = 0.5;
         this.buttonMouse.scale.y = 0.5;
         this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
-        this.buttonText = new PointButton(Texture.from("BACK.png"),
-            Texture.from("BACK hundido.png"),
-            Texture.from("BACK.png"));
-        this.buttonText.x = 650
-        this.buttonText.y = 370
+        this.buttonText = new PointButton(Texture.from("READ"),
+            Texture.from("READ hundido.png"),
+            Texture.from("READ.png"));
         this.buttonText.scale.x = 0.5;
         this.buttonText.scale.y = 0.5;
+        this.buttonText.x = this.fondo.width - this.buttonText.width / 2
+        this.buttonText.y = SceneManager.HEIGHT - this.fondo.height + this.buttonText.height / 2
+
         this.buttonText.on("pointerClick", this.onButtonText, this);
 
-        
-        this.title = new Text("This is Arek the great's story", TangerineTitle);
-        this.title.position.x=SceneManager.WIDTH/2- (this.title.width/2)
-        ;
-        this.title.position.y=150;
+        //TEXTO
+        this.title = new Text("This is Arek the great's story, the one that", TangerineTitle);
+        this.title.position.x = SceneManager.WIDTH / 2 - (this.title.width / 2);
+        this.title.position.y = SceneManager.HEIGHT - 250;
 
-        this.panelTexto=new Graphics();
-        this.panelTexto.beginFill(0x00FF00, 1);
-        this.panelTexto.drawRect(this.title.position.x+this.title.width,this.title.position.y,-this.title.width,this.title.height);
+        this.title2 = new Text("nobody knows and the reason of how he became who he is", TangerineTitle);
+        this.title2.position.x = SceneManager.WIDTH / 2 - (this.title2.width / 2);
+        this.title2.position.y = SceneManager.HEIGHT - 150;
+
+
+        this.panelTexto = new Graphics();
+        this.panelTexto.beginFill(0xff3, 1);
+        this.panelTexto.drawRect(this.title.position.x + this.title.width, this.title.position.y, -this.title.width, this.title.height);
         this.panelTexto.endFill();
 
-        
-        this.fondo = new Graphics();
-        this.fondo.beginFill(0x00FF00,1);
-        this.fondo.drawRect(0,0,SceneManager.WIDTH,SceneManager.HEIGHT);
-        this.fondo.endFill();
-
-
+        this.panelTexto2 = new Graphics();
+        this.panelTexto2.beginFill(0xff3, 1);
+        this.panelTexto2.drawRect(this.title2.position.x + this.title2.width, this.title2.position.y, -this.title2.width, this.title.height);
+        this.panelTexto2.endFill();
 
         this.addChild(
-            this.settings, 
             this.fondo,
-            this.title, 
+            this.title,
+            this.title2,
             this.buttonMouse,
             this.panelTexto,
+            this.panelTexto2,
             this.buttonText
-            )
-
-        // this.buttonText = new PointButton(Texture.from("BACK.png"),
-        //     Texture.from("BACK hundido.png"),
-        //     Texture.from("BACK.png"));
-        // this.buttonText.x = 20
-        // this.buttonText.y = 50
-        // this.buttonText.scale.x = 0.5;
-        // this.buttonText.scale.y = 0.5;
-        // this.buttonText.on("pointerClick", this.onButtonText, this);
-
-        //     // NOMBRE DEL JUGADOR
-        // let texto = prompt("Introduce tu nombre");
-        // if (texto!=null){
-        // // this.textoViejo = new BitmapText(texto, { fontName: "Supertext02" });
-        // } else {
-        //     // this.textoViejo = new BitmapText("Jugador", { fontName: "Supertext02" });
-        // }
-
-        // { // ADD.CHILD:             AGREGANDO TODO CON ADDCHILDS
-        //     this.addChild(this.buttonMouse, this.buttonText);
-        // }
+        )
     }
+
     onButtonText() {
+        this.soundWriting();
         new Tween(this.panelTexto)
-            .to({ x: 1280}, 5000)
-            .start()
+            .to({ x: 1280 }, 7500)
+            .start().onComplete(this.onButtonText2.bind(this))
     }
 
+    soundWriting(){
+        sound.play("handWriting")
+    }
+
+    onButtonText2() {
+        new Tween(this.title)
+            .to({ alpha: 0 }, 2500)
+            .start()
+        new Tween(this.panelTexto2)
+            .to({ x: 1280 }, 7500)
+            .start().onComplete(this.onButtonTextStop.bind(this))
+    }
+
+    onButtonTextStop() {
+        new Tween(this.title2)
+            .to({ alpha: 0 }, 2000)
+            .start().onComplete(this.onButtonTextStop.bind(this));
+    }
 
     public update(): void {
 
-        // console.log(this.aux.innerHTML);
     }
 
     //BUTTON.TS            HACER FUNCIONAR EL NUEVO BOTÓN  
     private onButtonClick(): void {
         console.log("Apreté volver", this);
+        sound.stop("handWriting");
         SceneManager.changeScene(new GameStartScene());
     }
 

@@ -74,9 +74,9 @@ export class GameStartScene extends SceneBase {
         this.start.on("pointerClick", this.onStartClick, this)
 
         
-        this.textscene = new PointButton(Texture.from("START.png"),
-            Texture.from("START hundido.png"),
-            Texture.from("START.png"))
+        this.textscene = new PointButton(Texture.from("ABOUT.png"),
+            Texture.from("ABOUT hundido.png"),
+            Texture.from("ABOUT.png"))
         this.textscene.x = 650
         this.textscene.y = 600
         this.textscene.scale.x = 0.5;
