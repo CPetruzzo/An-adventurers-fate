@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text } from "pixi.js";
 import { Tween } from "tweedle.js";
 
@@ -261,6 +262,9 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public runLeft() {
         // console.log("apreté la A!", this);
+
+        const run = sound.find("running");
+        run.play({ loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
         this.bardo.playState("run");
@@ -276,6 +280,8 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public runRight() {
         // console.log("apreté la D!", this);
+        const run = sound.find("running");
+        run.play({ loop: true, volume: 0.05 })
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
         this.bardo.playState("run", true)
@@ -323,6 +329,11 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public punchRun() {
         // console.log("apreté la J!", this);
+
+        
+        const atkbow = sound.find("bow");
+        atkbow.play({ loop: true, volume: 0.05 })
+        
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch",true)
         // this.bardoJump.visible = false;
@@ -360,7 +371,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public bow(){
-        this.bardo.playState("bow", false)
+    this.bardo.playState("bow", false)
         // this.bardoBow.visible = true;
         // this.bardoIdle.visible = false;
         // this.bardoWalk.visible = false;
@@ -382,7 +393,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         // this.bardoPunch.visible = false;
         // this.bardoRunPunch.visible = false;
         // this.bardoBow.visible = false;
-        // this.bardoJumpBow.gotoAndPlay(0);
+        // this.bardoJumpBow.gotoAndPlay(0);    
     }
 
     private stopJump() {
@@ -416,6 +427,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     private stopRunLeft() {
         // console.log("solté la A!", this);
+        sound.stop("running");
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardo.playState("idle",true)
@@ -428,6 +440,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     private stopRunRight() {
         // console.log("solté la D!", this);
+        sound.stop("running");
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle",true)
@@ -470,9 +483,8 @@ export class Player extends PhysicsContainer implements IHitBox {
         // this.bardoCrawl.visible = false;
         // this.bardoPunch.visible = false;
         // this.bardoRunPunch.visible = false;
+        sound.stop("bow");
     }
-
-
 
 
     // me da la distancia desde el (0,0) al borde inicial de la hitbox
