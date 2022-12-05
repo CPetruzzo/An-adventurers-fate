@@ -41,6 +41,10 @@ export const assets = [
     { url: "./sounds/MinecraftChest.mp3", name: "Chest1" },
     { url: "./sounds/bookPage.mp3", name: "SoundBook" },
     { url: "./sounds/Escritura.mp3", name: "handWriting" },
+    { url: "./run.mp3", name: "running", },
+    { url: "./sounds/Arrow.mp3", name: "bow", },
+    
+
 
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },
