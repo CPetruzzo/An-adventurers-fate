@@ -7,6 +7,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8",
     "@pixi/sound": "^4.2.0",
     "pixi-webfont-loader": "^1.0.2",
     "pixi.js": "^6.3.0",

@@ -1,7 +1,8 @@
-import { AnimatedSprite, Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text, Texture } from "pixi.js";
+import { Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text } from "pixi.js";
 import { Tween } from "tweedle.js";
 
 import { Keyboard } from "../utils/Keyboard";
+import { StateAnimation } from "../utils/StateAnimation";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
 
@@ -12,206 +13,124 @@ export class Player extends PhysicsContainer implements IHitBox {
     private static readonly MOVE_SPEED = 350;
     public canJump = true;
     private hitbox: Graphics;
-    private bardoWalk: AnimatedSprite;
-    private bardoIdle: AnimatedSprite;
-    private bardoJump: AnimatedSprite;
-    private bardoCrawl: AnimatedSprite;
-    private bardoPunch: AnimatedSprite;
-    private bardoRunPunch: AnimatedSprite;
-    private bardoBow: AnimatedSprite;
-    private bardoJumpBow: AnimatedSprite;
-    // private bardoHurted: AnimatedSprite;
     public healthOnScreen: Text;
     public currentHealth: number = 100;
     public maxHealth: number = 100;
-    private bardoGetUp: AnimatedSprite;
     public canPunch: boolean= true;
     public punchDamage: number = 2;
-    
+    private bardo: StateAnimation;
     
 
 
     constructor() {
         super();
 
-        //BARDO RUN
-        this.bardoWalk = new AnimatedSprite(
-            [
-                Texture.from("adventurer-run2-00.png"),
-                Texture.from("adventurer-run2-01.png"),
-                Texture.from("adventurer-run2-02.png"),
-                Texture.from("adventurer-run2-03.png"),
-                Texture.from("adventurer-run2-04.png"),
-                Texture.from("adventurer-run2-05.png"),
-            ],
-            false
-        );
-        this.bardoWalk.scale.set(2);
-        this.bardoWalk.animationSpeed = 0.15;
-        this.bardoWalk.anchor.set(0.55, 0.95);
-        this.bardoWalk.play();
-        this.bardoWalk.visible = false;
+        this.bardo = new StateAnimation();
+        this.bardo.scale.set(2)
+        this.bardo.pivot.set(0.55,17);
 
-        //BARDO HURTED
-        // this.bardoHurted = new AnimatedSprite(
-        //     [
-        //         Texture.from("adventurer-knock-down-00"),
-        //         Texture.from("adventurer-knock-down-01"),
-        //         Texture.from("adventurer-knock-down-02"),
-        //         Texture.from("adventurer-knock-down-03"),
-        //         Texture.from("adventurer-knock-down-04"),
-        //         Texture.from("adventurer-knock-down-05"),
-        //         Texture.from("adventurer-knock-down-06"),
-        //     ],
-        //     false
-        // );
-        // this.bardoHurted.scale.set(2);
-        // this.bardoHurted.animationSpeed = 0.05;
-        // this.bardoHurted.anchor.set(0.55, 0.95);
-        // this.bardoHurted.play();
-        // this.bardoHurted.visible = false;
+        this.bardo.addState("run",
+        [
+            "adventurer-run2-00.png",
+            "adventurer-run2-01.png",
+            "adventurer-run2-02.png",
+            "adventurer-run2-03.png",
+            "adventurer-run2-04.png",
+            "adventurer-run2-05.png",
+        ], 
+        0.1, true
+        )
 
-        //BARDO GET UP
-        this.bardoGetUp = new AnimatedSprite([
-            Texture.from("adventurer-get-up-00.png"),
-            Texture.from("adventurer-get-up-01.png"),
-            Texture.from("adventurer-get-up-02.png"),
-            Texture.from("adventurer-get-up-03.png"),
-            Texture.from("adventurer-get-up-04.png"),
-            Texture.from("adventurer-get-up-05.png"),
-            Texture.from("adventurer-get-up-06.png"),
+        this.bardo.addState("hurted",
+        [
+            "adventurer-knock-down-00",
+            "adventurer-knock-down-01",
+            "adventurer-knock-down-02",
+            "adventurer-knock-down-03",
+            "adventurer-knock-down-04",
+            "adventurer-knock-down-05",
+            "adventurer-knock-down-06",
         ],
-            false
-        );
-        this.bardoGetUp.scale.set(2);
-        this.bardoGetUp.animationSpeed = 0.15;
-        this.bardoGetUp.anchor.set(0.55, 0.95);
-        this.bardoGetUp.play();
-        this.bardoGetUp.visible = false;
+        0.1,true
+        )
+        
+        this.bardo.addState("getUp", [
+            "adventurer-get-up-00.png",
+            "adventurer-get-up-01.png",
+            "adventurer-get-up-02.png",
+            "adventurer-get-up-03.png",
+            "adventurer-get-up-04.png",
+            "adventurer-get-up-05.png",
+            "adventurer-get-up-06.png",
+        ], 0.1, true)
 
+        this.bardo.addState("punch",
+        [
+            "adventurer-punch-00.png",
+            "adventurer-punch-01.png",
+            "adventurer-punch-02.png",
+            "adventurer-punch-03.png",
+            "adventurer-punch-04.png",
+            "adventurer-punch-05.png",
+        ], 0.1, true)
+        
+        this.bardo.addState("runPunch",
+        [
+            "adventurer-run-punch-00.png",
+            "adventurer-run-punch-01.png",
+            "adventurer-run-punch-02.png",
+            "adventurer-run-punch-03.png",
+            "adventurer-run-punch-04.png",
+            "adventurer-run-punch-05.png",
+            "adventurer-run-punch-06.png",
+        ],0.1,true)
 
-        // BARDO PUNCH
-        this.bardoPunch = new AnimatedSprite(
-            [
-                Texture.from("adventurer-punch-00.png"),
-                Texture.from("adventurer-punch-01.png"),
-                Texture.from("adventurer-punch-02.png"),
-                Texture.from("adventurer-punch-03.png"),
-                Texture.from("adventurer-punch-04.png"),
-                Texture.from("adventurer-punch-05.png"),
-            ],
-            false
-        );
-        this.bardoPunch.loop=true;
-        this.bardoPunch.scale.set(2);
-        this.bardoPunch.animationSpeed = 0.15;
-        this.bardoPunch.anchor.set(0.55, 0.95);
-        this.bardoPunch.play();
-        this.bardoPunch.visible = false;
+        this.bardo.addState("idle",
+            ["adventurer-walk-00.png"],
+        0.05,true)
 
-        //BARDO RUNPUNCH
-        this.bardoRunPunch = new AnimatedSprite(
-            [
-                Texture.from("adventurer-run-punch-00.png"),
-                Texture.from("adventurer-run-punch-01.png"),
-                Texture.from("adventurer-run-punch-02.png"),
-                Texture.from("adventurer-run-punch-03.png"),
-                Texture.from("adventurer-run-punch-04.png"),
-                Texture.from("adventurer-run-punch-05.png"),
-                Texture.from("adventurer-run-punch-06.png"),
-            ],
-            false
-        );
-        this.bardoRunPunch.scale.set(2);
-        this.bardoRunPunch.animationSpeed = 0.15;
-        this.bardoRunPunch.anchor.set(0.5, 0.95);
-        this.bardoRunPunch.play();
-        this.bardoRunPunch.visible = false;
-
-
-        //BARDO AL PEDO 
-        this.bardoIdle = new AnimatedSprite([
-            Texture.from("adventurer-walk-00.png")
-        ],
-            false
-        );
-        this.bardoIdle.scale.set(2);
-        this.bardoIdle.anchor.set(0.55, 0.95)
-        this.bardoIdle.visible = true;
-        this.bardoIdle.play();
-        this.bardoIdle.animationSpeed = 0.15;
-
-        //BARDO AGACHADITO
-        this.bardoCrawl = new AnimatedSprite(
-            [
-                Texture.from("adventurer-crouch-walk-00.png"),
-                Texture.from("adventurer-crouch-walk-01.png"),
-                Texture.from("adventurer-crouch-walk-02.png"),
-                Texture.from("adventurer-crouch-walk-03.png"),
-                Texture.from("adventurer-crouch-walk-04.png"),
-                Texture.from("adventurer-crouch-walk-05.png"),
-            ],
-            false
-        );
-        this.bardoCrawl.scale.set(2);
-        this.bardoCrawl.animationSpeed = 0.15;
-        this.bardoCrawl.anchor.set(0.45, 0.95);
-        this.bardoCrawl.play();
-        this.bardoCrawl.visible = false;
+        this.bardo.addState("crawl",
+        [
+            "adventurer-crouch-walk-00.png",
+            "adventurer-crouch-walk-01.png",
+            "adventurer-crouch-walk-02.png",
+            "adventurer-crouch-walk-03.png",
+            "adventurer-crouch-walk-04.png",
+            "adventurer-crouch-walk-05.png",
+        ], 0.1,true)
 
         //BARDO JUMP 
-        this.bardoJump = new AnimatedSprite([
-            Texture.from("adventurer-drop-kick-00.png"),
-            Texture.from("adventurer-drop-kick-01.png"),
-            Texture.from("adventurer-drop-kick-02.png"),
-            Texture.from("adventurer-drop-kick-03.png"),
-        ],
-            false
-        );
-        this.bardoJump.scale.set(2);
-        this.bardoJump.anchor.set(0.45, 0.95)
-        this.bardoJump.play();
-        this.bardoJump.animationSpeed = 0.05;
-        this.bardoJump.loop = false;
-        this.bardoJump.visible = false;
-
+        this.bardo.addState("jump",[
+            "adventurer-drop-kick-00.png",
+            "adventurer-drop-kick-01.png",
+            "adventurer-drop-kick-02.png",
+            "adventurer-drop-kick-03.png",
+        ], 0.05, false
+        )
+    
+        this.bardo.addState("bow",
+            ["adventurer-bow-00.png",
+            "adventurer-bow-01.png",
+            "adventurer-bow-02.png",
+            "adventurer-bow-03.png",
+            "adventurer-bow-04.png",
+            "adventurer-bow-05.png",
+            "adventurer-bow-06.png",
+            "adventurer-bow-07.png",
+            "adventurer-bow-08.png",
+        ],0.1,true )
+        
         // BARDO BOW
-        this.bardoBow = new AnimatedSprite([
-            Texture.from("adventurer-bow-00.png"),
-            Texture.from("adventurer-bow-01.png"),
-            Texture.from("adventurer-bow-02.png"),
-            Texture.from("adventurer-bow-03.png"),
-            Texture.from("adventurer-bow-04.png"),
-            Texture.from("adventurer-bow-05.png"),
-            Texture.from("adventurer-bow-06.png"),
-            Texture.from("adventurer-bow-07.png"),
-            Texture.from("adventurer-bow-08.png"),
-        ],
-            false
-        );
-        this.bardoBow.scale.set(2);
-        this.bardoBow.anchor.set(0.45, 0.95)
-        this.bardoBow.play();
-        this.bardoBow.animationSpeed = 0.15;
-        this.bardoBow.visible = false;
-
-        // BARDO BOW
-        this.bardoJumpBow = new AnimatedSprite([
-            Texture.from("adventurer-bow-jump-00.png"),
-            Texture.from("adventurer-bow-jump-01.png"),
-            Texture.from("adventurer-bow-jump-02.png"),
-            Texture.from("adventurer-bow-jump-03.png"),
-            Texture.from("adventurer-bow-jump-04.png"),
-            Texture.from("adventurer-bow-jump-05.png"),
-        ],
-            false
-        );
-        this.bardoJumpBow.scale.set(2);
-        this.bardoJumpBow.anchor.set(0.45, 0.95)
-        this.bardoJumpBow.play();
-        this.bardoJumpBow.animationSpeed = 0.15;
-        this.bardoJumpBow.visible = false;
-
+        this.bardo.addState("jumpBow",
+        [
+            "adventurer-bow-jump-00.png",
+            "adventurer-bow-jump-01.png",
+            "adventurer-bow-jump-02.png",
+            "adventurer-bow-jump-03.png",
+            "adventurer-bow-jump-04.png",
+            "adventurer-bow-jump-05.png",
+        ], 0.1, true
+        )
 
         // PUNTO GUÍA
         const auxZero = new Graphics();
@@ -249,15 +168,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
         // agrego todos los movimientos a la clase player
         this.addChild(
-            this.bardoWalk,
-            // this.bardoHurted,
-            this.bardoIdle,
-            this.bardoJump,
-            this.bardoCrawl,
-            this.bardoPunch,
-            this.bardoRunPunch,
-            this.bardoBow,
-            this.bardoJumpBow,
+            this.bardo
         );
         
 
@@ -297,15 +208,16 @@ export class Player extends PhysicsContainer implements IHitBox {
     //  MOVIMIENTOS
     public override update(deltaMS: number) {
         super.update(deltaMS / 1000);
+        this.bardo.update(deltaMS / (1000 / 60));
         // lo que es lo mismo que deltaseconds/(1/60)
-        this.bardoJump.update(deltaMS / (1000 / 60)); // esto es para saber cuantos frames pasaron (que deberían ser 1)
-        this.bardoIdle.update(deltaMS / (1000 / 60));
-        this.bardoWalk.update(deltaMS / (1000 / 60));
-        this.bardoCrawl.update(deltaMS / (1000 / 60));
-        this.bardoPunch.update(deltaMS / (1000 / 60));
-        this.bardoRunPunch.update(deltaMS / (1000 / 60));
-        this.bardoBow.update(deltaMS / (1000 / 60));
-        this.bardoJumpBow.update(deltaMS / (1000 / 60));
+        // this.bardoJump.update(deltaMS / (1000 / 60)); // esto es para saber cuantos frames pasaron (que deberían ser 1)
+        // this.bardoIdle.update(deltaMS / (1000 / 60));
+        // this.bardoWalk.update(deltaMS / (1000 / 60));
+        // this.bardoCrawl.update(deltaMS / (1000 / 60));
+        // this.bardoPunch.update(deltaMS / (1000 / 60));
+        // this.bardoRunPunch.update(deltaMS / (1000 / 60));
+        // this.bardoBow.update(deltaMS / (1000 / 60));
+        // this.bardoJumpBow.update(deltaMS / (1000 / 60));
     }
 
 
@@ -315,29 +227,30 @@ export class Player extends PhysicsContainer implements IHitBox {
             // console.log("apreté la W!", this);
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
-            this.bardoJump.visible = true;
-            this.bardoIdle.visible = false;
-            this.bardoWalk.visible = false;
-            this.bardoCrawl.visible = false;
-            this.bardoPunch.visible = false;
-            this.bardoRunPunch.visible = false;
-            this.bardoBow.visible = false;
-            this.bardoJumpBow.visible = false;
-            this.bardoJump.gotoAndPlay(0);
+            this.bardo.playState("jump", true)
+            // this.bardoJump.visible = true;
+            // this.bardoIdle.visible = false;
+            // this.bardoWalk.visible = false;
+            // this.bardoCrawl.visible = false;
+            // this.bardoPunch.visible = false;
+            // this.bardoRunPunch.visible = false;
+            // this.bardoBow.visible = false;
+            // this.bardoJumpBow.visible = false;
+            // this.bardoJump.gotoAndPlay(0);
         }
     }
 
     public crawl() {
         // console.log("apreté la S!", this);
-
-        this.bardoCrawl.visible = true;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.visible = false;
+        this.bardo.playState("crawl", true)
+        // this.bardoCrawl.visible = true;
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.visible = false;
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
@@ -350,135 +263,149 @@ export class Player extends PhysicsContainer implements IHitBox {
         // console.log("apreté la A!", this);
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
-        this.bardoWalk.visible = true;
-        this.bardoIdle.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.visible = false;
+        this.bardo.playState("run");
+        // this.bardoWalk.visible = true;
+        // this.bardoIdle.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.visible = false;
     }
 
     public runRight() {
         // console.log("apreté la D!", this);
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
-        this.bardoWalk.visible = true;
-        this.bardoIdle.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.visible = false;
+        this.bardo.playState("run", true)
+        // this.bardoWalk.visible = true;
+        // this.bardoIdle.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.visible = false;
     }
 
     public punch() {
         if(this.canPunch) {
         // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
-        
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.visible = false;
-
-        this.bardoPunch.visible = true;
-        this.bardoPunch.gotoAndPlay(0);
-        this.bardoPunch.play();
-
+        this.bardo.playState("punch");
         this.canPunch=false;
         this.punchDamage = 2;
-        new Tween(this.bardoPunch).to({ }, 550).start().onComplete(() => {
+        new Tween(this.bardo).to({ }, 550).start().onComplete(() => {
             this.canPunch=true;
             this.stopPunch();
         } );
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.visible = false;
+
+        // this.bardoPunch.visible = true;
+        // this.bardoPunch.gotoAndPlay(0);
+        // this.bardoPunch.play();
+
+        this.canPunch=false;
+        this.punchDamage = 2;
+        // new Tween(this.bardoPunch).to({ }, 550).start().onComplete(() => {
+        //     this.canPunch=true;
+        //     this.stopPunch();
+        // } );
     }
 }
 
     public punchRun() {
         // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = true;
-        this.bardoRunPunch.gotoAndPlay(0);
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.visible = false;
+        this.bardo.playState("runPunch",true)
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = true;
+        // this.bardoRunPunch.gotoAndPlay(0);
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.visible = false;
     }
 
     public idlePlayer() {
         // console.log("ninguna tecla presionada", this);
         this.speed.x = 0;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     public fall(){
+        this.bardo.playState("hurted")
         // this.bardoHurted.visible = true;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     public bow(){
-        this.bardoBow.visible = true;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoBow.gotoAndPlay(0);
-        this.bardoJumpBow.visible = false;
+        this.bardo.playState("bow", false)
+        // this.bardoBow.visible = true;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoBow.gotoAndPlay(0);
+        // this.bardoJumpBow.visible = false;
     }
 
     public jumpBow(){  
-        this.bardoJumpBow.visible = true;
-        this.bardoIdle.visible = false;
-        this.bardoWalk.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
-        this.bardoBow.visible = false;
-        this.bardoJumpBow.gotoAndPlay(0);
+        this.bardo.playState("jumpBow", false)
+        // this.bardoJumpBow.visible = true;
+        // this.bardoIdle.visible = false;
+        // this.bardoWalk.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
+        // this.bardoBow.visible = false;
+        // this.bardoJumpBow.gotoAndPlay(0);
     }
 
     private stopJump() {
         // console.log("solté la W!", this);
-
-        this.bardoCrawl.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoCrawl.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     private stopCrawl() {
+        this.bardo.playState("idle",true)
         // console.log("solté la S!", this);
         this.speed.x = 0;
-        this.bardoCrawl.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
@@ -491,53 +418,58 @@ export class Player extends PhysicsContainer implements IHitBox {
         // console.log("solté la A!", this);
         this.speed.x = 0;
         this.scale.set(-2, 2);
-        this.bardoWalk.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoJump.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoWalk.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoJump.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     private stopRunRight() {
         // console.log("solté la D!", this);
         this.speed.x = 0;
         this.scale.set(2, 2);
-        this.bardoWalk.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoJump.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoWalk.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoJump.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     public stopPunch() {
         // console.log("solté la J!", this);
         this.speed.x = this.speed.x / 2;
-        this.bardoJump.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoJump.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     private stopBow(){
-        this.bardoBow.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoBow.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
     private stopJumpBow(){
-        this.bardoJumpBow.visible = false;
-        this.bardoIdle.visible = true;
-        this.bardoWalk.visible = false;
-        this.bardoJump.visible = false;
-        this.bardoCrawl.visible = false;
-        this.bardoPunch.visible = false;
-        this.bardoRunPunch.visible = false;
+        this.bardo.playState("idle",true)
+        // this.bardoJumpBow.visible = false;
+        // this.bardoIdle.visible = true;
+        // this.bardoWalk.visible = false;
+        // this.bardoJump.visible = false;
+        // this.bardoCrawl.visible = false;
+        // this.bardoPunch.visible = false;
+        // this.bardoRunPunch.visible = false;
     }
 
 
