@@ -9,7 +9,6 @@ import { PhysicsContainer } from "./PhysicsContainer";
 
 export class Player extends PhysicsContainer implements IHitBox {
 
-
     private static readonly GRAVITY = 1000;
     private static readonly MOVE_SPEED = 350;
     public canJump = true;
@@ -20,8 +19,6 @@ export class Player extends PhysicsContainer implements IHitBox {
     public canPunch: boolean= true;
     public punchDamage: number = 2;
     private bardo: StateAnimation;
-    
-
 
     constructor() {
         super();
@@ -201,8 +198,6 @@ export class Player extends PhysicsContainer implements IHitBox {
         Keyboard.up.off("KeyJ", this.stopPunch, this);
         Keyboard.up.off("KeyL", this.stopBow, this);
         Keyboard.up.off("KeyK", this.stopJumpBow, this);
-
-
     }
 
 
@@ -210,48 +205,20 @@ export class Player extends PhysicsContainer implements IHitBox {
     public override update(deltaMS: number) {
         super.update(deltaMS / 1000);
         this.bardo.update(deltaMS / (1000 / 60));
-        // lo que es lo mismo que deltaseconds/(1/60)
-        // this.bardoJump.update(deltaMS / (1000 / 60)); // esto es para saber cuantos frames pasaron (que deberían ser 1)
-        // this.bardoIdle.update(deltaMS / (1000 / 60));
-        // this.bardoWalk.update(deltaMS / (1000 / 60));
-        // this.bardoCrawl.update(deltaMS / (1000 / 60));
-        // this.bardoPunch.update(deltaMS / (1000 / 60));
-        // this.bardoRunPunch.update(deltaMS / (1000 / 60));
-        // this.bardoBow.update(deltaMS / (1000 / 60));
-        // this.bardoJumpBow.update(deltaMS / (1000 / 60));
     }
 
 
     //  FUNCION AUXILIAR (SI NO LA TENGO SEPARADA NO PUEDO BORRARLA CUANDO ELIMINE A PLAYER)
     public jump() {
         if (this.canJump) {
-            // console.log("apreté la W!", this);
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
             this.bardo.playState("jump", true)
-            // this.bardoJump.visible = true;
-            // this.bardoIdle.visible = false;
-            // this.bardoWalk.visible = false;
-            // this.bardoCrawl.visible = false;
-            // this.bardoPunch.visible = false;
-            // this.bardoRunPunch.visible = false;
-            // this.bardoBow.visible = false;
-            // this.bardoJumpBow.visible = false;
-            // this.bardoJump.gotoAndPlay(0);
         }
     }
 
     public crawl() {
-        // console.log("apreté la S!", this);
         this.bardo.playState("crawl", true)
-        // this.bardoCrawl.visible = true;
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.visible = false;
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
@@ -261,43 +228,23 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runLeft() {
-        // console.log("apreté la A!", this);
-
         const run = sound.find("running");
         run.play({ loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
         this.bardo.playState("run");
-        // this.bardoWalk.visible = true;
-        // this.bardoIdle.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.visible = false;
     }
 
     public runRight() {
-        // console.log("apreté la D!", this);
         const run = sound.find("running");
         run.play({ loop: true, volume: 0.05 })
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
         this.bardo.playState("run", true)
-        // this.bardoWalk.visible = true;
-        // this.bardoIdle.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.visible = false;
     }
 
     public punch() {
         if(this.canPunch) {
-        // console.log("apreté la J!", this);
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("punch");
         this.canPunch=false;
@@ -306,117 +253,42 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.canPunch=true;
             this.stopPunch();
         } );
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.visible = false;
-
-        // this.bardoPunch.visible = true;
-        // this.bardoPunch.gotoAndPlay(0);
-        // this.bardoPunch.play();
-
         this.canPunch=false;
         this.punchDamage = 2;
-        // new Tween(this.bardoPunch).to({ }, 550).start().onComplete(() => {
-        //     this.canPunch=true;
-        //     this.stopPunch();
-        // } );
     }
 }
 
     public punchRun() {
-        // console.log("apreté la J!", this);
-
-        
         const atkbow = sound.find("bow");
         atkbow.play({ loop: true, volume: 0.05 })
-        
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch",true)
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = true;
-        // this.bardoRunPunch.gotoAndPlay(0);
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.visible = false;
     }
 
     public idlePlayer() {
-        // console.log("ninguna tecla presionada", this);
         this.speed.x = 0;
         this.bardo.playState("idle",true)
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     public fall(){
         this.bardo.playState("hurted")
-        // this.bardoHurted.visible = true;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     public bow(){
-    this.bardo.playState("bow", false)
-        // this.bardoBow.visible = true;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoBow.gotoAndPlay(0);
-        // this.bardoJumpBow.visible = false;
+        this.bardo.playState("bow", false)
     }
 
     public jumpBow(){  
-        this.bardo.playState("jumpBow", false)
-        // this.bardoJumpBow.visible = true;
-        // this.bardoIdle.visible = false;
-        // this.bardoWalk.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
-        // this.bardoBow.visible = false;
-        // this.bardoJumpBow.gotoAndPlay(0);    
+        this.bardo.playState("jumpBow", false)   
     }
 
     private stopJump() {
-        // console.log("solté la W!", this);
         this.bardo.playState("idle",true)
-        // this.bardoCrawl.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     private stopCrawl() {
         this.bardo.playState("idle",true)
-        // console.log("solté la S!", this);
         this.speed.x = 0;
-        // this.bardoCrawl.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0);
@@ -426,66 +298,32 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunLeft() {
-        // console.log("solté la A!", this);
         sound.stop("running");
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardo.playState("idle",true)
-        // this.bardoWalk.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoJump.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     private stopRunRight() {
-        // console.log("solté la D!", this);
         sound.stop("running");
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle",true)
-        // this.bardoWalk.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoJump.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     public stopPunch() {
-        // console.log("solté la J!", this);
         this.speed.x = this.speed.x / 2;
         this.bardo.playState("idle",true)
-        // this.bardoJump.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     private stopBow(){
         this.bardo.playState("idle",true)
-        // this.bardoBow.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
     }
 
     private stopJumpBow(){
         this.bardo.playState("idle",true)
-        // this.bardoJumpBow.visible = false;
-        // this.bardoIdle.visible = true;
-        // this.bardoWalk.visible = false;
-        // this.bardoJump.visible = false;
-        // this.bardoCrawl.visible = false;
-        // this.bardoPunch.visible = false;
-        // this.bardoRunPunch.visible = false;
         sound.stop("bow");
     }
-
 
     // me da la distancia desde el (0,0) al borde inicial de la hitbox
     public getHitBox(): Rectangle {
