@@ -243,16 +243,18 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.shieldClose.position.set(880, 135);
         this.shieldClose.scale.set(0.8);
         this.shieldClose.on("pointerClick", this.onCloseShieldClick, this);
-
-        if(MapScene.texto){
-        this.textoViejo = new Text(MapScene.texto, Tangerine);
+        
+        if (MapScene.texto != (null)) {
+            this.textoViejo = new Text(MapScene.texto, Tangerine);
+        } else {
+            this.textoViejo = new Text("Jugador", Tangerine);
         }
 
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
         this.textoViejo.x = 400 - (this.textoViejo.width/2);
         this.textoViejo.y = 120;
-
+        
         this.Hp = new Text("Max hp: 100", Tangerine);
         this.Hp.position.set(320, 270);
         

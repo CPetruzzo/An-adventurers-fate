@@ -130,6 +130,8 @@ export class Player extends PhysicsContainer implements IHitBox {
         ], 0.1, true
         )
 
+        this.bardo.playState("idle");
+
         // PUNTO GUÍA
         const auxZero = new Graphics();
         auxZero.beginFill(0xFF00FF);

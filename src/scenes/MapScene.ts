@@ -14,7 +14,7 @@ import { GameStartScene } from "./GameStartScene";
 const RED = 0xAA0000;
 
 export class MapScene extends SceneBase implements IUpdateable {
-
+    
     private book: PointButton;
     // private soundOnOff: PointButton;
     private menuBag: PointButton;
@@ -243,7 +243,8 @@ export class MapScene extends SceneBase implements IUpdateable {
         if (MapScene.texto != (null)) {
             this.textoViejo = new Text(MapScene.texto, Tangerine);
         } else {
-            this.textoViejo = new Text("Jugador", Tangerine);;
+            MapScene.texto = "Jugador";
+            this.textoViejo = new Text(MapScene.texto, Tangerine);
         }
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
