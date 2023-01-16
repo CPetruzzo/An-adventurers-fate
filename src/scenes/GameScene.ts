@@ -667,10 +667,13 @@ export class GameScene extends SceneBase implements IUpdateable {
     private onButtonA(): void {
         this.playerBardo.punch();
         this.causingDamage = true;
+        sound.stop("bow");
     }
     private habilityClick(): void {
         this.playerBardo.jump();
         this.winStage=true;
+        sound.stop("running");
+        sound.stop("bow");
     }
 
     private RightMove(): void {
@@ -688,10 +691,14 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     private UpMove(): void {
         this.playerBardo.jump();
+        sound.stop("running");
+
     }
 
     private Stop(): void {
         this.playerBardo.idlePlayer();
+        sound.stop("running");
+        sound.stop("bow");
         this.causingRangeDamage = false;
         this.causingDamage = false;
     }

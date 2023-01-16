@@ -217,6 +217,8 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.canJump = false;
             this.bardo.playState("jump", true)
         }
+        sound.stop("running");
+
     }
 
     public crawl() {
@@ -261,7 +263,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 }
 
     public punchRun() {
-        const atkbow = sound.find("bow");
+        const atkbow = sound.find("bow");       
         atkbow.play({ loop: true, volume: 0.05 })
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch",true)
