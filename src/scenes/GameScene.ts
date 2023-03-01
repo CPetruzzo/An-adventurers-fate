@@ -8,7 +8,6 @@ import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
 import { Melee } from "../games/Weapon/Melee";
-import { Range } from "../games/Weapon/Range";
 import { GenericPanel } from "../ui/GenericPanel";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
@@ -20,6 +19,7 @@ import { WinScene } from "./WinScene";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
+import { Arrow } from "../games/Weapon/Arrow";
 
 export class GameScene extends SceneBase implements IUpdateable {
 
@@ -46,17 +46,16 @@ export class GameScene extends SceneBase implements IUpdateable {
     private buttonsOff: PointButton;
     private config: PointButton;
     private potions: Potion[];
+    private arrows: Arrow[];
 
     private isPaused: boolean = false;
     private causingDamage: boolean = false;
-    private causingRangeDamage: boolean = false;
 
     private arek: Arek;
     private punchDamage: number = 2;
     private rangeDamage: number = 1;
     private melee: Melee;
     private melee2: Melee;
-    private range: Range;
     private arekDamage: number = 1;
 
     private HPbar: HealthBar;
@@ -70,7 +69,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     constructor() {
         super();
         this.backgrounds = [];
-
+        this.arrows = [];
         this.world = new Container();
 
         const BGM = sound.find("GameBGM");
@@ -362,9 +361,6 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.melee2.position.x = -90;
         this.arek.addChild(this.melee2)
 
-        this.range = new Range();
-        this.playerBardo.addChild(this.range);
-
         this.potions = [];
         const pot1 = new Potion("Potion", 200, 200);
         pot1.scale.set(0.1);
@@ -385,7 +381,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
 
-        this.win= new WinScene();
+        this.win = new WinScene();
 
         this.addChild(
             this.cartel,
@@ -400,7 +396,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
         )
-        
+
     }
 
     // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
@@ -416,11 +412,11 @@ export class GameScene extends SceneBase implements IUpdateable {
             GameOverBGM.play({ loop: true, volume: 0.05 })
         }
 
-        if (this.nextStage) { 
+        if (this.nextStage) {
             SceneManager.changeScene(new WinScene());
             sound.stop("GameBGM");
         }
- 
+
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
@@ -483,7 +479,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
                 console.log("tomé la poción")
-                sound.play("PotionSound1", {volume: 0.5});
+                sound.play("PotionSound1", { volume: 0.5 });
 
 
                 potion.destroy();
@@ -523,33 +519,50 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.world.removeChild(this.playerBardo);
                 this.gameOver = true;
             }
+        } else {
+            this.arek.idleArek();
         }
-        else { this.arek.idleArek(); }
 
         // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
-        const pelea4 = checkCollision(this.range, this.arek);
-        if (pelea4 != null) {
-            if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
-                this.arek.getEnemyHurt(this.rangeDamage);
-                this.HPbar2.destroy();
-                this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
-                this.HPbar2.position.set(-120, -145);
-                this.arek.addChild(this.HPbar2);
-                if (this.arek.currentHealth <= 0) {
-                    this.world.removeChild(this.arek);
+        this.playerBardo.on("arrowShooted", () => {
+            this.createArrow();
+            console.log("creating arrow...");
+            for (let i = 0; i < this.arrows.length; i++) {
+                this.shootArrow(this.arrows[i]);
+                console.log("shooting arrow...");
+                const pelea4 = checkCollision(this.arrows[i], this.arek);
+                console.log("Checking for collisions...");
+                if (pelea4 != null) {
+                    this.removeChild(this.arrows[i]);
+                    this.arrows[i].destroy();
+                    this.arek.getEnemyHurt(this.rangeDamage);
+                    this.HPbar2.destroy();
+                    this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
+                    this.HPbar2.position.set(-120, -145);
+                    this.arek.addChild(this.HPbar2);
+                    if (this.arek.currentHealth <= 0) {
+                        this.world.removeChild(this.arek);
+                    }
+
+                } else {
+                    this.removeChild(this.arrows[i]);
+                    this.arrows[i].destroy();
                 }
             }
-        }
+        });
+
+
 
         // FIN DE LA PANTALLA - CHESTBOX
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
-            this.chest.destroy();     
-            this.addChild(this.win);            
+            this.chest.destroy();
+            this.addChild(this.win);
         }
     }
 
-    
+
+
     // TWEENS DE LOS MOVIMIENTOS DE AREK
 
     private arekToLeft(): void {
@@ -599,16 +612,16 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.moveRight
         );
         this.addChild(this.pauseScene,
-            this.pauseOff, 
+            this.pauseOff,
             // this.config
-            );
+        );
     }
     private offPause(): void {
         this.isPaused = false;
         this.removeChild(this.pauseScene,
-            this.pauseOff, 
+            this.pauseOff,
             // this.config
-            );
+        );
         this.addChild(this.start,
             this.buttonA,
             this.buttonB,
@@ -650,7 +663,6 @@ export class GameScene extends SceneBase implements IUpdateable {
         );
     }
 
-    
     // UI DE MOVIMIENTOS
 
     private onConfigClick(): void {
@@ -658,10 +670,9 @@ export class GameScene extends SceneBase implements IUpdateable {
         sound.stop("GameBGM");
     }
 
-
     private onButtonB(): void {
-        this.playerBardo.punchRun();
-        this.causingRangeDamage = true;
+        this.playerBardo.bow();
+        this.playerBardo.canBow = true;
     }
 
     private onButtonA(): void {
@@ -671,7 +682,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
     private habilityClick(): void {
         this.playerBardo.jump();
-        this.winStage=true;
+        this.winStage = true;
         sound.stop("running");
         sound.stop("bow");
     }
@@ -699,7 +710,19 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.playerBardo.idlePlayer();
         sound.stop("running");
         sound.stop("bow");
-        this.causingRangeDamage = false;
+        this.playerBardo.canBow = false;
         this.causingDamage = false;
+    }
+
+    public createArrow(): void {
+        const newArrow: Arrow = new Arrow();
+        newArrow.position.set(this.playerBardo.width / 2, -2 * this.playerBardo.height / 5);
+        this.addChild(newArrow);
+        this.arrows.push(newArrow);
+    }
+
+    public shootArrow(newArrow: Arrow): void {
+        newArrow.shoot();
+        new Tween(newArrow).to({ x: 1000 }, 500).start();
     }
 }

@@ -28,6 +28,7 @@ export const assets = [
     // PLAYER
     { url: "./spritesheet (6).json", name: "Player" },
     { url: "./spritesheet (10).json", name: "PlayerBow" },
+    { url: "./arrow.png", name: "Arrow" },
 
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
@@ -43,7 +44,7 @@ export const assets = [
     { url: "./sounds/Escritura.mp3", name: "handWriting" },
     { url: "./run.mp3", name: "running", },
     { url: "./sounds/Arrow.mp3", name: "bow", },
-    
+    { url: "./sounds/MaleHurt.mp3", name: "jumper", },
 
 
     // POTION
