@@ -7,7 +7,6 @@ export const assets = [
     { url: "./StageOne/Lose.png", name: "LOSE" },
     { url: "./READ.png", name: "READ" },
     
-
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
     { url: "./StageOne/B2.png", name: "B2" },
@@ -16,7 +15,6 @@ export const assets = [
     { url: "./StageOne/B5.png", name: "B5" },
     { url: "./StartMenu/SETTINGS.png", name: "B6" },
     
-
     // SUELO
     { url: "./texture.json", name: "Suelo" },
     { url: "./tileset.png", name: "Tile" },
@@ -28,6 +26,8 @@ export const assets = [
     // PLAYER
     { url: "./spritesheet (6).json", name: "Player" },
     { url: "./spritesheet (10).json", name: "PlayerBow" },
+    { url: "./arrow.png", name: "Arrow" },
+
 
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
@@ -44,16 +44,18 @@ export const assets = [
     { url: "./run.mp3", name: "running", },
     { url: "./sounds/Arrow.mp3", name: "bow", },
     
-
-
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },
     { url: "./chestboxs.json", name: "Chest", },
     { url: "./StageOne/ChestBox.png", name: "ChestBox", },
 
     //health bar
-    { url: "./HealthBar.png", name: "HealthBar", },
-
+    { url: "./HealthBar.png", name: "HealthBar"},
+    { url: "./GreenHealthBar.png", name: "GreenHealthBar"},
+    { url: "./aljava.png", name: "aljava"},
+    { url: "./hpFrame.png", name: "hpFrame"},
+    { url: "./hpFrame2.png", name: "hpFrame2"},
+    
     // FONTS
     { url: "./fonts/ST02R.TTF", name: "Letra1" },
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
@@ -81,8 +83,8 @@ export const assets = [
     { url: "./Maps/backShield.png", name: "backShield" },
     { url: "./Maps/itemShield.png", name: "itemShield" },
     { url: "./Maps/swordBlade.png", name: "itemSword" },
-        
-
+    { url: "./Maps/bow&arrow.png", name: "itemBow" },
+    
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },
     { url: "./RingsSwordsPotions.json", name: "RingsSwordsPotions" },

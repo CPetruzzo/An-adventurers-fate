@@ -6,8 +6,6 @@ import { SceneManager } from "../utils/SceneManager";
 import { MapScene2 } from "./MapScene2";
 
 export class WinScene extends Container {
-
-
     private box: PointButton;
     public finish: boolean = false;
     private openingBox: AnimatedSprite;
@@ -15,13 +13,14 @@ export class WinScene extends Container {
     public winStage: boolean = false;
 
     constructor() {
-
-        super();     
-
+        super();
+        
         // IMAGEN DE LA CAJA SIN MOVERSE HECHA BOTON PARA QUE SE ABRA
-        this.box = new PointButton(Texture.from("nro1.png"),
+        this.box = new PointButton(
             Texture.from("nro1.png"),
-            Texture.from("nro1.png"))
+            Texture.from("nro1.png"),
+            Texture.from("nro1.png")
+        );
         this.box.position.set(625, 368);
         this.box.on("pointerClick", this.onBoxClick, this)
         this.addChild(this.box);
@@ -44,19 +43,19 @@ export class WinScene extends Container {
         this.award = new Sprite(Texture.from("itemSword"));
         this.award.position.set(500, 230);
         this.award.scale.set(0.2);
-        this.award.visible=false;
+        this.award.alpha = 0;
     }
 
     public update(deltaTime: number) {
         this.openingBox.update(deltaTime);
     }
 
-    // FUNCION QUE SE EJECUTA CUANDO SE HACE CLICK EN LA CAJA
-
-    public Box(){
-        this.winStage=true;
+    /** Flag que activa la caja */
+    public Box() {
+        this.winStage = true;
     }
 
+    /** Función que se activa cuando hacés click en la caja */
     public onBoxClick(): void {
         this.removeChild(this.box);
         this.addChild(this.openingBox);
@@ -65,38 +64,33 @@ export class WinScene extends Container {
         new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
     }
 
+    /** Función que hace salir la espada (premio) */
     private Award(): void {
-
-        
         this.addChild(this.award);
-        this.award.visible=true;
+        this.award.visible = true;
 
         sound.stop("Chest1");
-        const winbgm=sound.find("ItemBGM");
-                winbgm.volume=0.2;
-                winbgm.play();
-        
-        new Tween(this.award)
-        .to({ x: 400, y:130 }, 2000)
-        .start().
-        onComplete(this.Waiting.bind(this));
-        console.log("Award");
-    
-        
+        const winbgm = sound.find("ItemBGM");
+        winbgm.volume = 0.2;
+        winbgm.play();
 
+        new Tween(this.award)
+            .to({ x: 400, y: 130, alpha: 1 }, 2000)
+            .start().
+            onComplete(this.Waiting.bind(this));
     }
 
+    /** Timer */
     private Waiting(): void {
-        console.log("waiting");  
+        console.log("waiting");
         new Tween(this.award).to({}, 2000).start().onComplete(this.NextStage.bind(this));
     }
 
-    NextStage():void{
+    /** Función que pasa al turno siguiente */
+    public NextStage(): void {
         sound.stop("GameBGM");
         sound.stop("ItemBGM");
         SceneManager.changeScene(new MapScene2());
     }
-    
-    
 }
 

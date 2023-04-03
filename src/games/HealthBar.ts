@@ -8,7 +8,7 @@ export class HealthBar extends PhysicsContainer{
     private bar: AnimatedSprite;
 
 
-    constructor(shape: TextureSource, width: number, height: number){
+    constructor(shape: TextureSource, width: number, height: number, tint?: number){
 
         super();
         this.shape= shape;
@@ -16,10 +16,13 @@ export class HealthBar extends PhysicsContainer{
         this.bar = new AnimatedSprite([
             Texture.from(shape),]
         );
+        // this.bar.anchor.set(0.5);
         this.bar.width= width;
         this.bar.height= height;
         this.bar.position.set(30, 28);
         
+        // verde: 0x90EE90
+        this.bar.tint ? tint : 0xffffff;
         this.addChild(this.bar);        
     }
 

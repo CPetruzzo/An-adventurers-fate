@@ -2,6 +2,7 @@ import { Graphics, ObservablePoint, Rectangle, Text } from "pixi.js";
 
 import { IHitBox } from "../IHitBox";
 import { PhysicsContainer } from "../PhysicsContainer";
+import { Easing, Tween } from "tweedle.js";
 
 export class Enemy extends PhysicsContainer implements IHitBox {
 
@@ -33,18 +34,18 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         // let currentScene:any = undefined;
         let initialHealth: number = 150;
         let currentHealth: number = initialHealth;
-        this.healthOnScreen = new Text(`${currentHealth}`+ "HP", { fontSize: 40, fontFamily: ("Arial") });
+        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Arial") });
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
     }
 
-    // me da la distancia desde el (0,0) al borde inicial de la hitbox
+    /** Da la distancia desde el (0,0) al borde inicial de la hitbox */
     public getHitBox(): Rectangle {
         return this.hitbox.getBounds();
     }
 
-    //PARA SEPARAR JUGADORES DE SUS PLATAFORMAS
+    /** PARA SEPARAR ENEMIGOS DE PLATAFORMAS Y PODER GOLPEARLOS  */
     public separate(overlap: Rectangle, platform: ObservablePoint<any>) {
         if (overlap.width < overlap.height) {
             if (this.x < platform.x) {
@@ -64,13 +65,18 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         }
     }
 
+    /** función para dañar al enemigo */
     public getEnemyHurt(damage: number) {
-            this.currentHealth -= damage;
-            this.healthOnScreen.text = `${this.currentHealth}` + "HP";
-            console.log("Enemy health: " + this.currentHealth);       
-        }
-    
+        this.currentHealth -= damage;
+        this.healthOnScreen.text = `${this.currentHealth}` + "HP";
+        console.log("Enemy health: " + this.currentHealth);
+    }
 
+    public playDestroyAnimation(enemy: Enemy): void {
+        new Tween(enemy).to({ alpha: 0.3 }, 1000).yoyoEasing(Easing.Elastic.Out).start();
+    }
 
-
+    public override destroy(): void {
+        this.destroy();
+    }
 }

@@ -44,7 +44,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     private stageTwo: PointButton;
     private salir: Text;
     private salirSi: Text;
-    private salirNo : Text;
+    private salirNo: Text;
     public MapUp: PointButton;
     public MapDown: PointButton;
     private marcoBottomRight: Sprite;
@@ -52,13 +52,13 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     private pie: Sprite;
     private backShield: Sprite;
     private shieldClose: PointButton;
-    private itemWeapon: Sprite;
+    private itemWeapon4: Sprite;
     private itemWeapon1: Sprite;
     private itemWeapon2: Sprite;
     private itemWeapon3: Sprite;
     private level: Text;
     private itemSword: Sprite;
-
+    private itemBow: Sprite;
 
     constructor() {
 
@@ -74,17 +74,17 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.map.scale.set(1);
         this.map.position.set(0, -240);
 
-        
+
         this.nombre = new Sprite(Texture.from("nombreMarco"));
         this.nombre.position.set(225, 100);
         this.nombre.scale.set(0.7);
 
         this.pie = new Sprite(Texture.from("pie"));
-        this.pie.position.set(225,500);
+        this.pie.position.set(225, 500);
         this.pie.scale.set(0.7);
 
         this.backShield = new Sprite(Texture.from("backShield"));
-        this.backShield.position.set(320,60);
+        this.backShield.position.set(320, 60);
         this.backShield.scale.set(0.9);
 
 
@@ -217,7 +217,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             Texture.from("UpDown"));
         this.MapUp.x = 1210;
         this.MapUp.y = 320;
-        this.MapUp.scale.set(0.5,0.4)
+        this.MapUp.scale.set(0.5, 0.4)
         this.MapUp.on("pointerClick", this.onMapUp, this);
         this.addChild(this.MapUp);
 
@@ -226,7 +226,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             Texture.from("UpDown"));
         this.MapDown.x = 1210;
         this.MapDown.y = 400;
-        this.MapDown.scale.set(0.5,-0.4)
+        this.MapDown.scale.set(0.5, -0.4)
         this.MapDown.on("pointerClick", this.onMapDown, this)
         this.addChild(this.MapDown);
 
@@ -243,7 +243,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.shieldClose.position.set(880, 135);
         this.shieldClose.scale.set(0.8);
         this.shieldClose.on("pointerClick", this.onCloseShieldClick, this);
-        
+
         if (MapScene.texto != (null)) {
             this.textoViejo = new Text(MapScene.texto, Tangerine);
         } else {
@@ -252,15 +252,15 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
-        this.textoViejo.x = 400 - (this.textoViejo.width/2);
+        this.textoViejo.x = 400 - (this.textoViejo.width / 2);
         this.textoViejo.y = 120;
-        
+
         this.Hp = new Text("Max hp: 100", Tangerine);
         this.Hp.position.set(320, 270);
-        
+
         this.PStrenght = new Text("Punch: 5 hp", Tangerine);
         this.PStrenght.position.set(320, 320);
-        
+
         this.BStrenght = new Text("Bow: 2 hp", Tangerine);
         this.BStrenght.position.set(320, 370);
 
@@ -275,7 +275,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.marcoBottomRight = Sprite.from("MarcoMap");
         this.marcoBottomRight.scale.set(0.4, -0.4);
         this.marcoBottomRight.position.set(400, 500);
-        
+
 
         this.salir = new Text("¿Desea Salir?", Tangerine);
         this.salir.position.set(540, 270);
@@ -285,39 +285,45 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
         this.salirNo = new Text("No", Tangerine);
         this.salirNo.position.set(587, 396);
-
-        this.itemWeapon = Sprite.from("itemShield");
-        this.itemWeapon.scale.set(0.25);
-        this.itemWeapon.position.set(630,170);
+        this.itemWeapon4 = Sprite.from("itemShield");
+        this.itemWeapon4.scale.set(0.25);
+        this.itemWeapon4.position.set(700, 240);
+        this.itemWeapon4.anchor.set(0.5)
 
         this.itemWeapon1 = Sprite.from("itemShield");
         this.itemWeapon1.scale.set(0.25);
-        this.itemWeapon1.position.set(450,170);
-        
+        this.itemWeapon1.position.set(540, 240);
+        this.itemWeapon1.anchor.set(0.5)
+
         this.itemWeapon2 = Sprite.from("itemShield");
         this.itemWeapon2.scale.set(0.25);
-        this.itemWeapon2.position.set(450,350);
+        this.itemWeapon2.position.set(540, 420);
+        this.itemWeapon2.anchor.set(0.5)
 
         this.itemWeapon3 = Sprite.from("itemShield");
         this.itemWeapon3.scale.set(0.25);
-        this.itemWeapon3.position.set(630,350);
-        
-        this.itemSword = Sprite.from("itemSword");
-        this.itemSword.scale.set(-0.08,0.08);
-        this.itemSword.position.set(560,380);
+        this.itemWeapon3.position.set(700, 420);
+        this.itemWeapon3.anchor.set(0.5)
 
+        this.itemBow = Sprite.from("itemBow");
+        this.itemBow.scale.set(0.3);
+        this.itemBow.anchor.set(0.5);
+
+        this.itemSword = Sprite.from("itemSword");
+        this.itemSword.scale.set(-0.3, 0.3);
+        this.itemSword.anchor.set(0.5);
 
         this.level = new Text("Level: 2", Tangerine);
-        this.level.position.set(350 , 505);
+        this.level.position.set(350, 505);
     }
 
 
-    onMapUp(){
-        this.world.position.y+=10;
+    onMapUp() {
+        this.world.position.y += 10;
     }
 
-    onMapDown(){
-        this.world.position.y-=10;
+    onMapDown() {
+        this.world.position.y -= 10;
     }
 
 
@@ -325,12 +331,14 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.addChild(
             this.backShield,
             this.shieldClose,
-            this.itemWeapon,
+            this.itemWeapon4,
             this.itemWeapon1,
             this.itemWeapon2,
             this.itemWeapon3,
-            this.itemSword,
-            );
+        );
+
+        this.itemWeapon1.addChild(this.itemSword);
+        this.itemWeapon4.addChild(this.itemBow);
 
     }
 
@@ -338,24 +346,27 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.removeChild(
             this.backShield,
             this.shieldClose,
-            this.itemWeapon,
+            this.itemWeapon4,
             this.itemWeapon1,
             this.itemWeapon2,
             this.itemWeapon3,
             this.itemSword,
-            );
-        
+        );
+
+        this.itemWeapon4.removeChild(this.itemBow);
+
+
     }
 
     onCloseClick(): void {
-        this.removeChild(this.buttonClose, 
-            this.cartel, 
-            this.button1, 
+        this.removeChild(this.buttonClose,
+            this.cartel,
+            this.button1,
             this.button2,
             this.salir,
             this.salirSi,
             this.salirNo,
-            );
+        );
         this.addChild(this.backMenu);
     }
 
@@ -365,14 +376,14 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
     private onBackMenu(): void {
         this.removeChild(this.backMenu);
-        this.addChild(this.cartel, 
+        this.addChild(this.cartel,
             this.button1,
-            this.button2, 
+            this.button2,
             this.buttonClose,
             this.salir,
             this.salirSi,
             this.salirNo,
-            );
+        );
     }
 
     private onBook(): void {
@@ -388,7 +399,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.nombre,
             this.pie,
             this.level,
-            );
+        );
 
         this.removeChild(this.book);
     }
@@ -406,7 +417,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.nombre,
             this.pie,
             this.level,
-            );
+        );
 
 
         this.addChild(this.book);
@@ -420,7 +431,6 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
         this.infoText.text = "Player position inside the world: " +
             this.graphicRed.x.toFixed(1) + ", " + this.graphicRed.y.toFixed(1);
-
 
         if (Keyboard.state.get("ArrowRight")) {
             this.graphicRed.x += 0.1 * deltaTime;
@@ -459,10 +469,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.infoText.text += " ⬇"
         }
 
-
         // LIMITES DE MOVIMIENTO DEL MAPA
-
-
         if (this.world.scale.x === this.minScale) {
             this.world.scale.x = this.minScale;
             this.world.scale.y = this.minScale;

@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Texture, TilingSprite } from "pixi.js";
+import { Container, Point, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
@@ -20,9 +20,10 @@ import { WinScene } from "./WinScene";
 import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
+import { Arrow } from "../games/Weapon/Arrow";
+import { BUTTON_SCALE, MOVEMENTS_SCALE, START_SCALE, UI_CONFIG, UI_SCALE } from "../utils/constants";
 
 export class GameScene extends SceneBase implements IUpdateable {
-
     private playerBardo: Player;
     private world: Container;
     public numero: number = 0;
@@ -65,12 +66,16 @@ export class GameScene extends SceneBase implements IUpdateable {
     private win: WinScene;
     public winStage: boolean = false;
     public nextStage: boolean = false;
-
+    private arrows: Arrow[];
+    private arrowDamage: number = 20;
+    public arrowsOnScreen: Text;
+    private aljava: Sprite;
 
     constructor() {
         super();
-        this.backgrounds = [];
 
+        this.backgrounds = [];
+        this.arrows = [];
         this.world = new Container();
 
         const BGM = sound.find("GameBGM");
@@ -87,11 +92,14 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.backgrounds.push(background);
         }
 
-        // UN JUGADOR
         this.playerBardo = new Player();
         this.playerBardo.scale.set(2);
         this.playerBardo.position.y = 450;
         this.world.addChild(this.playerBardo);
+
+        this.playerBardo.on("shoot", () => {
+            this.shootArrow();
+        });
 
         this.arek = new Arek();
         this.arek.scale.set(2);
@@ -102,99 +110,43 @@ export class GameScene extends SceneBase implements IUpdateable {
         new Tween(this.arek)
             .to({ x: 3700 }, 3000)
             .start().onComplete(this.arekToRight.bind(this));
-
-
         this.addChild(this.world);
 
-        // LA PLATAFORMA PARA PISAR
         this.platforms = [];
-        const plat1 = new Platform("Tile", 15, 20, 15, 20, 1000, 100);
-        plat1.position.x = 50;
-        plat1.position.y = 677;
-        const plat2 = new Platform("Tile", 30, 10, 30, 10, 200, 100);
-        plat2.position.x = 600;
-        plat2.position.y = 475;
-        const plat3 = new Platform("Tile", 30, 10, 30, 10, 200, 100);
-        plat3.position.x = 760;
-        plat3.position.y = 250;
-        const plat4 = new Platform("Tile", 30, 10, 30, 10, 300, 100);
-        plat4.position.x = 1400;
-        plat4.position.y = 150;
-        const plat5 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat5.position.x = 2500;
-        plat5.position.y = 700;
-        const plat6 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat6.position.x = 2800;
-        plat6.position.y = 677;
-        const plat7 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat7.position.x = 3505;
-        plat7.position.y = 475;
-        const plat8 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat8.position.x = 3805;
-        plat8.position.y = 270;
-        const plat9 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat9.position.x = 4105;
-        plat9.position.y = 675;
-        const plat10 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat10.position.x = 3005;
-        plat10.position.y = 500;
-        const plat11 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat11.position.x = 4405;
-        plat11.position.y = 705;
-        const plat12 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat12.position.x = 4755;
-        plat12.position.y = 500;
-        const plat13 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat13.position.x = 5005;
-        plat13.position.y = 700;
-        const plat14 = new Platform("Tile", 30, 30, 30, 30, 500, 100);
-        plat14.position.x = 5405;
-        plat14.position.y = 500;
-        const plat15 = new Platform("Tile", 30, 10, 30, 10, 200, 100);
-        plat15.position.x = 6000;
-        plat15.position.y = 475;
-        const plat16 = new Platform("Tile", 30, 10, 30, 10, 500, 100);
-        plat16.position.x = 6350;
-        plat16.position.y = 250;
+        // An array of platform data
+        const platformData = [
+            { type: "Tile", width: 15, height: 20, posX: 1000, posY: 100, sizeX: 50, sizeY: 677 },
+            { type: "Tile", width: 30, height: 10, posX: 200, posY: 100, sizeX: 600, sizeY: 475 },
+            { type: "Tile", width: 30, height: 10, posX: 200, posY: 100, sizeX: 760, sizeY: 250 },
+            { type: "Tile", width: 30, height: 10, posX: 300, posY: 100, sizeX: 1400, sizeY: 150 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 2500, sizeY: 700 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 2800, sizeY: 677 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 3505, sizeY: 475 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 3805, sizeY: 270 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 4105, sizeY: 675 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 3005, sizeY: 500 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 4405, sizeY: 705 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 4755, sizeY: 500 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 5000, sizeY: 700 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 5405, sizeY: 500 },
+            { type: "Tile", width: 30, height: 30, posX: 200, posY: 100, sizeX: 6000, sizeY: 475 },
+            { type: "Tile", width: 30, height: 30, posX: 500, posY: 100, sizeX: 6350, sizeY: 250 },
+        ];
+        // A loop to create and position platforms
+        for (let data of platformData) {
+            // Create a new platform with the data
+            let plat = new Platform(data.type, data.width, data.height, data.width, data.height, data.posX, data.posY);
+            // Set its position
+            plat.position.x = data.sizeX;
+            plat.position.y = data.sizeY;
+            // Add it to the world and the platforms array
+            this.world.addChild(plat);
+            this.platforms.push(plat);
 
+            let numero = platformData.indexOf
+            console.log(numero);
+        }
 
-        this.world.addChild(plat1,
-            plat2,
-            plat3,
-            plat4,
-            plat5,
-            plat6,
-            plat7,
-            plat8,
-            plat9,
-            plat10,
-            plat11,
-            plat12,
-            plat13,
-            plat14,
-            plat15,
-            plat16,
-        );
-
-        this.platforms.push(plat1,
-            plat2,
-            plat3,
-            plat4,
-            plat5,
-            plat6,
-            plat7,
-            plat8,
-            plat9,
-            plat10,
-            plat11,
-            plat12,
-            plat13,
-            plat14,
-            plat15,
-            plat16,
-        );
-
-        //Habillity Circle
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
 
@@ -203,96 +155,52 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.chest.position.set(6350, 125);
         this.world.addChild(this.chest);
 
-        //Container para HealthBar
-        this.barra = new GenericPanel("lineDark03.png", 80, 80, 80, 80);
-        this.barra.scale.x = 2
-        this.barra.scale.y = 0.4
-        this.barra.position.set(10, 10);
-        this.addChild(this.barra);
+        this.aljava = Sprite.from("aljava");
+        this.aljava.position.set(400, 40);
+        this.aljava.scale.set(0.1);
+        this.aljava.anchor.set(0.5);
+        this.addChild(this.aljava);
 
-        { /* Habillity */
-            this.start = new PointButton(Texture.from("lineDark44.png"),
-                Texture.from("lineLight47.png"),
-                Texture.from("lineDark44.png"));
-            this.start.x = this.cartel.x + 80
-            this.start.y = this.cartel.y + 80
-            this.start.scale.x = 1.2;
-            this.start.scale.y = 1.2;
-            this.start.on("pointer down", this.habilityClick, this)
+        let arrowsAvailable = this.playerBardo.arrowsAvailable;
+        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+        this.arrowsOnScreen.position.set(400, 55)
+        this.addChild(this.arrowsOnScreen);
 
-        }
+        // Contador de flechas en pantalla
+        this.on("changeArrowAmount", () => {
+            this.removeChild(this.arrowsOnScreen);
+            let arrowsAvailable = this.playerBardo.arrowsAvailable;
+            this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+            this.arrowsOnScreen.position.set(400, 55)
+            this.addChild(this.arrowsOnScreen);
+        });
 
-        { /* A Button */
-            this.buttonA = new PointButton(Texture.from("lineDark31.png"),
-                Texture.from("lineLight34.png"),
-                Texture.from("lineDark31.png"));
-            this.buttonA.x = 980
-            this.buttonA.y = 540
-            this.buttonA.scale.x = 1;
-            this.buttonA.scale.y = 1;
-            this.buttonA.on("pointer down", this.onButtonA, this)
-            this.buttonA.on("pointerClick", this.Stop, this)
-        }
+        this.start = this.createPointButton("lineDark44.png", "lineLight47.png", this.cartel.x + 80, this.cartel.y + 80, START_SCALE);
+        this.start.on("pointer down", this.habilityClick, this);
 
-        { /* B Button */
-            this.buttonB = new PointButton(Texture.from("lineDark32.png"),
-                Texture.from("lineLight35.png"),
-                Texture.from("lineDark32.png"));
-            this.buttonB.x = 1120
-            this.buttonB.y = 430
-            this.buttonB.scale.x = 1;
-            this.buttonB.scale.y = 1;
-            this.buttonB.on("pointer down", this.onButtonB, this)
-            this.buttonB.on("pointerClick", this.Stop, this)
-        }
+        this.buttonA = this.createPointButton("lineDark31.png", "lineLight34.png", 980, 540, BUTTON_SCALE);
+        this.buttonA.on("pointer down", this.onButtonA, this)
+        this.buttonA.on("pointerClick", this.Stop, this);
 
-        { /* Move Up */
-            this.moveUp = new PointButton(Texture.from("lineDark48.png"),
-                Texture.from("lineLight01.png"),
-                Texture.from("lineDark48.png"));
-            this.moveUp.x = 180
-            this.moveUp.y = 440
-            this.moveUp.scale.x = 1.8;
-            this.moveUp.scale.y = 1.8;
-            this.moveUp.on("pointer down", this.UpMove, this)
+        this.buttonB = this.createPointButton("lineDark32.png", "lineDark32.png", 1120, 430, BUTTON_SCALE);
+        this.buttonB.on("pointer down", this.onButtonB, this)
+        this.buttonB.on("pointerClick", this.Stop, this);
 
-        }
+        this.moveUp = this.createPointButton("lineDark48.png", "lineLight01.png", 180, 440, MOVEMENTS_SCALE);
+        this.moveUp.on("pointer down", this.UpMove, this)
 
-        { /* Move Down */
-            this.moveDown = new PointButton(Texture.from("lineDark05.png"),
-                Texture.from("lineLight08.png"),
-                Texture.from("lineDark05.png"));
-            this.moveDown.x = 180
-            this.moveDown.y = 620
-            this.moveDown.scale.x = 1.8;
-            this.moveDown.scale.y = 1.8;
-            this.moveDown.on("pointer down", this.DownMove, this)
-            this.moveDown.on("pointerClick", this.Stop, this)
-        }
-        { /* Move Left */
-            this.moveLeft = new PointButton(Texture.from("lineDark00.png"),
-                Texture.from("lineLight03.png"),
-                Texture.from("lineDark00.png"));
-            this.moveLeft.x = 100
-            this.moveLeft.y = 530
-            this.moveLeft.scale.x = 1.8;
-            this.moveLeft.scale.y = 1.8;
-            this.moveLeft.on("pointer down", this.LeftMove, this)
-            this.moveLeft.on("pointerClick", this.Stop, this)
-        }
-        { /* Move Right */
-            this.moveRight = new PointButton(Texture.from("lineDark01.png"),
-                Texture.from("lineLight04.png"),
-                Texture.from("lineDark01.png"));
-            this.moveRight.x = 260
-            this.moveRight.y = 530
-            this.moveRight.scale.x = 1.8;
-            this.moveRight.scale.y = 1.8;
-            this.moveRight.on("pointer down", this.RightMove, this)
-            this.moveRight.on("pointerClick", this.Stop, this)
-        }
+        this.moveDown = this.createPointButton("lineDark05.png", "lineLight08.png", 180, 620, MOVEMENTS_SCALE);
+        this.moveDown.on("pointer down", this.DownMove, this)
+        this.moveDown.on("pointerClick", this.Stop, this)
 
-        // Sound ON-OFF
+        this.moveLeft = this.createPointButton("lineDark00.png", "lineLight03.png", 100, 530, MOVEMENTS_SCALE);
+        this.moveLeft.on("pointer down", this.LeftMove, this)
+        this.moveLeft.on("pointerClick", this.Stop, this)
+
+        this.moveRight = this.createPointButton("lineDark01.png", "lineLight04.png", 260, 530, MOVEMENTS_SCALE);
+        this.moveRight.on("pointer down", this.RightMove, this)
+        this.moveRight.on("pointerClick", this.Stop, this)
+
         this.buttonSound = new ToggleButton(
             Texture.from("lineDark12.png"),
             Texture.from("lineDark14.png"));
@@ -304,55 +212,20 @@ export class GameScene extends SceneBase implements IUpdateable {
             console.log("toggle changed to:", newState)
         })
 
-        { /* Pause */
-            this.pauseOn = new PointButton(Texture.from("lineDark28.png"),
-                Texture.from("lineLight31.png"),
-                Texture.from("lineDark28.png"));
-            this.pauseOn.x = 1230
-            this.pauseOn.y = 40
-            this.pauseOn.scale.x = 1.45;
-            this.pauseOn.scale.y = 1.45;
-            this.pauseOn.on("pointerClick", this.onPause, this)
+        this.pauseOn = this.createPointButton("lineDark28.png", "lineLight31.png", 1230, 40, UI_SCALE);
+        this.pauseOn.on("pointerClick", this.onPause, this)
 
-            this.pauseOff = new PointButton(Texture.from("lineDark28.png"),
-                Texture.from("lineLight31.png"),
-                Texture.from("lineDark28.png"));
-            this.pauseOff.x = 1230
-            this.pauseOff.y = 40
-            this.pauseOff.scale.x = 1.45;
-            this.pauseOff.scale.y = 1.45;
-            this.pauseOff.on("pointerClick", this.offPause, this)
-        }
+        this.pauseOff = this.createPointButton("lineDark28.png", "lineLight31.png", 1230, 40, UI_SCALE);
+        this.pauseOff.on("pointerClick", this.offPause, this)
 
-        { /* BUTTONS */
-            this.buttonsOn = new PointButton(Texture.from("lineDark28.png"),
-                Texture.from("lineLight31.png"),
-                Texture.from("lineDark28.png"));
-            this.buttonsOn.x = 1070
-            this.buttonsOn.y = 40
-            this.buttonsOn.scale.x = 1.45;
-            this.buttonsOn.scale.y = 1.45;
-            this.buttonsOn.on("pointerClick", this.removeButtons, this)
+        this.buttonsOn = this.createPointButton("lineDark28.png", "lineLight31.png", 1070, 40, UI_SCALE);
+        this.buttonsOn.on("pointerClick", this.removeButtons, this);
 
-            this.buttonsOff = new PointButton(Texture.from("lineDark28.png"),
-                Texture.from("lineLight31.png"),
-                Texture.from("lineDark28.png"));
-            this.buttonsOff.x = 1070
-            this.buttonsOff.y = 40
-            this.buttonsOff.scale.x = 1.45;
-            this.buttonsOff.scale.y = 1.45;
-            this.buttonsOff.on("pointerClick", this.showButtons, this)
-        }
+        this.buttonsOff = this.createPointButton("lineDark28.png", "lineLight31.png", 1070, 40, UI_SCALE);
+        this.buttonsOff.on("pointerClick", this.showButtons, this)
 
-        this.config = new PointButton(Texture.from("CONFIG.png"),
-            Texture.from("CONFIG hundido.png"),
-            Texture.from("CONFIG.png"));
-        this.config.x = 650
-        this.config.y = 500
-        this.config.scale.x = 0.5;
-        this.config.scale.y = 0.5;
+        this.config = this.createPointButton("CONFIG.png", "CONFIG hundido.png", 650, 500, UI_CONFIG);
         this.config.on("pointerClick", this.onConfigClick, this)
-
 
         this.melee = new Melee();
         this.melee.position.x = -10
@@ -366,26 +239,33 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.playerBardo.addChild(this.range);
 
         this.potions = [];
-        const pot1 = new Potion("Potion", 200, 200);
-        pot1.scale.set(0.1);
-        pot1.position.set(3000, 580)
-        this.world.addChild(pot1);
-        this.potions.push(pot1);
+        const positions = [
+            { x: 3000, y: 580 },
+            { x: 4850, y: 600 }
+        ];
 
-        const pot2 = new Potion("Potion", 200, 200);
-        pot2.scale.set(0.1);
-        pot2.position.set(4850, 600);
-        this.world.addChild(pot2);
-        this.potions.push(pot2);
+        for (let i = 0; i < positions.length; i++) {
+            const pot = new Potion("Potion", 200, 200);
+            pot.scale.set(0.1);
+            pot.position.set(positions[i].x, positions[i].y);
+            this.world.addChild(pot);
+            this.potions.push(pot);
+        }
 
-        this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
+        //HPbar y Container para HealthBar
+        this.HPbar = new HealthBar("HealthBar", (250 * ((this.playerBardo.currentHealth) / 100)), 60);
+        this.HPbar.position.set(0, -20);
         this.addChild(this.HPbar);
+        this.barra = new GenericPanel("hpFrame2", 40, 40, 40, 40);
+        this.barra.position.set(-10, -77);
+        this.addChild(this.barra);
 
+        // Enemy's hpbar
         this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
 
-        this.win= new WinScene();
+        this.win = new WinScene();
 
         this.addChild(
             this.cartel,
@@ -400,7 +280,33 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
         )
-        
+    }
+
+    /** Función de disparo de las flechas */
+    public shootArrow(): void {
+        if (this.playerBardo.arrowsAvailable > 0) {
+            const newArrow = new Arrow();
+            newArrow.angle = -20
+            newArrow.position.set(this.playerBardo.x + this.playerBardo.width / 3, this.playerBardo.y - this.playerBardo.height / 3);
+            newArrow.shoot(newArrow, newArrow.position, this.playerBardo.scale.x);
+
+            this.arrows.push(newArrow);
+            this.world.addChild(newArrow);
+            this.playerBardo.arrowsAvailable -= 1;
+
+            console.log("Arrows shooted: ", this.arrows.length);
+            console.log("Arrows left: ", this.playerBardo.arrowsAvailable);
+            this.emit("changeArrowAmount", this.playerBardo.arrowsAvailable);
+        } else {
+            console.log("No arrows left");
+            this.removeChild(this.aljava);
+            this.aljava = Sprite.from("aljava");
+            this.aljava.alpha = 0.3;
+            this.aljava.position.set(400, 40);
+            this.aljava.scale.set(0.1);
+            this.aljava.anchor.set(0.5);
+            this.addChild(this.aljava);
+        }
     }
 
     // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
@@ -416,11 +322,11 @@ export class GameScene extends SceneBase implements IUpdateable {
             GameOverBGM.play({ loop: true, volume: 0.05 })
         }
 
-        if (this.nextStage) { 
+        if (this.nextStage) {
             SceneManager.changeScene(new WinScene());
             sound.stop("GameBGM");
         }
- 
+
         this.playerBardo.update(deltaTime); // Actualizacion del personaje
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
@@ -460,98 +366,146 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.gameOver = true;
         }
 
-
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + SceneManager.WIDTH / 3)
 
-        // JUGADOR Y ENEMIGO HACIENDO COLISION
-        const pelea = checkCollision(this.playerBardo, this.arek);
-        if (pelea != null) {
-            this.playerBardo.separate(pelea, this.arek.position);
-            this.playerBardo.getPlayerHurt(this.arekDamage / 5);
-            this.HPbar.destroy();
-            this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
-            this.addChild(this.HPbar);
-            if (this.playerBardo.currentHealth <= 0) {
-                this.world.removeChild(this.playerBardo);
-                this.gameOver = true;
-            }
-        }
+        // Chequeo de cada una de las situaciones posibles en el update
+        this.enemyCloseToPlayer();
+        this.drinkPotion();
+        this.hitWithMelee();
+        this.enemyHitPlayer();
+        this.rangeHit();
+        this.arrowsHit();
+        this.endStage();
+    }
 
-        // TOMANDO MI POCION
-        for (let potion of this.potions) {
-            const overlap = checkCollision(this.playerBardo, potion);
-            if (overlap != null) {
-                console.log("tomé la poción")
-                sound.play("PotionSound1", {volume: 0.5});
-
-
-                potion.destroy();
-                this.playerBardo.drinkPotion(50);
-
-                this.HPbar.destroy();
-                this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
-                this.addChild(this.HPbar);
-            }
-        }
-
-        // ARMA DE CUERPO A CUERPO Y ENEMIGO
-        const pelea2 = checkCollision(this.melee, this.arek);
-        if (pelea2 != null) {
-            console.log("che deberia estar pegandole al arek")
-            if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
-                this.arek.getEnemyHurt(this.punchDamage);
-                this.HPbar2.destroy();
-                this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
-                this.HPbar2.position.set(-120, -145);
-                this.arek.addChild(this.HPbar2);
-                if (this.arek.currentHealth <= 0) {
-                    this.world.removeChild(this.arek);
-                }
-            }
-        }
-
-        // ATAQUE DEL ENEMIGO AL JUGADOR
-        const pelea3 = checkCollision(this.melee2, this.playerBardo);
-        if (pelea3 != null) {
-            this.arek.attackArek();
-            this.playerBardo.getPlayerHurt(this.arekDamage);
-            this.HPbar.destroy();
-            this.HPbar = new HealthBar("HealthBar", (275 * ((this.playerBardo.currentHealth) / 100)), 25);
-            this.addChild(this.HPbar);
-            if (this.playerBardo.currentHealth <= 0) {
-                this.world.removeChild(this.playerBardo);
-                this.gameOver = true;
-            }
-        }
-        else { this.arek.idleArek(); }
-
-        // ATAQUE DEL JUGADOR A LARGA DISTANCIA HACIA EL ENEMIGO
+    /** Daño de rango medio */
+    private rangeHit(): void {
         const pelea4 = checkCollision(this.range, this.arek);
         if (pelea4 != null) {
             if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
                 this.arek.getEnemyHurt(this.rangeDamage);
-                this.HPbar2.destroy();
-                this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
-                this.HPbar2.position.set(-120, -145);
-                this.arek.addChild(this.HPbar2);
+                this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
-                    this.world.removeChild(this.arek);
+                    this.arek.playDestroyAnimation(this.arek);
+                    new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                 }
             }
         }
+    }
 
-        // FIN DE LA PANTALLA - CHESTBOX
-        const fin = checkCollision(this.playerBardo, this.chest);
-        if (fin != null) {
-            this.chest.destroy();     
-            this.addChild(this.win);            
+    /** Función de daño con flechas */
+    private arrowsHit(): void {
+        for (let arrow of this.arrows) {
+            const pelea5 = checkCollision(arrow, this.arek);
+            if (pelea5 != null) {
+                if ((this.causingRangeDamage || Keyboard.state.get("KeyL"))) {
+                    arrow.arrowCollision(pelea5, this.arek.position);
+                    this.world.removeChild(arrow);
+                    arrow.getEnemyHurt(this.arrowDamage, this.arek);
+                    this.changeEnemyHP();
+                    if (this.arek.currentHealth <= 0) {
+                        this.arek.playDestroyAnimation(this.arek);
+                        new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
+                    }
+                }
+            }
         }
     }
 
-    
-    // TWEENS DE LOS MOVIMIENTOS DE AREK
+    /** Chequeo de fin de pantalla */
+    private endStage() {
+        const fin = checkCollision(this.playerBardo, this.chest);
+        if (fin != null) {
+            this.chest.destroy();
+            this.addChild(this.win);
+        }
+    }
 
+    /** Función de daño del enemigo al jugador */
+    private enemyHitPlayer(): void {
+        const pelea3 = checkCollision(this.melee2, this.playerBardo);
+        if (pelea3 != null) {
+            this.arek.attackArek();
+            this.playerBardo.getPlayerHurt(this.arekDamage);
+            this.changePlayerHP();
+            if (this.playerBardo.currentHealth <= 0) {
+                this.playerBardo.bardo.playState("hurted");
+            }
+        } else {
+            this.arek.idleArek();
+        }
+    }
+
+    /** Daño cuerpo a cuerpo del jugador al enemigo */
+    private hitWithMelee(): void {
+        const pelea2 = checkCollision(this.melee, this.arek);
+        if (pelea2 != null) {
+            if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
+                this.arek.getEnemyHurt(this.punchDamage);
+                this.changeEnemyHP();
+                if (this.arek.currentHealth <= 0) {
+                    this.arek.playDestroyAnimation(this.arek);
+                    new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
+                }
+            }
+        }
+    }
+
+    /** Función de daño por contacto entre jugador y enemigo */
+    private enemyCloseToPlayer(): void {
+        const pelea = checkCollision(this.playerBardo, this.arek);
+        if (pelea != null) {
+            this.playerBardo.separate(pelea, this.arek.position);
+            this.playerBardo.getPlayerHurt(this.arekDamage / 5);
+            this.changePlayerHP();
+            if (this.playerBardo.currentHealth <= 0) {
+                this.world.removeChild(this.playerBardo);
+                this.gameOver = true;
+            }
+        }
+    }
+
+    /** Función de poción */
+    private drinkPotion(): void {
+        for (let potion of this.potions) {
+            const overlap = checkCollision(this.playerBardo, potion);
+            if (overlap != null) {
+                sound.play("PotionSound1", { volume: 0.5 });
+                potion.destroy();
+                this.playerBardo.drinkPotion(50);
+                this.changePlayerHP();
+            }
+        }
+    }
+
+    /** Cambio de HP en la barra de vida del enemigo */
+    private changeEnemyHP(): void {
+        if (this.HPbar2 != undefined) {
+            this.HPbar2.destroy();
+        }
+        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
+        this.HPbar2.position.set(-120, -145);
+        this.arek.addChild(this.HPbar2);
+    }
+
+    /** Función que cambia el hp del jugador frente a un evento */
+    private changePlayerHP(): void {
+        if (this.HPbar != undefined && this.barra != undefined) {
+            this.HPbar.destroy();
+            this.barra.destroy();
+        }
+        this.HPbar = new HealthBar("HealthBar", (250 * ((this.playerBardo.currentHealth) / 100)), 60);
+        this.HPbar.position.set(0, -20);
+        this.addChild(this.HPbar);
+        this.barra = new GenericPanel("hpFrame2", 40, 40, 40, 40);
+        this.barra.position.set(-10, -77);
+        this.addChild(this.barra);
+    }
+
+    // TWEENS DE LOS MOVIMIENTOS DE AREK
+    
+    /** Movimiento del enemigo hacia la izquierda */
     private arekToLeft(): void {
         this.arek.scale.set(2, 2);
         new Tween(this.arek)
@@ -561,6 +515,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             .onComplete(this.arekIdleRight.bind(this));
 
     }
+
+    /** Tween de esperar a la izquierda */
     private arekIdleLeft(): void {
         new Tween(this.arek.idleArek)
             .from({ x: 3700 })
@@ -568,6 +524,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekToLeft.bind(this));
     }
+    
+    /** Tween de esperar hacia la derecha */
     private arekIdleRight(): void {
         new Tween(this.arek.idleArek)
             .from({ x: 3800 })
@@ -575,6 +533,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekToRight.bind(this));
     }
+
+    /** Movimiento hacia la derecha */
     private arekToRight(): void {
         this.arek.scale.set(-2, 2);
         new Tween(this.arek)
@@ -585,9 +545,8 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     // BOTON DE PAUSE
-
+    /** Pausado de la escena */
     private onPause(): void {
-        // console.log("Pusimos pausa", this);
         this.isPaused = true;
         this.pauseScene = new PauseScene();
         this.removeChild(this.start,
@@ -599,16 +558,16 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.moveRight
         );
         this.addChild(this.pauseScene,
-            this.pauseOff, 
-            // this.config
-            );
+            this.pauseOff,
+        );
     }
+
+    /** Función para salir de pausa */
     private offPause(): void {
         this.isPaused = false;
         this.removeChild(this.pauseScene,
-            this.pauseOff, 
-            // this.config
-            );
+            this.pauseOff,
+        );
         this.addChild(this.start,
             this.buttonA,
             this.buttonB,
@@ -621,7 +580,7 @@ export class GameScene extends SceneBase implements IUpdateable {
 
 
     // BOTONES ON - OFF
-
+    /** Función para remover los botones de la escena */
     private removeButtons(): void {
         this.removeChild(this.start,
             this.buttonA,
@@ -636,6 +595,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.addChild(this.buttonsOff);
     }
 
+    /** Función para añadir los botones de la escena */
     private showButtons(): void {
         this.removeChild(this.buttonsOff);
         this.addChild(this.start,
@@ -650,56 +610,69 @@ export class GameScene extends SceneBase implements IUpdateable {
         );
     }
 
-    
     // UI DE MOVIMIENTOS
 
+    /** Cambio de escena a la escena de Configuración */
     private onConfigClick(): void {
         SceneManager.changeScene(new Config());
         sound.stop("GameBGM");
     }
 
-
+    /** Tiro con arco y flecha */
     private onButtonB(): void {
-        this.playerBardo.punchRun();
+        this.playerBardo.bow();
         this.causingRangeDamage = true;
     }
 
+    /** Golpe de puño */
     private onButtonA(): void {
         this.playerBardo.punch();
         this.causingDamage = true;
         sound.stop("bow");
     }
+
+    /** Función para habilidad especial - Salto */
     private habilityClick(): void {
         this.playerBardo.jump();
-        this.winStage=true;
+        this.winStage = true;
         sound.stop("running");
         sound.stop("bow");
     }
 
+    /** Correr hacia la derecha */
     private RightMove(): void {
         this.playerBardo.runRight();
     }
 
+    /** Correr hacia la izquierda */
     private LeftMove(): void {
         this.playerBardo.runLeft();
     }
 
+    /** Agacharse */
     private DownMove(): void {
         this.playerBardo.crawl();
 
     }
 
+    /** Salto */
     private UpMove(): void {
         this.playerBardo.jump();
         sound.stop("running");
 
     }
 
+    /** Alto de todos los movimientos */
     private Stop(): void {
         this.playerBardo.idlePlayer();
         sound.stop("running");
         sound.stop("bow");
         this.causingRangeDamage = false;
         this.causingDamage = false;
+    }
+
+    // Use a function to create PointButtons with common parameters
+    public createPointButton(textureName: string, textureClickName: string, x: number, y: number, scale: number): PointButton {
+        return new PointButton(Texture.from(textureName), Texture.from(textureClickName), Texture.from(textureName), new Point(x, y), scale)
     }
 }
