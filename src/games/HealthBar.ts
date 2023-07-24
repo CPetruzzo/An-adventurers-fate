@@ -5,7 +5,7 @@ export class HealthBar extends PhysicsContainer{
     
 
     public shape: TextureSource;
-    private bar: AnimatedSprite;
+    public bar: AnimatedSprite;
 
 
     constructor(shape: TextureSource, width: number, height: number, tint?: number){

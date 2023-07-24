@@ -1,35 +1,31 @@
 // import { sound } from "@pixi/sound";
-import { Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Sprite, Text, Texture } from "pixi.js";
 // import { Tween } from "tweedle.js";
 // import Typed from "typed.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
+import { LETRA1, LETRA5 } from "../utils/constants";
 
 
 export class Config extends SceneBase {
 
-    // private buttonText: PointButton;
     private buttonMouse: PointButton;
 
     public mostrarEscrito: boolean = false;
-    public settings: Sprite;
-    public title: Text;
-    public control1: Text;
-    control2: Text;
-    control3: Text;
-    control4: Text;
-    control5: Text;
-    control6: Text;
-    control7: Text;
-    // public textoViejo: BitmapText;
+    private settings: Sprite;
+    private title: Text;
+    private control1: Text;
+    private control2: Text;
+    private control3: Text;
+    private control4: Text;
+    private control5: Text;
+    private control6: Text;
+    private control7: Text;
 
     constructor() {
         super();
-
-        const TangerineTitle = new TextStyle({ fontFamily: "Tangerine", fontSize: 130, fill: 0X1819 });
-        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
 
 
         this.settings = Sprite.from("B6");
@@ -43,35 +39,35 @@ export class Config extends SceneBase {
         this.buttonMouse.scale.y = 0.5;
         this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
-        
-        this.title = new Text("Settings", TangerineTitle);
+
+        this.title = new Text("Settings", LETRA5);
         this.title.position.set(520, 100);
-        
-        this.control1 = new Text("Movement:", Tangerine);
+
+        this.control1 = new Text("Movement:", LETRA1);
         this.control1.position.set(150, 320);
 
-        this.control2 = new Text("Jump: KeyW / click Main hability", Tangerine);
+        this.control2 = new Text("Jump: KeyW / click Main hability", LETRA1);
         this.control2.position.set(600, 400);
 
-        this.control3 = new Text("Crawl: KeyS / click arrowDown", Tangerine);
+        this.control3 = new Text("Crawl: KeyS / click arrowDown", LETRA1);
         this.control3.position.set(150, 480);
 
-        this.control4 = new Text("Left: KeyA / click arrowLeft", Tangerine);
+        this.control4 = new Text("Left: KeyA / click arrowLeft", LETRA1);
         this.control4.position.set(150, 560);
 
-        this.control5 = new Text("Right: KeyD / click arrowRight", Tangerine);
+        this.control5 = new Text("Right: KeyD / click arrowRight", LETRA1);
         this.control5.position.set(150, 400);
 
-        this.control6 = new Text("Punch: KeyJ / click button A", Tangerine);
+        this.control6 = new Text("Punch: KeyJ / click button A", LETRA1);
         this.control6.position.set(600, 480);
 
-        this.control7 = new Text("Range Attack: KeyK / click button B", Tangerine);
+        this.control7 = new Text("Range Attack: KeyK / click button B", LETRA1);
         this.control7.position.set(600, 560);
 
 
         this.addChild(
-            this.settings, 
-            this.title, 
+            this.settings,
+            this.title,
             this.control1,
             this.control2,
             this.control3,
@@ -80,7 +76,7 @@ export class Config extends SceneBase {
             this.control6,
             this.control7,
             this.buttonMouse,
-            )
+        )
 
         // this.buttonText = new PointButton(Texture.from("BACK.png"),
         //     Texture.from("BACK hundido.png"),

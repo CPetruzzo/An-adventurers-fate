@@ -1,6 +1,6 @@
 import { sound } from "@pixi/sound";
 import { Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text } from "pixi.js";
-import { Tween } from "tweedle.js";
+import { Easing, Tween } from "tweedle.js";
 
 import { Keyboard } from "../utils/Keyboard";
 import { StateAnimation } from "../utils/StateAnimation";
@@ -21,6 +21,23 @@ export class Player extends PhysicsContainer implements IHitBox {
     public bardo: StateAnimation;
     public canBow: boolean = true;
     public arrowsAvailable: number;
+    public hurted: boolean = false;
+    public recovered: boolean = false;
+
+    public checkWhatsHeDoing(): string | any {
+        let currentName: string;
+        this.bardo.on("currentAnimation", (current) => {
+            console.log(current);
+            currentName = this.bardo.currentState(current);
+            if (currentName != undefined){
+                console.log(currentName);
+                return currentName;
+            } else {
+                console.log("no idea what's he doin");
+                return "no idea what's he doin";
+            }
+        });
+    }
 
     constructor() {
         super();
@@ -52,7 +69,7 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-knock-dwn-05.png",
                 "adventurer-knock-dwn-06.png",
             ],
-            0.1, true)
+            0.1, false)
 
         this.bardo.addState("getUp", [
             "adventurer-get-up-00.png",
@@ -62,7 +79,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             "adventurer-get-up-04.png",
             "adventurer-get-up-05.png",
             "adventurer-get-up-06.png",
-        ], 0.1, true)
+        ], 0.1, false)
 
         this.bardo.addState("punch",
             [
@@ -104,7 +121,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             "adventurer-drop-kick-01.png",
             "adventurer-drop-kick-02.png",
             "adventurer-drop-kick-03.png",
-        ], 0.05, false)
+        ], 0.025, false)
 
         this.bardo.addState("bow",
             ["adventurer-bow-00.png",
@@ -186,17 +203,14 @@ export class Player extends PhysicsContainer implements IHitBox {
         // this.addChild(auxZero);
         this.addChild(this.hitbox);
 
-        // this.arrowShooter = new ArrowShooter();
-
         // agrego todos los movimientos a la clase player
         this.addChild(
             this.bardo,
-            // this.arrowShooter
         );
 
         let initialHealth: number = 100;
         let currentHealth: number = initialHealth;
-        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Arial") });
+        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Letra1") });
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
@@ -235,10 +249,9 @@ export class Player extends PhysicsContainer implements IHitBox {
         if (this.canJump) {
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
-            this.bardo.playState("jump", true)
+            this.bardo.playState("jump", true);
         }
         sound.stop("running");
-
     }
 
     /** Caminar agachado */
@@ -303,6 +316,18 @@ export class Player extends PhysicsContainer implements IHitBox {
     /** Jugador dañado */
     public fall() {
         this.bardo.playState("hurted");
+        this.hurted = true;
+        this.recovered = false;
+    }
+
+    /** Jugador levantandose */
+    public getUp() {
+        if (this.hurted) {
+            new Tween(this).to({ alpha: 1 }, 500).repeat(2).easing(Easing.Elastic.Out).start().onComplete(() => {
+                this.bardo.playState("getUp");
+                this.hurted = false;
+            });
+        }
     }
 
     /** Función de arco en suelo y salto */
@@ -405,7 +430,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         if (this.currentHealth <= 0) {
             this.currentHealth = 0;
             this.bardo.playState("hurted", true);
-            new Tween(this).to({ x: 5, alpha: 0.5 }, 1000).start().onComplete(() => {
+            new Tween(this).to({ x: 5, alpha: 0.5 }, 500).start().onComplete(() => {
             })
         }
     }

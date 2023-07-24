@@ -18,10 +18,10 @@ export class NameScene extends SceneBase implements IUpdateable{
         let texto = prompt("Introduce tu nombre");
         if (texto != null) {
             this.characterName=texto;
-            this.textoViejo = new Text(this.characterName, { fontFamily: "Arial", fontSize: 48, fill:  0xAA0000 });
+            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill:  0xAA0000 });
         } else {
             this.characterName="Jugador";
-            this.textoViejo = new Text(this.characterName, { fontFamily: "Arial", fontSize: 48, fill:  0xAA0000 });
+            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill:  0xAA0000 });
         }
         this.textoViejo.x = 300;
         this.textoViejo.y = 120;

@@ -56,6 +56,6 @@ export class PointButton extends Container{
         console.log("pointer out");
         this.spr.texture=this.def; 
     }
-        
+    
 }
     

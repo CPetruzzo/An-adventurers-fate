@@ -14,12 +14,15 @@ export class StateAnimation extends Container {
 
         this.animContainer.removeChildren();
         const current = this.states.get(name);
+        // console.log("esto es una animation", current);
         if (current) {
             this.animContainer.addChild(current);
             if (restart) {
                 current.gotoAndPlay(0);
             }
         }
+
+        this.emit("currentAnimation", current);
     }
 
     public addState(name: string, frames: Texture[] | string[], animationSpeed: number, loop: boolean = true) {
@@ -40,6 +43,11 @@ export class StateAnimation extends Container {
         tempAnim.play();
         this.states.set(name, tempAnim);
 
+    }
+
+    public currentState(current: string): string {
+        // console.log(current);
+        return current;
     }
 
     public update(frames: number) {

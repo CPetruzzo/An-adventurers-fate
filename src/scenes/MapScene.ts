@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Graphics, IDestroyOptions, Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Container, Graphics, IDestroyOptions, Sprite, Text, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
@@ -8,8 +8,8 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
+import { LETRA2 } from "../utils/constants";
 // import { GameScene } from "./GameScene";
-
 
 const RED = 0xAA0000;
 
@@ -57,14 +57,14 @@ export class MapScene extends SceneBase implements IUpdateable {
     private itemWeapon3: Sprite;
     private level: Text;
     private itemBow: Sprite;
+    private goingUp: boolean = false;
+    private goingDown: boolean = false;
 
     constructor() {
         super();
 
         this.world = new Container();
         this.addChild(this.world);
-
-        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
 
         this.map = new Sprite(Texture.from("Map1"));
         this.world.addChild(this.map);
@@ -122,7 +122,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         Keyboard.down.on("NumpadAdd", () => this.world.scale.set(this.world.scale.x + 0.1));
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
 
-        this.infoText = new Text("", Tangerine);
+        this.infoText = new Text("", LETRA2);
         // this.addChild(this.infoText);
 
         this.book = new PointButton(Texture.from("BookOff"),
@@ -201,8 +201,11 @@ export class MapScene extends SceneBase implements IUpdateable {
             Texture.from("UpDown"));
         this.MapUp.x = 1210;
         this.MapUp.y = 320;
-        this.MapUp.scale.set(0.5, 0.4)
+        this.MapUp.scale.set(0.5, 0.4);
         this.MapUp.on("pointer down", this.onMapUp, this);
+        this.MapUp.on("pointerClick", ()=>{
+            this.stopMap();
+        })
         this.addChild(this.MapUp);
 
         this.MapDown = new PointButton(Texture.from("UpDown"),
@@ -212,6 +215,9 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.MapDown.y = 400;
         this.MapDown.scale.set(0.5, -0.4)
         this.MapDown.on("pointer down", this.onMapDown, this)
+        this.MapDown.on("pointerClick", ()=>{
+            this.stopMap();
+        })
         this.addChild(this.MapDown);
 
         this.buttonClose = new PointButton(Texture.from("ButtonClose"),
@@ -231,23 +237,23 @@ export class MapScene extends SceneBase implements IUpdateable {
         // // NOMBRE DEL JUGADOR
         MapScene.texto = prompt("Introduce tu nombre");
         if (MapScene.texto != (null)) {
-            this.textoViejo = new Text(MapScene.texto, Tangerine);
+            this.textoViejo = new Text(MapScene.texto, LETRA2);
         } else {
             MapScene.texto = "Jugador";
-            this.textoViejo = new Text(MapScene.texto, Tangerine);
+            this.textoViejo = new Text(MapScene.texto, LETRA2);
         }
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
         this.textoViejo.x = 400 - (this.textoViejo.width / 2);
         this.textoViejo.y = 120;
 
-        this.Hp = new Text("Max hp: 100", Tangerine);
+        this.Hp = new Text("Max hp: 100", LETRA2);
         this.Hp.position.set(320, 270);
 
-        this.PStrenght = new Text("Punch: 5 hp", Tangerine);
+        this.PStrenght = new Text("Punch: 5 hp", LETRA2);
         this.PStrenght.position.set(320, 320);
 
-        this.BStrenght = new Text("Bow: 2 hp", Tangerine);
+        this.BStrenght = new Text("Bow: 2 hp", LETRA2);
         this.BStrenght.position.set(320, 370);
 
         this.player = Sprite.from("PlayerMap");
@@ -262,13 +268,13 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.marcoBottomRight.scale.set(0.4, -0.4);
         this.marcoBottomRight.position.set(400, 500);
 
-        this.salir = new Text("¿Desea Salir?", Tangerine);
+        this.salir = new Text("¿Desea Salir?", LETRA2);
         this.salir.position.set(540, 270);
 
-        this.salirSi = new Text("Si", Tangerine);
+        this.salirSi = new Text("Si", LETRA2);
         this.salirSi.position.set(600, 328);
 
-        this.salirNo = new Text("No", Tangerine);
+        this.salirNo = new Text("No", LETRA2);
         this.salirNo.position.set(587, 396);
 
         this.itemWeapon4 = Sprite.from("itemShield");
@@ -295,19 +301,27 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.itemBow.scale.set(0.3);
         this.itemBow.anchor.set(0.5);
 
-        this.level = new Text("Level: 1", Tangerine);
+        this.level = new Text("Level: 1", LETRA2);
         this.level.position.set(350, 505);
     }
 
-    onMapUp() {
-        this.world.position.y += 10;
+    private onMapUp(): void {
+        // this.world.position.y += 10;
+        this.goingUp = true;
     }
 
-    onMapDown() {
-        this.world.position.y -= 10;
+    public stopMap(): void {
+        this.goingUp = false;
+        this.goingDown = false;
     }
 
-    onShieldClick(): void {
+
+    private onMapDown(): void {
+        // this.world.position.y -= 10;
+        this.goingDown = true;
+    }
+
+    private onShieldClick(): void {
         this.addChild(
             this.backShield,
             this.shieldClose,
@@ -317,10 +331,9 @@ export class MapScene extends SceneBase implements IUpdateable {
             this.itemWeapon3,
         );
         this.itemWeapon4.addChild(this.itemBow);
-
     }
 
-    onCloseShieldClick(): void {
+    private onCloseShieldClick(): void {
         this.removeChild(
             this.backShield,
             this.shieldClose,
@@ -330,10 +343,9 @@ export class MapScene extends SceneBase implements IUpdateable {
             this.itemWeapon3,
         );
         this.itemWeapon4.removeChild(this.itemBow);
-
     }
 
-    onCloseClick(): void {
+    private onCloseClick(): void {
         this.removeChild(this.buttonClose,
             this.cartel,
             this.button1,
@@ -361,13 +373,12 @@ export class MapScene extends SceneBase implements IUpdateable {
         );
     }
 
-    private bookSound() {
-
+    private bookSound(): void {
         sound.play("SoundBook")
         new Tween(this.book).to({}, 1000).start().onComplete(this.stopBookSound.bind(this));
     }
 
-    private stopBookSound() {
+    private stopBookSound(): void {
         sound.stop("SoundBook");
     }
 
@@ -386,11 +397,10 @@ export class MapScene extends SceneBase implements IUpdateable {
             this.pie,
             this.level,
         );
-
         this.removeChild(this.book);
     }
 
-    onBookClose() {
+    private onBookClose(): void {
         this.removeChild(this.bookOpened,
             this.closeBook,
             this.textoViejo,
@@ -413,6 +423,20 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     public update(_deltaFrame: number, deltaTime: number): void {
+
+        if(this.goingUp){
+            this.world.y += 0.1 * deltaTime;
+            this.infoText.text += " ⬇"
+        }
+
+        if(this.goingDown){
+            this.world.y -= 0.1 * deltaTime;
+            this.infoText.text += " ⬆️"
+        }
+
+        // if(!this.goingDown && !this.goingUp){
+        //     this.world.y = this.world.y;
+        // }
 
         this.infoText.text = "Player position inside the world: " +
             this.graphicRed.x.toFixed(1) + ", " + this.graphicRed.y.toFixed(1);
@@ -454,9 +478,7 @@ export class MapScene extends SceneBase implements IUpdateable {
             this.infoText.text += " ⬇"
         }
 
-
         // LIMITES DE MOVIMIENTO DEL MAPA
-
         if (this.world.scale.x === this.minScale) {
             this.world.scale.x = this.minScale;
             this.world.scale.y = this.minScale;
@@ -492,19 +514,15 @@ export class MapScene extends SceneBase implements IUpdateable {
         if (this.position.y > 240) {
             this.position.y = 240;
         }
-
     }
 
-    private onStageOneClick() {
+    private onStageOneClick(): void {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
     }
 
-    private onMenu() {
+    private onMenu(): void {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameStartScene());
     }
-
-
-
 }

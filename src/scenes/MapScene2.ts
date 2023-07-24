@@ -67,7 +67,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.world = new Container();
         this.addChild(this.world);
 
-        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
+        const Tangerine = new TextStyle({ fontFamily: "Letra4", fontSize: 48, fill: 0X1819 });
 
         this.map = new Sprite(Texture.from("Map1"));
         this.world.addChild(this.map);

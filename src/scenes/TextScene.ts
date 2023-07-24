@@ -26,7 +26,7 @@ export class TextScene extends SceneBase {
         this.fondo.drawRect(0, SceneManager.HEIGHT - 350, SceneManager.WIDTH, 350);
         this.fondo.endFill();
 
-        const TangerineTitle = new TextStyle({ fontFamily: "Tangerine", fontSize: 100, fill: 0X111 });
+        const TangerineTitle = new TextStyle({ fontFamily: "Letra5", fontSize: 100, fill: 0X111 });
 
         this.buttonMouse = new PointButton(Texture.from("BACK.png"),
             Texture.from("BACK hundido.png"),

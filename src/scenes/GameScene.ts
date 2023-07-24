@@ -21,7 +21,7 @@ import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
 import { Arrow } from "../games/Weapon/Arrow";
-import { BUTTON_SCALE, MOVEMENTS_SCALE, START_SCALE, UI_CONFIG, UI_SCALE } from "../utils/constants";
+import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 
 export class GameScene extends SceneBase implements IUpdateable {
     private playerBardo: Player;
@@ -70,6 +70,11 @@ export class GameScene extends SceneBase implements IUpdateable {
     private arrowDamage: number = 20;
     public arrowsOnScreen: Text;
     private aljava: Sprite;
+
+    // private aboutMe: Text;
+    // private aboutMeText: Text;
+    // private aboutMe2: Text;
+    // private aboutMeText2: Text;
 
     constructor() {
         super();
@@ -162,7 +167,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.addChild(this.aljava);
 
         let arrowsAvailable = this.playerBardo.arrowsAvailable;
-        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra2") });
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
 
@@ -170,34 +175,34 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.on("changeArrowAmount", () => {
             this.removeChild(this.arrowsOnScreen);
             let arrowsAvailable = this.playerBardo.arrowsAvailable;
-            this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+            this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra3") });
             this.arrowsOnScreen.position.set(400, 55)
             this.addChild(this.arrowsOnScreen);
         });
 
-        this.start = this.createPointButton("lineDark44.png", "lineLight47.png", this.cartel.x + 80, this.cartel.y + 80, START_SCALE);
+        this.start = this.createPointButton(start);
         this.start.on("pointer down", this.habilityClick, this);
 
-        this.buttonA = this.createPointButton("lineDark31.png", "lineLight34.png", 980, 540, BUTTON_SCALE);
+        this.buttonA = this.createPointButton(buttonA);
         this.buttonA.on("pointer down", this.onButtonA, this)
         this.buttonA.on("pointerClick", this.Stop, this);
 
-        this.buttonB = this.createPointButton("lineDark32.png", "lineDark32.png", 1120, 430, BUTTON_SCALE);
+        this.buttonB = this.createPointButton(buttonB);
         this.buttonB.on("pointer down", this.onButtonB, this)
         this.buttonB.on("pointerClick", this.Stop, this);
 
-        this.moveUp = this.createPointButton("lineDark48.png", "lineLight01.png", 180, 440, MOVEMENTS_SCALE);
+        this.moveUp = this.createPointButton(moveUp);
         this.moveUp.on("pointer down", this.UpMove, this)
 
-        this.moveDown = this.createPointButton("lineDark05.png", "lineLight08.png", 180, 620, MOVEMENTS_SCALE);
+        this.moveDown = this.createPointButton(moveDown);
         this.moveDown.on("pointer down", this.DownMove, this)
         this.moveDown.on("pointerClick", this.Stop, this)
 
-        this.moveLeft = this.createPointButton("lineDark00.png", "lineLight03.png", 100, 530, MOVEMENTS_SCALE);
+        this.moveLeft = this.createPointButton(moveLeft);
         this.moveLeft.on("pointer down", this.LeftMove, this)
         this.moveLeft.on("pointerClick", this.Stop, this)
 
-        this.moveRight = this.createPointButton("lineDark01.png", "lineLight04.png", 260, 530, MOVEMENTS_SCALE);
+        this.moveRight = this.createPointButton(moveRight);
         this.moveRight.on("pointer down", this.RightMove, this)
         this.moveRight.on("pointerClick", this.Stop, this)
 
@@ -212,19 +217,19 @@ export class GameScene extends SceneBase implements IUpdateable {
             console.log("toggle changed to:", newState)
         })
 
-        this.pauseOn = this.createPointButton("lineDark28.png", "lineLight31.png", 1230, 40, UI_SCALE);
+        this.pauseOn = this.createPointButton(pauseOn);
         this.pauseOn.on("pointerClick", this.onPause, this)
 
-        this.pauseOff = this.createPointButton("lineDark28.png", "lineLight31.png", 1230, 40, UI_SCALE);
+        this.pauseOff = this.createPointButton(pauseOff);
         this.pauseOff.on("pointerClick", this.offPause, this)
 
-        this.buttonsOn = this.createPointButton("lineDark28.png", "lineLight31.png", 1070, 40, UI_SCALE);
+        this.buttonsOn = this.createPointButton(buttonsOn);
         this.buttonsOn.on("pointerClick", this.removeButtons, this);
 
-        this.buttonsOff = this.createPointButton("lineDark28.png", "lineLight31.png", 1070, 40, UI_SCALE);
+        this.buttonsOff = this.createPointButton(buttonsOff);
         this.buttonsOff.on("pointerClick", this.showButtons, this)
 
-        this.config = this.createPointButton("CONFIG.png", "CONFIG hundido.png", 650, 500, UI_CONFIG);
+        this.config = this.createPointButton(configButtonGame);
         this.config.on("pointerClick", this.onConfigClick, this)
 
         this.melee = new Melee();
@@ -280,6 +285,27 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
         )
+
+
+        // // PORTFOLIO
+        // this.aboutMe = new Text("Portfolio", { fontFamily: "Arial", fill: "#fff", align: "center" });
+        // this.aboutMe.anchor.set(0.5, 0);
+        // this.aboutMe.position.set(SceneManager.WIDTH / 2, 0);
+        // this.world.addChild(this.aboutMe);
+
+        // this.aboutMeText = new Text("Hola, mi nombre es Facundo y este es mi portfolio hecho en PixiJS", { fontFamily: "Arial", fill: "#fff", align: "center" });
+        // this.aboutMeText.position.set(this.aboutMe.x - this.aboutMeText.width / 2, this.aboutMe.y + this.aboutMe.height);
+        // this.world.addChild(this.aboutMeText);
+
+        // // ACERCA DE MI
+        // this.aboutMe2 = new Text("Acerca de mi", { fontFamily: "Arial", fill: "#fff", align: "center" });
+        // this.aboutMe2.anchor.set(0.5, 0);
+        // this.aboutMe2.position.set(2 * SceneManager.WIDTH, 0);
+        // this.world.addChild(this.aboutMe2);
+
+        // this.aboutMeText2 = new Text("Tengo 33 años, soy Ingeniero en Alimentos, nacido en Santa Fe, Argentina y vivo en Entre Ríos", { fontFamily: "Arial", fill: "#fff", align: "center" });
+        // this.aboutMeText2.position.set(this.aboutMe2.x - this.aboutMeText2.width / 2, this.aboutMe2.y + this.aboutMe2.height);
+        // this.world.addChild(this.aboutMeText2);
     }
 
     /** Función de disparo de las flechas */
@@ -294,8 +320,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.world.addChild(newArrow);
             this.playerBardo.arrowsAvailable -= 1;
 
-            console.log("Arrows shooted: ", this.arrows.length);
-            console.log("Arrows left: ", this.playerBardo.arrowsAvailable);
+            // console.log("Arrows shooted: ", this.arrows.length);
+            // console.log("Arrows left: ", this.playerBardo.arrowsAvailable);
             this.emit("changeArrowAmount", this.playerBardo.arrowsAvailable);
         } else {
             console.log("No arrows left");
@@ -366,6 +392,10 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.gameOver = true;
         }
 
+        // if(this.playerBardo.canJump){
+        //     this.playerBardo.checkWhatsHeDoing();
+        // }
+
         // CAMARA SEGUÍ A MI PERSONAJE
         (this.world.x = - this.playerBardo.x * this.worldTransform.a + SceneManager.WIDTH / 3)
 
@@ -377,6 +407,18 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.rangeHit();
         this.arrowsHit();
         this.endStage();
+        this.myOwnHp();
+    }
+
+    /** Checks hp situation and changes hpbar color */
+    private myOwnHp(): void {
+        if (this.playerBardo.currentHealth > this.playerBardo.maxHealth * 0.7) {
+            this.HPbar.bar.tint = 0xffffff
+        } else if (this.playerBardo.currentHealth > this.playerBardo.maxHealth * 0.4 && this.playerBardo.currentHealth < this.playerBardo.maxHealth * 0.7) {
+            this.HPbar.bar.tint = 0xff0000
+        } else if (this.playerBardo.currentHealth <= this.playerBardo.maxHealth * 0.4) {
+            this.HPbar.bar.tint = 0x000000
+        }
     }
 
     /** Daño de rango medio */
@@ -388,7 +430,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
                     this.arek.playDestroyAnimation(this.arek);
-                    new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
+                    new Tween(this.arek).to({ alpha: 0 }, 5000).repeat(3).start().onComplete(() => this.world.removeChild(this.arek));
                 }
             }
         }
@@ -414,7 +456,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     /** Chequeo de fin de pantalla */
-    private endStage() {
+    private endStage(): void {
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.chest.destroy();
@@ -429,9 +471,15 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.arek.attackArek();
             this.playerBardo.getPlayerHurt(this.arekDamage);
             this.changePlayerHP();
+
             if (this.playerBardo.currentHealth <= 0) {
-                this.playerBardo.bardo.playState("hurted");
+                this.playerBardo.fall();
             }
+
+            if (this.playerBardo.hurted) {
+                this.playerBardo.getUp();
+            }
+
         } else {
             this.arek.idleArek();
         }
@@ -504,7 +552,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     // TWEENS DE LOS MOVIMIENTOS DE AREK
-    
     /** Movimiento del enemigo hacia la izquierda */
     private arekToLeft(): void {
         this.arek.scale.set(2, 2);
@@ -524,7 +571,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekToLeft.bind(this));
     }
-    
+
     /** Tween de esperar hacia la derecha */
     private arekIdleRight(): void {
         new Tween(this.arek.idleArek)
@@ -578,7 +625,6 @@ export class GameScene extends SceneBase implements IUpdateable {
         );
     }
 
-
     // BOTONES ON - OFF
     /** Función para remover los botones de la escena */
     private removeButtons(): void {
@@ -611,7 +657,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     // UI DE MOVIMIENTOS
-
     /** Cambio de escena a la escena de Configuración */
     private onConfigClick(): void {
         SceneManager.changeScene(new Config());
@@ -672,7 +717,13 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     // Use a function to create PointButtons with common parameters
-    public createPointButton(textureName: string, textureClickName: string, x: number, y: number, scale: number): PointButton {
-        return new PointButton(Texture.from(textureName), Texture.from(textureClickName), Texture.from(textureName), new Point(x, y), scale)
-    }
+    public createPointButton(params: ButtonParams): PointButton {
+        return new PointButton(
+            Texture.from(params.textureName),
+            Texture.from(params.textureClickName),
+            Texture.from(params.textureName),
+            new Point(params.x, params.y),
+            params.scale
+        );
+    };
 }

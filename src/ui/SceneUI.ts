@@ -2,7 +2,7 @@ import { Container, Point, Sprite, Text, Texture } from "pixi.js";
 import { PointButton } from "./PointButton";
 import { GenericPanel } from "./GenericPanel";
 import { HealthBar } from "../games/HealthBar";
-import { START_SCALE, BUTTON_SCALE, MOVEMENTS_SCALE, UI_SCALE, UI_CONFIG } from "../utils/constants";
+import { START_SCALE, BUTTON_SCALE, MOVEMENTS_SCALE, UI_SCALE, UI_CONFIG, LETRA2 } from "../utils/constants";
 import { ToggleButton } from "./ToggleButton";
 import { sound } from "@pixi/sound";
 import { SceneManager } from "../utils/SceneManager";
@@ -50,7 +50,7 @@ export class SceneUI extends Container {
         this.addChild(this.aljava);
 
         let arrowsAvailable = this.playerBardo.arrowsAvailable;
-        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, LETRA2);
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
 
@@ -58,7 +58,7 @@ export class SceneUI extends Container {
         this.on("changeArrowAmount", () => {
             this.removeChild(this.arrowsOnScreen);
             let arrowsAvailable = this.playerBardo.arrowsAvailable;
-            this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Arial") });
+            this.arrowsOnScreen = new Text(`${arrowsAvailable}`, LETRA2);
             this.arrowsOnScreen.position.set(400, 55)
             this.addChild(this.arrowsOnScreen);
         });

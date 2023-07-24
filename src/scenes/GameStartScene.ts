@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Sprite, Text, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 
@@ -9,6 +9,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { Config } from "./Config";
 import { MapScene } from "./MapScene";
 import { TextScene } from "./TextScene";
+import { LETRA3 } from "../utils/constants";
 
 export class GameStartScene extends SceneBase {
     private titulo: Text;
@@ -23,8 +24,6 @@ export class GameStartScene extends SceneBase {
 
     constructor() {
         super();
-
-        const letra = new TextStyle({ fontFamily: "Quintessential", fontSize: 100, fill: 0X1819 });
 
         const BGM = sound.find("StartBGM");
         BGM.play({ loop: true, volume: 0.05 })
@@ -49,7 +48,7 @@ export class GameStartScene extends SceneBase {
         })
 
         
-        this.titulo = new Text("An adventurer's fate", letra);
+        this.titulo = new Text("An adventurer's fate", LETRA3);
         this.titulo.position.set(250,200);
         
 

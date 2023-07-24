@@ -7,24 +7,19 @@ import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
 
 export class PauseScene extends Container {
-
     private buttonSound: ToggleButton;
-    // private BG: Sprite;
     private cartel: Sprite;
-    button1: PointButton;
-    button2: PointButton;
-    salirSi: Text;
-    salirNo: Text;
-    reiniciar: Text;
-
+    public button1: PointButton;
+    public button2: PointButton;
+    public salirSi: Text;
+    public salirNo: Text;
+    public reiniciar: Text;
 
     constructor() {
         super();
 
         // this.BG=new Sprite(Texture.from("PAUSA"));
-
-        
-        const Tangerine = new TextStyle({ fontFamily: "Tangerine", fontSize: 48, fill: 0X1819 });
+        const PauseFont = new TextStyle({ fontFamily: "Letra2", fontSize: 30, fill: 0X1819 });
 
         this.cartel = Sprite.from("Cartel");
         this.cartel.x = 470;
@@ -59,14 +54,14 @@ export class PauseScene extends Container {
             console.log("toggle changed to:", newState)
         })
 
-        this.reiniciar = new Text("Pausado", Tangerine);
+        this.reiniciar = new Text("Pausado", PauseFont);
         this.reiniciar.position.set(560, 250);
 
 
-        this.salirSi = new Text("Reiniciar", Tangerine);
+        this.salirSi = new Text("Reiniciar", PauseFont);
         this.salirSi.position.set(560, 328);
 
-        this.salirNo = new Text("Salir", Tangerine);
+        this.salirNo = new Text("Salir", PauseFont);
         this.salirNo.position.set(590, 396);
 
 

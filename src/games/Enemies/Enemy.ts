@@ -34,7 +34,7 @@ export class Enemy extends PhysicsContainer implements IHitBox {
         // let currentScene:any = undefined;
         let initialHealth: number = 150;
         let currentHealth: number = initialHealth;
-        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Arial") });
+        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Letra1") });
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;

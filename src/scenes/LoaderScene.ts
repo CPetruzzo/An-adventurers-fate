@@ -3,7 +3,7 @@ import { Graphics, Loader, Sprite, } from "pixi.js";
 import { assets } from "../assets";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
-import { GameScene } from "./GameScene";
+import { GameStartScene } from "./GameStartScene";
 
 export class LoaderScene extends SceneBase {
     
@@ -35,8 +35,8 @@ export class LoaderScene extends SceneBase {
     private downloadAssets() {
         Loader.registerPlugin(WebfontLoaderPlugin);
         Loader.shared.add(assets);
-        Loader.shared.add({ name: 'From Google 2', url: 'https://fonts.googleapis.com/css2?family=Tangerine&display=swap' });
-        Loader.shared.add({ name: 'From Google 3', url: 'https://fonts.googleapis.com/css2?family=Quintessential&display=swap' });
+        // Loader.shared.add({ name: 'From Google 2', url: 'https://fonts.googleapis.com/css2?family=Tangerine&display=swap' });
+        // Loader.shared.add({ name: 'From Google 3', url: 'https://fonts.googleapis.com/css2?family=Quintessential&display=swap' });
 
         
         
@@ -67,6 +67,6 @@ export class LoaderScene extends SceneBase {
     }
 
     private whenLoadFinishes(){
-        SceneManager.changeScene(new GameScene())
+        SceneManager.changeScene(new GameStartScene())
     }
 }

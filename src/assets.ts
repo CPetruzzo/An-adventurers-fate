@@ -58,6 +58,11 @@ export const assets = [
     
     // FONTS
     { url: "./fonts/ST02R.TTF", name: "Letra1" },
+    { url: "./fonts/FREETAPE_ttf.ttf", name: "Letra2" },
+    { url: "./fonts/GelPenUpright.ttf", name: "Letra3" },
+    { url: "./fonts/GelPenUprightHeavy.ttf", name: "Letra4" },
+    { url: "./fonts/GelPenUprightLight.ttf", name: "Letra5" },
+
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
 
     //MAPS
