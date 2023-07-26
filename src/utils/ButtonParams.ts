@@ -1,6 +1,5 @@
 import { BUTTON_SCALE, MOVEMENTS_SCALE, START_SCALE, UI_CONFIG, UI_SCALE } from "./constants";
 
-
 export type ButtonParams = {
     x: number,
     y: number,
@@ -8,7 +7,6 @@ export type ButtonParams = {
     textureName: string;
     textureClickName: string;
 };
-
 
 export const configButtonGame: ButtonParams = {
     x: 650,
@@ -41,6 +39,7 @@ export const buttonA: ButtonParams = {
     textureName: "lineDark31.png",
     textureClickName: "lineDark34.png"
 };
+
 export const buttonB: ButtonParams = {
     x: 1120,
     y: 430,

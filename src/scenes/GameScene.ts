@@ -172,7 +172,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.addChild(this.aljava);
 
         let arrowsAvailable = this.playerBardo.arrowsAvailable;
-        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra2") });
+        this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra3") });
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
 
@@ -624,7 +624,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.moveUp,
             this.moveDown,
             this.moveLeft,
-            this.moveRight
+            this.moveRight,
+            this.cartel
         );
         this.addChild(this.pauseScene,
             this.pauseOff,
@@ -643,7 +644,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.moveUp,
             this.moveDown,
             this.moveLeft,
-            this.moveRight
+            this.moveRight,
+            this.cartel
         );
     }
 

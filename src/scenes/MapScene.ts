@@ -270,13 +270,13 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.marcoBottomRight.position.set(400, 500);
 
         this.salir = new Text("¿Desea Salir?", LETRA2);
-        this.salir.position.set(540, 270);
+        this.salir.position.set(548, 270);
 
         this.salirSi = new Text("Si", LETRA2);
-        this.salirSi.position.set(600, 328);
+        this.salirSi.position.set(615, 334);
 
         this.salirNo = new Text("No", LETRA2);
-        this.salirNo.position.set(587, 396);
+        this.salirNo.position.set(610, 400);
 
         this.itemWeapon4 = Sprite.from("itemShield");
         this.itemWeapon4.scale.set(0.25);
@@ -424,7 +424,6 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     public update(_deltaFrame: number, deltaTime: number): void {
-
         if(this.goingUp){
             this.world.y += 0.1 * deltaTime;
             this.infoText.text += " ⬇"
@@ -434,10 +433,6 @@ export class MapScene extends SceneBase implements IUpdateable {
             this.world.y -= 0.1 * deltaTime;
             this.infoText.text += " ⬆️"
         }
-
-        // if(!this.goingDown && !this.goingUp){
-        //     this.world.y = this.world.y;
-        // }
 
         this.infoText.text = "Player position inside the world: " +
             this.graphicRed.x.toFixed(1) + ", " + this.graphicRed.y.toFixed(1);

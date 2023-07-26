@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">An Adventurer\'s Fate</string>
+    <string name="title_activity_main">An Adventurer\'s Fate</string>
+    <string name="package_name">com.adventurer.app</string>
+    <string name="custom_url_scheme">com.adventurer.app</string>
+</resources>

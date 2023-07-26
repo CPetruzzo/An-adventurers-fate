@@ -8,6 +8,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
+import { LETRA2 } from "../utils/constants";
 import { Player } from "../games/Player";
 // import { GameScene } from "./GameScene";
 
@@ -60,6 +61,8 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     private level: Text;
     private itemSword: Sprite;
     private itemBow: Sprite;
+    private goingUp: boolean = false;
+    private goingDown: boolean = false;
 
     constructor() {
 
@@ -218,8 +221,11 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             Texture.from("UpDown"));
         this.MapUp.x = 1210;
         this.MapUp.y = 320;
-        this.MapUp.scale.set(0.5, 0.4)
-        this.MapUp.on("pointerClick", this.onMapUp, this);
+        this.MapUp.scale.set(0.5, 0.4);
+        this.MapUp.on("pointer down", this.onMapUp, this);
+        this.MapUp.on("pointerClick", ()=>{
+            this.stopMap();
+        })
         this.addChild(this.MapUp);
 
         this.MapDown = new PointButton(Texture.from("UpDown"),
@@ -228,7 +234,10 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.MapDown.x = 1210;
         this.MapDown.y = 400;
         this.MapDown.scale.set(0.5, -0.4)
-        this.MapDown.on("pointerClick", this.onMapDown, this)
+        this.MapDown.on("pointer down", this.onMapDown, this)
+        this.MapDown.on("pointerClick", ()=>{
+            this.stopMap();
+        })
         this.addChild(this.MapDown);
 
         this.buttonClose = new PointButton(Texture.from("ButtonClose"),
@@ -277,15 +286,15 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.marcoBottomRight.scale.set(0.4, -0.4);
         this.marcoBottomRight.position.set(400, 500);
 
+        this.salir = new Text("¿Desea Salir?", LETRA2);
+        this.salir.position.set(548, 270);
 
-        this.salir = new Text("¿Desea Salir?", Tangerine);
-        this.salir.position.set(540, 270);
+        this.salirSi = new Text("Si", LETRA2);
+        this.salirSi.position.set(615, 334);
 
-        this.salirSi = new Text("Si", Tangerine);
-        this.salirSi.position.set(600, 328);
+        this.salirNo = new Text("No", LETRA2);
+        this.salirNo.position.set(610, 400);
 
-        this.salirNo = new Text("No", Tangerine);
-        this.salirNo.position.set(587, 396);
         this.itemWeapon4 = Sprite.from("itemShield");
         this.itemWeapon4.scale.set(0.25);
         this.itemWeapon4.position.set(700, 240);
@@ -319,14 +328,22 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     }
 
 
-    onMapUp() {
-        this.world.position.y += 10;
+
+    private onMapUp(): void {
+        // this.world.position.y += 10;
+        this.goingUp = true;
     }
 
-    onMapDown() {
-        this.world.position.y -= 10;
+    public stopMap(): void {
+        this.goingUp = false;
+        this.goingDown = false;
     }
 
+
+    private onMapDown(): void {
+        // this.world.position.y -= 10;
+        this.goingDown = true;
+    }
 
     onShieldClick(): void {
         this.addChild(
@@ -429,6 +446,16 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     }
 
     public update(_deltaFrame: number, deltaTime: number): void {
+
+        if(this.goingUp){
+            this.world.y += 0.1 * deltaTime;
+            this.infoText.text += " ⬇"
+        }
+
+        if(this.goingDown){
+            this.world.y -= 0.1 * deltaTime;
+            this.infoText.text += " ⬆️"
+        }
 
         this.infoText.text = "Player position inside the world: " +
             this.graphicRed.x.toFixed(1) + ", " + this.graphicRed.y.toFixed(1);

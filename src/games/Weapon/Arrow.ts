@@ -6,7 +6,6 @@ import { PhysicsContainer } from "../PhysicsContainer";
 import { Tween } from "tweedle.js";
 
 export class Arrow extends PhysicsContainer implements IHitBox {
-
     public canShoot: boolean;
     public attack: number;
     public areaDamage: number;
@@ -40,7 +39,7 @@ export class Arrow extends PhysicsContainer implements IHitBox {
     }
 
     /** Función para dañar con flechas */
-    public getEnemyHurt(damage: number, enemy: Enemy | Arek) {
+    public getEnemyHurt(damage: number, enemy: Enemy | Arek): void {
         enemy.currentHealth -= damage;
         enemy.healthOnScreen.text = `${enemy.currentHealth}` + "HP";
         console.log("Enemy health: " + enemy.currentHealth);
@@ -48,22 +47,21 @@ export class Arrow extends PhysicsContainer implements IHitBox {
 
     public shoot(arrow: Arrow, currentPos: Point, scale: number): void {
         new Tween(arrow)
-        .to({ x: (currentPos.x + 500) * scale , y: currentPos.y }, 1000)
-        .start().onComplete(() => { 
-            arrow.destroy() 
-        });
+            .to({ x: (currentPos.x + 500) * scale, y: currentPos.y }, 1000)
+            .start().onComplete(() => {
+                arrow.destroy()
+            });
     }
 
     /** PARA SEPARAR ENEMIGOS DE PLATAFORMAS Y PODER GOLPEARLOS  */
-    public arrowCollision(overlap: Rectangle, enemy: ObservablePoint<any>) {
+    public arrowCollision(overlap: Rectangle, enemy: ObservablePoint<any>): void {
         if (overlap.width < overlap.height) {
             if (this.x < enemy.x) {
                 this.x -= overlap.width;
             } else if (this.x > enemy.x) {
                 this.x += overlap.width;
             }
-        }
-        else {
+        } else {
             if (this.y > enemy.y) {
                 this.y += overlap.height;
                 this.speed.y = 0;
@@ -74,4 +72,3 @@ export class Arrow extends PhysicsContainer implements IHitBox {
         }
     }
 }
-

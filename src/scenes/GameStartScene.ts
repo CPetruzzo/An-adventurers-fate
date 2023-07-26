@@ -47,10 +47,10 @@ export class GameStartScene extends SceneBase {
             console.log("toggle changed to:", newState)
         })
 
-        
         this.titulo = new Text("An adventurer's fate", LETRA3);
-        this.titulo.position.set(250,200);
-        
+        this.titulo.position.set(SceneManager.WIDTH / 2, 200);
+        this.titulo.anchor.set(0.5)
+        new Tween(this.titulo.style).to({dropShadowDistance: 2}, 1500).repeat(Infinity).yoyo(true).start();
 
         this.config = new PointButton(Texture.from("CONFIG.png"),
             Texture.from("CONFIG hundido.png"),
@@ -61,7 +61,7 @@ export class GameStartScene extends SceneBase {
         this.config.scale.y = 0.5;
         this.config.on("pointerClick", this.onConfigClick, this)
 
-        new Tween(this.BG).from({x:0 , y: 0}).to({x:0 , y: -500},15000).start().onComplete(this.BGdown.bind(this));
+        new Tween(this.BG).from({ x: 0, y: 0 }).to({ x: 0, y: -500 }, 15000).start().onComplete(this.BGdown.bind(this));
 
         this.start = new PointButton(Texture.from("START.png"),
             Texture.from("START hundido.png"),
@@ -72,7 +72,7 @@ export class GameStartScene extends SceneBase {
         this.start.scale.y = 0.5;
         this.start.on("pointerClick", this.onStartClick, this)
 
-        
+
         this.textscene = new PointButton(Texture.from("ABOUT.png"),
             Texture.from("ABOUT hundido.png"),
             Texture.from("ABOUT.png"))
@@ -91,7 +91,7 @@ export class GameStartScene extends SceneBase {
             this.titulo,
         )
     }
-    onTextClick():void {
+    onTextClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new TextScene());
         sound.stop("StartBGM");
@@ -110,11 +110,11 @@ export class GameStartScene extends SceneBase {
     }
 
     BGdown(): void {
-        new Tween(this.BG).from({x:0 , y: -500}).to({x:0 , y: 0},15000).start().onComplete(this.BGup.bind(this));
+        new Tween(this.BG).from({ x: 0, y: -500 }).to({ x: 0, y: 0 }, 15000).start().onComplete(this.BGup.bind(this));
     }
 
-    BGup(): void{
-        new Tween(this.BG).from({x:0 , y: 0}).to({x:0 , y: -500},15000).start().onComplete(this.BGdown.bind(this));
+    BGup(): void {
+        new Tween(this.BG).from({ x: 0, y: 0 }).to({ x: 0, y: -500 }, 15000).start().onComplete(this.BGdown.bind(this));
     }
 
 }

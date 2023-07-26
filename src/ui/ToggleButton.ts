@@ -2,10 +2,10 @@ import { sound } from "@pixi/sound";
 import { Container, Texture } from "pixi.js";
 import { PointButton } from "./PointButton";
 
-export class ToggleButton extends Container{
-    public static readonly TOGGLE_EVENT:string = "toggledButtonEvent";
-    private btnOn:PointButton;
-    private btnOff:PointButton;
+export class ToggleButton extends Container {
+    public static readonly TOGGLE_EVENT: string = "toggledButtonEvent";
+    private btnOn: PointButton;
+    private btnOff: PointButton;
     private _state: boolean = true;
     public get state(): boolean {
         return this._state;
@@ -14,34 +14,27 @@ export class ToggleButton extends Container{
         this._state = value;
         this.fixState();
     }
-    constructor(texUp:Texture, texDown:Texture){
+    constructor(texUp: Texture, texDown: Texture) {
         super();
-
         this.btnOn = new PointButton(texUp, texDown, texUp);
         this.btnOff = new PointButton(texDown, texUp, texDown);
-
         this.btnOn.on("pointerClick", this.toggle, this);
         this.btnOff.on("pointerClick", this.toggle, this);
-
         this.btnOff.visible = false;
-
-        this.addChild(this.btnOn,this.btnOff);
+        this.addChild(this.btnOn, this.btnOff);
     }
 
-    public toggle(){
+    public toggle() {
         this.state = !this.state;
         this.emit(ToggleButton.TOGGLE_EVENT, this.state);
         sound.toggleMuteAll();
     }
 
     private fixState() {
-        if (this.state)
-        {
+        if (this.state) {
             this.btnOff.visible = false;
             this.btnOn.visible = true;
-        }
-        else
-        {
+        } else {
             this.btnOff.visible = true;
             this.btnOn.visible = false;
         }

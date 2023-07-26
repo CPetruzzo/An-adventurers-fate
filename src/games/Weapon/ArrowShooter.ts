@@ -3,7 +3,6 @@ import { Tween } from "tweedle.js";
 import { Arrow } from "./Arrow";
 
 export class ArrowShooter extends Container {
-
     public arrowsArray: Array<Arrow>;
 
     constructor() {
@@ -16,11 +15,10 @@ export class ArrowShooter extends Container {
         this.addChild(newArrow);
         newArrow.x = playerPosX;
         newArrow.y = playerPosY;
-        new Tween(newArrow).to({ x: playerPosX +1000 }, 500).start().onComplete(() => {
+        new Tween(newArrow).to({ x: playerPosX + 1000 }, 500).start().onComplete(() => {
             this.removeChild(newArrow);
             newArrow.destroy();
         });
-        // newArrow.attack = this.arrowsArray[this.arrowsArray.length - 1].attack;
         this.arrowsArray.push(newArrow);
     }
 }

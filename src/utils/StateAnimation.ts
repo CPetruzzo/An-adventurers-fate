@@ -1,7 +1,6 @@
 import { AnimatedSprite, Container, Texture } from "pixi.js";
 
 export class StateAnimation extends Container {
-
     private states: Map<string, AnimatedSprite> = new Map();
     private animContainer: Container = new Container();
 
@@ -11,7 +10,6 @@ export class StateAnimation extends Container {
     }
 
     public playState(name: string, restart: boolean = true) {
-
         this.animContainer.removeChildren();
         const current = this.states.get(name);
         // console.log("esto es una animation", current);
@@ -21,7 +19,6 @@ export class StateAnimation extends Container {
                 current.gotoAndPlay(0);
             }
         }
-
         this.emit("currentAnimation", current);
     }
 
@@ -42,7 +39,6 @@ export class StateAnimation extends Container {
         tempAnim.loop = loop;
         tempAnim.play();
         this.states.set(name, tempAnim);
-
     }
 
     public currentState(current: string): string {
@@ -54,7 +50,5 @@ export class StateAnimation extends Container {
         for (const states of this.states.values()) {
             states.update(frames);
         }
-
     }
-
 }

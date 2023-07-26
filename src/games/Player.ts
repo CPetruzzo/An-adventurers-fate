@@ -63,7 +63,9 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-run2-04.png",
                 "adventurer-run2-05.png",
             ],
-            0.1, true)
+            0.1,
+            true
+        )
 
         this.bardo.addState("hurted",
             [
@@ -75,17 +77,23 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-knock-dwn-05.png",
                 "adventurer-knock-dwn-06.png",
             ],
-            0.1, false)
+            0.1,
+            false
+        )
 
-        this.bardo.addState("getUp", [
-            "adventurer-get-up-00.png",
-            "adventurer-get-up-01.png",
-            "adventurer-get-up-02.png",
-            "adventurer-get-up-03.png",
-            "adventurer-get-up-04.png",
-            "adventurer-get-up-05.png",
-            "adventurer-get-up-06.png",
-        ], 0.1, false)
+        this.bardo.addState("getUp",
+            [
+                "adventurer-get-up-00.png",
+                "adventurer-get-up-01.png",
+                "adventurer-get-up-02.png",
+                "adventurer-get-up-03.png",
+                "adventurer-get-up-04.png",
+                "adventurer-get-up-05.png",
+                "adventurer-get-up-06.png",
+            ],
+            0.1,
+            false
+        )
 
         this.bardo.addState("punch",
             [
@@ -95,7 +103,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-punch-03.png",
                 "adventurer-punch-04.png",
                 "adventurer-punch-05.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
         this.bardo.addState("runPunch",
             [
@@ -106,7 +117,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-run-punch-04.png",
                 "adventurer-run-punch-05.png",
                 "adventurer-run-punch-06.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
         this.bardo.addState("idle",
             ["adventurer-walk-00.png"],
@@ -120,14 +134,21 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-crouch-walk-03.png",
                 "adventurer-crouch-walk-04.png",
                 "adventurer-crouch-walk-05.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
-        this.bardo.addState("jump", [
-            "adventurer-drop-kick-00.png",
-            "adventurer-drop-kick-01.png",
-            "adventurer-drop-kick-02.png",
-            "adventurer-drop-kick-03.png",
-        ], 0.025, false)
+        this.bardo.addState("jump",
+            [
+                "adventurer-drop-kick-00.png",
+                "adventurer-drop-kick-01.png",
+                "adventurer-drop-kick-02.png",
+                "adventurer-drop-kick-03.png",
+            ],
+            0.025,
+            false
+        )
 
         this.bardo.addState("bow",
             ["adventurer-bow-00.png",
@@ -140,7 +161,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-bow-07.png",
                 "adventurer-bow-08.png",
 
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
 
         this.bardo.addState("chargebow",
@@ -150,13 +174,19 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-bow-03.png",
                 "adventurer-bow-04.png",
                 "adventurer-bow-05.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
         this.bardo.addState("chargedbow",
             [
                 "adventurer-bow-04.png",
                 "adventurer-bow-05.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
         this.bardo.addState("shootingbow",
             [
@@ -173,7 +203,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                 "adventurer-bow-jump-03.png",
                 "adventurer-bow-jump-04.png",
                 "adventurer-bow-jump-05.png",
-            ], 0.1, true)
+            ],
+            0.1,
+            true
+        )
 
         this.bardo.playState("idle");
 
@@ -199,20 +232,16 @@ export class Player extends PhysicsContainer implements IHitBox {
         Keyboard.down.on("KeyJ", this.punch, this);
         Keyboard.down.on("KeyL", this.bow, this);
 
-        // Keyboard.up.on("KeyW", this.stopJump, this);
         Keyboard.up.on("KeyS", this.stopCrawl, this);
         Keyboard.up.on("KeyD", this.stopRunRight, this);
         Keyboard.up.on("KeyA", this.stopRunLeft, this);
-        // Keyboard.up.on("KeyJ", this.stopPunch, this);
         Keyboard.up.on("KeyL", this.stopBow, this);
 
         // this.addChild(auxZero);
         this.addChild(this.hitbox);
 
         // agrego todos los movimientos a la clase player
-        this.addChild(
-            this.bardo,
-        );
+        this.addChild(this.bardo);
 
         let initialHealth: number = 100;
         let currentHealth: number = initialHealth;
@@ -236,7 +265,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     // ESTO ES PARA QUE CUANDO DESTRUYA EL PLAYER TAMBIÉN SE BORRE EL MÉTODO DE SALTAR KEYBOARD DOWN ARROW UP ----> THIS.JUMP
-    public override destroy(options: boolean | IDestroyOptions | undefined) {
+    public override destroy(options: boolean | IDestroyOptions | undefined): void {
         super.destroy(options);
 
         Keyboard.down.off("KeyW", this.jump, this);
@@ -256,14 +285,14 @@ export class Player extends PhysicsContainer implements IHitBox {
 
 
     //  MOVIMIENTOS
-    public override update(deltaMS: number) {
+    public override update(deltaMS: number): void {
         super.update(deltaMS / 1000);
         this.bardo.update(deltaMS / (1000 / 60));
     }
 
 
     /** Función para el salto (Función auxiliar, si no está separada no puedo borrarla cuando elimine a player) */
-    public jump() {
+    public jump(): void {
         if (this.canJump) {
             this.speed.y = -(Player.GRAVITY * 0.7)
             this.canJump = false;
@@ -273,7 +302,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Caminar agachado */
-    public crawl() {
+    public crawl(): void {
         this.bardo.playState("crawl", true)
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
@@ -284,7 +313,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Correr a la izquierda */
-    public runLeft() {
+    public runLeft(): void {
         const run = sound.find("running");
         run.play({ loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
@@ -293,7 +322,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Correr a la derecha */
-    public runRight() {
+    public runRight(): void {
         const run = sound.find("running");
         run.play({ loop: true, volume: 0.05 })
         this.speed.x = Player.MOVE_SPEED;
@@ -302,7 +331,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Golpe de puño */
-    public punch() {
+    public punch(): void {
         if (this.canPunch) {
             this.speed.x = this.speed.x * 2;
             this.bardo.playState("punch");
@@ -318,7 +347,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Golpe corriendo */
-    public punchRun() {
+    public punchRun(): void {
         const atkbow = sound.find("bow");
         atkbow.play({ loop: true, volume: 0.05 })
         this.speed.x = this.speed.x * 2;
@@ -326,20 +355,20 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Jugador ocioso */
-    public idlePlayer() {
+    public idlePlayer(): void {
         this.speed.x = 0;
         this.bardo.playState("idle", true)
     }
 
     /** Jugador dañado */
-    public fall() {
+    public fall(): void {
         this.bardo.playState("hurted");
         this.hurted = true;
         this.recovered = false;
     }
 
     /** Jugador levantandose */
-    public getUp() {
+    public getUp(): void {
         if (this.hurted) {
             new Tween(this).to({ alpha: 1 }, 500).repeat(2).easing(Easing.Elastic.Out).start().onComplete(() => {
                 this.bardo.playState("getUp");
@@ -349,7 +378,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Función de arco en suelo y salto */
-    public bow() {
+    public bow(): void {
         // Arco y flecha mientras estoy en el piso
         if (this.canJump && this.canBow) {
             this.bardo.playState("bow");
@@ -374,11 +403,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
     }
 
-    private stopJump() {
+    private stopJump(): void {
         this.bardo.playState("idle", true)
     }
 
-    private stopCrawl() {
+    private stopCrawl(): void {
         this.bardo.playState("idle", true)
         this.speed.x = 0;
         this.removeChild(this.hitbox);
@@ -389,26 +418,26 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.addChild(this.hitbox);
     }
 
-    private stopRunLeft() {
+    private stopRunLeft(): void {
         sound.stop("running");
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardo.playState("idle", true)
     }
 
-    private stopRunRight() {
+    private stopRunRight(): void {
         sound.stop("running");
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle", true)
     }
 
-    public stopPunch() {
+    public stopPunch(): void {
         this.speed.x = this.speed.x / 2;
         this.bardo.playState("idle", true)
     }
 
-    public stopBow() {
+    public stopBow(): void {
         this.bardo.playState("idle", true);
         this.canBow = true;
     }
@@ -426,8 +455,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             } else if (this.x > platform.x) {
                 this.x += overlap.width;
             }
-        }
-        else {
+        } else {
             if (this.y > platform.y) {
                 this.y += overlap.height;
                 this.speed.y = 0;
@@ -440,7 +468,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Función de daño al jugador */
-    public getPlayerHurt(damage: number) {
+    public getPlayerHurt(damage: number): void {
         this.currentHealth -= damage;
         this.healthOnScreen.text = `${this.currentHealth}` + "HP";
         console.log("Player health: " + this.currentHealth);
@@ -454,7 +482,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     /** Curación al tomar una poción */
-    public drinkPotion(healthRecovered: number) {
+    public drinkPotion(healthRecovered: number): void {
         this.currentHealth += healthRecovered;
         if (this.currentHealth > this.maxHealth) {
             this.currentHealth = this.maxHealth;

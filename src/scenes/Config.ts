@@ -6,13 +6,10 @@ import { PointButton } from "../ui/PointButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
-import { LETRA1, LETRA5 } from "../utils/constants";
-
+import { LETRA1, LETRA1SUBTITLE, LETRA1TITLE } from "../utils/constants";
 
 export class Config extends SceneBase {
-
     private buttonMouse: PointButton;
-
     public mostrarEscrito: boolean = false;
     private settings: Sprite;
     private title: Text;
@@ -26,8 +23,6 @@ export class Config extends SceneBase {
 
     constructor() {
         super();
-
-
         this.settings = Sprite.from("B6");
 
         this.buttonMouse = new PointButton(Texture.from("BACK.png"),
@@ -39,11 +34,11 @@ export class Config extends SceneBase {
         this.buttonMouse.scale.y = 0.5;
         this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
-
-        this.title = new Text("Settings", LETRA5);
+        this.title = new Text("Settings", LETRA1TITLE);
         this.title.position.set(520, 100);
 
-        this.control1 = new Text("Movement:", LETRA1);
+        this.control1 = new Text("Movement:", LETRA1SUBTITLE);
+        // this.control1.style.fontSize = 35;
         this.control1.position.set(150, 320);
 
         this.control2 = new Text("Jump: KeyW / click Main hability", LETRA1);
