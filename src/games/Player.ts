@@ -257,10 +257,10 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public static getLevel(): number {
-        if(Player.level != undefined){
+        if (Player.level != undefined) {
             return Player.level;
         } else {
-           return 1 
+            return 1
         }
     }
 

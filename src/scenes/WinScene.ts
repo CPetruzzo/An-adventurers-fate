@@ -14,7 +14,7 @@ export class WinScene extends Container {
 
     constructor() {
         super();
-        
+
         // IMAGEN DE LA CAJA SIN MOVERSE HECHA BOTON PARA QUE SE ABRA
         this.box = new PointButton(
             Texture.from("nro1.png"),

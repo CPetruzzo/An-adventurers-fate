@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { Container } from "pixi.js";
 
 export class LevelPoints extends Container {
@@ -21,12 +22,15 @@ export class LevelPoints extends Container {
     private checkLevelUp(): void {
         LevelPoints.requiredPoints = Math.floor(1000 * Math.pow(this.pointsMultiplier, this.currentLevel - 1));
         if (LevelPoints.points >= LevelPoints.requiredPoints) {
-            LevelPoints.points -= LevelPoints.requiredPoints;
+            // LevelPoints.points -= LevelPoints.requiredPoints;
             this.currentLevel++;
+            const winbgm = sound.find("ItemBGM");
+            winbgm.volume = 0.2;
+            winbgm.play();
             this.checkLevelUp();
         }
     }
-    
+
     getCurrentLevel(): number {
         return this.currentLevel;
     }

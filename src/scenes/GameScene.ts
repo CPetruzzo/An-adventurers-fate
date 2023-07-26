@@ -23,6 +23,7 @@ import { SceneBase } from "../utils/SceneBase";
 import { Arrow } from "../games/Weapon/Arrow";
 import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
+import { LETRA1 } from "../utils/constants";
 
 export class GameScene extends SceneBase implements IUpdateable {
     private playerBardo: Player;
@@ -71,6 +72,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     private arrowDamage: number = 20;
     public arrowsOnScreen: Text;
     private aljava: Sprite;
+    public myLevel: Text;
 
     // private aboutMe: Text;
     // private aboutMeText: Text;
@@ -175,6 +177,10 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra3") });
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
+
+        this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
+        this.myLevel.position.set(450, 45)
+        this.addChild(this.myLevel);
 
         // Contador de flechas en pantalla
         this.on("changeArrowAmount", () => {
@@ -313,6 +319,19 @@ export class GameScene extends SceneBase implements IUpdateable {
         // this.world.addChild(this.aboutMeText2);
     }
 
+
+    public levelOnScreen(): void {
+        if (this.myLevel != undefined) {
+            this.removeChild(this.myLevel);
+            this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
+            this.myLevel.position.set(450, 45)
+            this.addChild(this.myLevel);
+        } else {
+            this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
+            this.myLevel.position.set(450, 45)
+            this.addChild(this.myLevel);
+        }
+    }
     /** Función de disparo de las flechas */
     public shootArrow(): void {
         if (this.playerBardo.arrowsAvailable > 0) {
@@ -347,15 +366,16 @@ export class GameScene extends SceneBase implements IUpdateable {
         }
 
         if (this.gameOver) {
-            SceneManager.changeScene(new GameOverScene());
-            sound.stop("GameBGM");
             this.playerBardo.increasePoints(-2000);
+            this.levelOnScreen();
             console.log("Current Level: ", Player.getLevel());
             console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
             console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
             const GameOverBGM = sound.find("PartingBGM");
             GameOverBGM.play({ loop: true, volume: 0.05 })
+            SceneManager.changeScene(new GameOverScene());
+            sound.stop("GameBGM");
         }
 
         if (this.nextStage) {
@@ -440,6 +460,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
                     this.playerBardo.increasePoints(1000);
+                    this.levelOnScreen();
                     console.log("Current Level: ", Player.getLevel());
                     console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
                     console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
@@ -463,6 +484,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                     if (this.arek.currentHealth <= 0) {
                         this.playerBardo.increasePoints(1000);
                         console.log("Current Level: ", Player.getLevel());
+                        this.levelOnScreen();
                         console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
                         console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                         this.arek.playDestroyAnimation(this.arek);
@@ -512,6 +534,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
                     this.playerBardo.increasePoints(10000);
+                    this.levelOnScreen();
                     console.log("Current Level: ", Player.getLevel());
                     console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
                     console.log('this.playerBardo.levelPoints.points', LevelPoints.points)

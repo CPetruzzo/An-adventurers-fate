@@ -204,7 +204,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.MapUp.y = 320;
         this.MapUp.scale.set(0.5, 0.4);
         this.MapUp.on("pointer down", this.onMapUp, this);
-        this.MapUp.on("pointerClick", ()=>{
+        this.MapUp.on("pointerClick", () => {
             this.stopMap();
         })
         this.addChild(this.MapUp);
@@ -216,7 +216,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.MapDown.y = 400;
         this.MapDown.scale.set(0.5, -0.4)
         this.MapDown.on("pointer down", this.onMapDown, this)
-        this.MapDown.on("pointerClick", ()=>{
+        this.MapDown.on("pointerClick", () => {
             this.stopMap();
         })
         this.addChild(this.MapDown);
@@ -424,12 +424,12 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     public update(_deltaFrame: number, deltaTime: number): void {
-        if(this.goingUp){
+        if (this.goingUp) {
             this.world.y += 0.1 * deltaTime;
             this.infoText.text += " ⬇"
         }
 
-        if(this.goingDown){
+        if (this.goingDown) {
             this.world.y -= 0.1 * deltaTime;
             this.infoText.text += " ⬆️"
         }

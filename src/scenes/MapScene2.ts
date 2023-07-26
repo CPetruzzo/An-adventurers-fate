@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Graphics, IDestroyOptions, Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Container, Graphics, IDestroyOptions, Sprite, Text, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
@@ -71,8 +71,6 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.world = new Container();
         this.addChild(this.world);
 
-        const Tangerine = new TextStyle({ fontFamily: "Letra4", fontSize: 48, fill: 0X1819 });
-
         this.map = new Sprite(Texture.from("Map1"));
         this.world.addChild(this.map);
         this.map.scale.set(1);
@@ -137,7 +135,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
 
 
-        this.infoText = new Text("", Tangerine);
+        this.infoText = new Text("", LETRA2);
         // this.addChild(this.infoText);
 
 
@@ -223,7 +221,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.MapUp.y = 320;
         this.MapUp.scale.set(0.5, 0.4);
         this.MapUp.on("pointer down", this.onMapUp, this);
-        this.MapUp.on("pointerClick", ()=>{
+        this.MapUp.on("pointerClick", () => {
             this.stopMap();
         })
         this.addChild(this.MapUp);
@@ -235,7 +233,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.MapDown.y = 400;
         this.MapDown.scale.set(0.5, -0.4)
         this.MapDown.on("pointer down", this.onMapDown, this)
-        this.MapDown.on("pointerClick", ()=>{
+        this.MapDown.on("pointerClick", () => {
             this.stopMap();
         })
         this.addChild(this.MapDown);
@@ -255,9 +253,9 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.shieldClose.on("pointerClick", this.onCloseShieldClick, this);
 
         if (MapScene.texto != (null)) {
-            this.textoViejo = new Text(MapScene.texto, Tangerine);
+            this.textoViejo = new Text(MapScene.texto, LETRA2);
         } else {
-            this.textoViejo = new Text("Jugador", Tangerine);
+            this.textoViejo = new Text("Jugador", LETRA2);
         }
 
         const mapMsc = sound.find("MapBGM");
@@ -265,13 +263,13 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.textoViejo.x = 400 - (this.textoViejo.width / 2);
         this.textoViejo.y = 120;
 
-        this.Hp = new Text("Max hp: 100", Tangerine);
+        this.Hp = new Text("Max hp: 100", LETRA2);
         this.Hp.position.set(320, 270);
 
-        this.PStrenght = new Text("Punch: 5 hp", Tangerine);
+        this.PStrenght = new Text("Punch: 5 hp", LETRA2);
         this.PStrenght.position.set(320, 320);
 
-        this.BStrenght = new Text("Bow: 2 hp", Tangerine);
+        this.BStrenght = new Text("Bow: 2 hp", LETRA2);
         this.BStrenght.position.set(320, 370);
 
         this.player = Sprite.from("PlayerMap");
@@ -323,7 +321,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.itemSword.scale.set(-0.3, 0.3);
         this.itemSword.anchor.set(0.5);
 
-        this.level = new Text(`Level: ${Player.getLevel()}`, Tangerine);
+        this.level = new Text(`Level: ${Player.getLevel()}`, LETRA2);
         this.level.position.set(350, 505);
     }
 
@@ -447,12 +445,12 @@ export class MapScene2 extends SceneBase implements IUpdateable {
 
     public update(_deltaFrame: number, deltaTime: number): void {
 
-        if(this.goingUp){
+        if (this.goingUp) {
             this.world.y += 0.1 * deltaTime;
             this.infoText.text += " ⬇"
         }
 
-        if(this.goingDown){
+        if (this.goingDown) {
             this.world.y -= 0.1 * deltaTime;
             this.infoText.text += " ⬆️"
         }
