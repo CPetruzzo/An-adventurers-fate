@@ -7,6 +7,7 @@ import { StateAnimation } from "../utils/StateAnimation";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
 import { INITIALARROWS } from "../utils/constants";
+import { LevelPoints } from "../Logic/LevelPoints";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;
@@ -23,13 +24,15 @@ export class Player extends PhysicsContainer implements IHitBox {
     public arrowsAvailable: number;
     public hurted: boolean = false;
     public recovered: boolean = false;
+    public levelPoints: LevelPoints;
+    public static level: number;
 
     public checkWhatsHeDoing(): string | any {
         let currentName: string;
         this.bardo.on("currentAnimation", (current) => {
             console.log(current);
             currentName = this.bardo.currentState(current);
-            if (currentName != undefined){
+            if (currentName != undefined) {
                 console.log(currentName);
                 return currentName;
             } else {
@@ -45,6 +48,9 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardo = new StateAnimation();
         this.bardo.scale.set(2)
         this.bardo.pivot.set(0.55, 17);
+
+        this.levelPoints = new LevelPoints(); // Inicializa con 0 puntos y un multiplicador de 1.5
+        console.log('this.levelPoints', this.levelPoints)
 
         this.arrowsAvailable = INITIALARROWS;
 
@@ -214,7 +220,19 @@ export class Player extends PhysicsContainer implements IHitBox {
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
+    }
 
+    increasePoints(amount: number): void {
+        this.levelPoints.increasePoints(amount);
+        Player.level = this.levelPoints.getCurrentLevel();
+    }
+
+    public static getLevel(): number {
+        if(Player.level != undefined){
+            return Player.level;
+        } else {
+           return 1 
+        }
     }
 
     // ESTO ES PARA QUE CUANDO DESTRUYA EL PLAYER TAMBIÉN SE BORRE EL MÉTODO DE SALTAR KEYBOARD DOWN ARROW UP ----> THIS.JUMP

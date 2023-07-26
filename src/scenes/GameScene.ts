@@ -22,6 +22,7 @@ import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
 import { Arrow } from "../games/Weapon/Arrow";
 import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
+import { LevelPoints } from "../Logic/LevelPoints";
 
 export class GameScene extends SceneBase implements IUpdateable {
     private playerBardo: Player;
@@ -101,6 +102,10 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.playerBardo.scale.set(2);
         this.playerBardo.position.y = 450;
         this.world.addChild(this.playerBardo);
+
+        console.log("Current Level: ", Player.getLevel());
+        console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+        console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
         this.playerBardo.on("shoot", () => {
             this.shootArrow();
@@ -344,6 +349,11 @@ export class GameScene extends SceneBase implements IUpdateable {
         if (this.gameOver) {
             SceneManager.changeScene(new GameOverScene());
             sound.stop("GameBGM");
+            this.playerBardo.increasePoints(-2000);
+            console.log("Current Level: ", Player.getLevel());
+            console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+            console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
+
             const GameOverBGM = sound.find("PartingBGM");
             GameOverBGM.play({ loop: true, volume: 0.05 })
         }
@@ -429,6 +439,10 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.arek.getEnemyHurt(this.rangeDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
+                    this.playerBardo.increasePoints(1000);
+                    console.log("Current Level: ", Player.getLevel());
+                    console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+                    console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to({ alpha: 0 }, 5000).repeat(3).start().onComplete(() => this.world.removeChild(this.arek));
                 }
@@ -447,6 +461,10 @@ export class GameScene extends SceneBase implements IUpdateable {
                     arrow.getEnemyHurt(this.arrowDamage, this.arek);
                     this.changeEnemyHP();
                     if (this.arek.currentHealth <= 0) {
+                        this.playerBardo.increasePoints(1000);
+                        console.log("Current Level: ", Player.getLevel());
+                        console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+                        console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                         this.arek.playDestroyAnimation(this.arek);
                         new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                     }
@@ -493,6 +511,10 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.arek.getEnemyHurt(this.punchDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
+                    this.playerBardo.increasePoints(10000);
+                    console.log("Current Level: ", Player.getLevel());
+                    console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+                    console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                 }

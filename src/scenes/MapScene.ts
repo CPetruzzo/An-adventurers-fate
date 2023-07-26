@@ -9,6 +9,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
+import { Player } from "../games/Player";
 // import { GameScene } from "./GameScene";
 
 const RED = 0xAA0000;
@@ -301,7 +302,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.itemBow.scale.set(0.3);
         this.itemBow.anchor.set(0.5);
 
-        this.level = new Text("Level: 1", LETRA2);
+        this.level = new Text(`Level: ${Player.getLevel()}`, LETRA2);
         this.level.position.set(350, 505);
     }
 

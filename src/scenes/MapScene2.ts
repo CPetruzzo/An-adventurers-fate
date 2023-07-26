@@ -8,6 +8,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
+import { Player } from "../games/Player";
 // import { GameScene } from "./GameScene";
 
 
@@ -313,7 +314,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.itemSword.scale.set(-0.3, 0.3);
         this.itemSword.anchor.set(0.5);
 
-        this.level = new Text("Level: 2", Tangerine);
+        this.level = new Text(`Level: ${Player.getLevel()}`, Tangerine);
         this.level.position.set(350, 505);
     }
 
