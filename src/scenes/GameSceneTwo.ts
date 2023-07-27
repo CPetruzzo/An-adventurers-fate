@@ -25,7 +25,7 @@ import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
 
-export class GameScene extends SceneBase implements IUpdateable {
+export class GameSceneTwo extends SceneBase implements IUpdateable {
     private playerBardo: Player;
     private world: Container;
     public numero: number = 0;
@@ -88,7 +88,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         BGM.play({ loop: true, volume: 0.05 })
 
         // FONDOS
-        for (let i = 1; i < 6; i++) {
+        for (let i = 7; i < 12; i++) {
             const background = new TilingSprite(
                 Texture.from("B" + i),
                 1280,
@@ -261,6 +261,8 @@ export class GameScene extends SceneBase implements IUpdateable {
         for (let i = 0; i < positions.length; i++) {
             const pot = new Potion("Potion", 200, 200);
             pot.scale.set(0.1);
+            pot.spr.tint = 0x00ff;
+            
             pot.position.set(positions[i].x, positions[i].y);
             this.world.addChild(pot);
             this.potions.push(pot);
@@ -278,7 +280,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.addChild(this.barra);
 
         // Enemy's hpbar
-        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
+        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealthLvl2) / 100)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
 
@@ -370,11 +372,11 @@ export class GameScene extends SceneBase implements IUpdateable {
         }
 
         if (this.gameOver) {
-            // this.playerBardo.increasePoints(-2000);
-            // this.levelOnScreen();
-            // console.log("Current Level: ", Player.getLevel());
-            // console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
-            // console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
+            this.playerBardo.increasePoints(-2000);
+            this.levelOnScreen();
+            console.log("Current Level: ", Player.getLevel());
+            console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
+            console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
             const GameOverBGM = sound.find("PartingBGM");
             GameOverBGM.play({ loop: true, volume: 0.05 })
@@ -585,7 +587,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         if (this.HPbar2 != undefined) {
             this.HPbar2.destroy();
         }
-        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealth) / 100)), 10);
+        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealthLvl2) / 100)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
     }

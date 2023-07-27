@@ -14,7 +14,13 @@ export const assets = [
     { url: "./StageOne/B4.png", name: "B4" },
     { url: "./StageOne/B5.png", name: "B5" },
     { url: "./StartMenu/SETTINGS.png", name: "B6" },
-    
+
+    { url: "./StageTwo/B1.png", name: "B7" },
+    { url: "./StageTwo/B2.png", name: "B8" },
+    { url: "./StageTwo/B3.png", name: "B9" },
+    { url: "./StageTwo/B4.png", name: "B10" },
+    { url: "./StageTwo/B5.png", name: "B11" },
+
     // SUELO
     { url: "./texture.json", name: "Suelo" },
     { url: "./tileset.png", name: "Tile" },

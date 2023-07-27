@@ -10,6 +10,7 @@ import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
 import { LETRA2 } from "../utils/constants";
 import { Player } from "../games/Player";
+import { GameSceneTwo } from "./GameSceneTwo";
 // import { GameScene } from "./GameScene";
 
 
@@ -263,14 +264,14 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.textoViejo.x = 400 - (this.textoViejo.width / 2);
         this.textoViejo.y = 120;
 
-        this.Hp = new Text("Max hp: 100", LETRA2);
-        this.Hp.position.set(320, 270);
+        this.Hp = new Text(`Max hp: ${Player._maxHealth}`, LETRA2);
+        this.Hp.position.set(320, 275);
 
-        this.PStrenght = new Text("Punch: 5 hp", LETRA2);
-        this.PStrenght.position.set(320, 320);
+        this.PStrenght = new Text(`Punch: ${Player._punchDamage}`, LETRA2);
+        this.PStrenght.position.set(320, 325);
 
-        this.BStrenght = new Text("Bow: 2 hp", LETRA2);
-        this.BStrenght.position.set(320, 370);
+        this.BStrenght = new Text(`Bow: ${Player._bowDamage}`, LETRA2);
+        this.BStrenght.position.set(320, 375);
 
         this.player = Sprite.from("PlayerMap");
         this.player.scale.set(0.45);
@@ -322,7 +323,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.itemSword.anchor.set(0.5);
 
         this.level = new Text(`Level: ${Player.getLevel()}`, LETRA2);
-        this.level.position.set(350, 505);
+        this.level.position.set(350, 510);
     }
 
 
@@ -541,7 +542,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
     // Faltaría hacer una pantalla 2
     private onStageTwoClick() {
         sound.stop("MapBGM");
-        SceneManager.changeScene(new GameScene());
+        SceneManager.changeScene(new GameSceneTwo());
     }
 
     private onMenu() {

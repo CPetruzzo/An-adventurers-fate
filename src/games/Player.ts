@@ -27,6 +27,34 @@ export class Player extends PhysicsContainer implements IHitBox {
     public levelPoints: LevelPoints;
     public static level: number;
 
+    public static _hp: number = 100;
+    private static _baseMaxHealth: number = 100;
+    public static _maxHealth: number = 100;
+    public _strength: number = 10;
+    public _speed: number = 5;
+    public static _punchDamage: number = 2;
+    public static _bowDamage: number = 5;
+    public _swordDamage: number = 40;
+
+    // Getters y otros métodos...
+
+    // Función para aumentar el nivel
+    public increaseLevel(): void {
+        Player._hp += 20;
+        this._strength += 5;
+        this._speed += 1;
+        Player._punchDamage += 0.5;
+        Player._bowDamage += 0.5;
+        this._swordDamage += 20;
+
+        // Incrementar la salud máxima en un valor base cada vez que se sube de nivel
+        const healthIncreasePerLevel = 20;
+        Player._baseMaxHealth += healthIncreasePerLevel;
+
+        // Actualizar la salud máxima con el nuevo valor base
+        Player._maxHealth = Player._baseMaxHealth;
+    }
+
     public checkWhatsHeDoing(): string | any {
         let currentName: string;
         this.bardo.on("currentAnimation", (current) => {
@@ -49,7 +77,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardo.scale.set(2)
         this.bardo.pivot.set(0.55, 17);
 
-        this.levelPoints = new LevelPoints(); // Inicializa con 0 puntos y un multiplicador de 1.5
+        this.levelPoints = new LevelPoints(this); // Inicializa con 0 puntos y un multiplicador de 1.5
         console.log('this.levelPoints', this.levelPoints)
 
         this.arrowsAvailable = INITIALARROWS;
@@ -243,9 +271,16 @@ export class Player extends PhysicsContainer implements IHitBox {
         // agrego todos los movimientos a la clase player
         this.addChild(this.bardo);
 
-        let initialHealth: number = 100;
-        let currentHealth: number = initialHealth;
-        this.healthOnScreen = new Text(`${currentHealth}` + "HP", { fontSize: 40, fontFamily: ("Letra1") });
+        if (Player._hp) {
+            this.healthOnScreen = new Text(`${Player._hp}` + "HP", { fontSize: 40, fontFamily: "Letra1" });
+        } else if (Player._hp == undefined) {
+            // Cambiamos todas las referencias a currentHealth por _hp
+            let initialHealth: number = 100;
+            Player._hp = initialHealth;
+            Player._maxHealth = Player._baseMaxHealth;
+        }
+        this.healthOnScreen = new Text(`${Player._hp}` + "HP", { fontSize: 40, fontFamily: "Letra1" });
+
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
@@ -466,28 +501,30 @@ export class Player extends PhysicsContainer implements IHitBox {
             }
         }
     }
-
-    /** Función de daño al jugador */
+    // Función de daño al jugador
     public getPlayerHurt(damage: number): void {
-        this.currentHealth -= damage;
-        this.healthOnScreen.text = `${this.currentHealth}` + "HP";
-        console.log("Player health: " + this.currentHealth);
+        Player._hp -= damage;
+        if (Player._hp < 0) {
+            Player._hp = 0;
+        }
+        this.healthOnScreen.text = `${Player._hp}` + "HP";
+        console.log("Player health: " + Player._hp);
 
-        if (this.currentHealth <= 0) {
-            this.currentHealth = 0;
+        if (Player._hp <= 0) {
+            Player._hp = 0;
             this.bardo.playState("hurted", true);
             new Tween(this).to({ x: 5, alpha: 0.5 }, 500).start().onComplete(() => {
-            })
+            });
         }
     }
 
-    /** Curación al tomar una poción */
+    // Curación al tomar una poción
     public drinkPotion(healthRecovered: number): void {
-        this.currentHealth += healthRecovered;
-        if (this.currentHealth > this.maxHealth) {
-            this.currentHealth = this.maxHealth;
+        Player._hp += healthRecovered;
+        if (Player._hp > Player._maxHealth) {
+            Player._hp = Player._maxHealth;
         }
-        this.healthOnScreen.text = `${this.currentHealth}` + "HP";
-        console.log("Player health: " + this.currentHealth);
+        this.healthOnScreen.text = `${Player._hp}` + "HP";
+        console.log("Player health: " + Player._hp);
     }
 }

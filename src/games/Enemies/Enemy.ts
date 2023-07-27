@@ -11,6 +11,7 @@ export class Enemy extends PhysicsContainer implements IHitBox {
     public hitbox: Graphics;
     public healthOnScreen: Text;
     public currentHealth: number = 150;
+    public currentHealthLvl2: number = 550;
 
     constructor() {
         super();

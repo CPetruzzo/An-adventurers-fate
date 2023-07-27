@@ -3,13 +3,14 @@ import { IHitBox } from "./IHitBox";
 
 export class Potion extends Container implements IHitBox {
     private hitbox: Graphics;
+    spr: Sprite;
 
     constructor(sprite: SpriteSource, hitboxWidth: number, hitboxHeight: number, anchorx?: number, anchory?: number,) {
         super();
 
-        const spr = Sprite.from(sprite);
-        spr.anchor.set(anchorx, anchory);
-        this.addChild(spr);
+        this.spr = Sprite.from(sprite);
+        this.spr.anchor.set(anchorx, anchory);
+        this.addChild(this.spr);
 
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0x00FF00, 0);
