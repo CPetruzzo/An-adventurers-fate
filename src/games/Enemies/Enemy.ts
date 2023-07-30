@@ -6,12 +6,13 @@ import { Easing, Tween } from "tweedle.js";
 
 export class Enemy extends PhysicsContainer implements IHitBox {
 
-
     public static readonly GRAVITY = 1000;
     public hitbox: Graphics;
     public healthOnScreen: Text;
     public currentHealth: number = 150;
     public currentHealthLvl2: number = 550;
+    public maxHP: number = 200;
+    public maxHP2: number = 550;
 
     constructor() {
         super();

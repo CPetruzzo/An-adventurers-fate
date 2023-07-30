@@ -587,7 +587,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         if (this.HPbar2 != undefined) {
             this.HPbar2.destroy();
         }
-        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealthLvl2) / 100)), 10);
+        this.HPbar2 = new HealthBar("HealthBar", (100 * ((this.arek.currentHealthLvl2) / this.arek.maxHP2)), 10);
         this.HPbar2.position.set(-120, -145);
         this.arek.addChild(this.HPbar2);
     }
@@ -776,9 +776,9 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     // Use a function to create PointButtons with common parameters
     public createPointButton(params: ButtonParams): PointButton {
         return new PointButton(
-            Texture.from(params.textureName),
-            Texture.from(params.textureClickName),
-            Texture.from(params.textureName),
+            Texture.from(params.textureNameDef),
+            Texture.from(params.textureOver),
+            Texture.from(params.textureNameDef),
             new Point(params.x, params.y),
             params.scale
         );

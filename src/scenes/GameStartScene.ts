@@ -2,7 +2,6 @@ import { sound } from "@pixi/sound";
 import { Sprite, Text, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
-
 import { ToggleButton } from "../ui/ToggleButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
@@ -10,13 +9,11 @@ import { Config } from "./Config";
 import { MapScene } from "./MapScene";
 import { TextScene } from "./TextScene";
 import { LETRA3 } from "../utils/constants";
+import { configParams, createPointButton, startParams, textSceneParams } from "../utils/ButtonParams";
 
 export class GameStartScene extends SceneBase {
     private titulo: Text;
     private textscene: PointButton;
-
-    public update(): void { }
-
     private buttonSound: ToggleButton;
     private BG: Sprite;
     private config: PointButton;
@@ -28,13 +25,14 @@ export class GameStartScene extends SceneBase {
         const BGM = sound.find("StartBGM");
         BGM.play({ loop: true, volume: 0.05 })
 
-        // this.BG=new Sprite(Texture.from("An adventurer's fate (1).png"));
-
         this.BG = new Sprite(Texture.from("GameStartScene1.png"));
         this.BG.scale.set(2.9);
         this.BG.position.set(0, 0);
-
-
+        
+        this.config = createPointButton(configParams, "pointerClick", () => this.onConfigClick())
+        this.start = createPointButton(startParams, "pointerClick", () => this.onStartClick());
+        this.textscene = createPointButton(textSceneParams, "pointerClick", () => this.onTextClick());
+        
         // Sound ON-OFF
         this.buttonSound = new ToggleButton(
             Texture.from("lineDark12.png"),
@@ -50,71 +48,38 @@ export class GameStartScene extends SceneBase {
         this.titulo = new Text("An adventurer's fate", LETRA3);
         this.titulo.position.set(SceneManager.WIDTH / 2, 200);
         this.titulo.anchor.set(0.5)
-        new Tween(this.titulo.style).to({dropShadowDistance: 2}, 1500).repeat(Infinity).yoyo(true).start();
+        new Tween(this.titulo.style).to({ dropShadowDistance: 2 }, 1500).repeat(Infinity).yoyo(true).start();
 
-        this.config = new PointButton(Texture.from("CONFIG.png"),
-            Texture.from("CONFIG hundido.png"),
-            Texture.from("CONFIG.png"))
-        this.config.x = 650
-        this.config.y = 500
-        this.config.scale.x = 0.5;
-        this.config.scale.y = 0.5;
-        this.config.on("pointerClick", this.onConfigClick, this)
+        this.addChild(this.BG, this.buttonSound, this.config, this.start, this.textscene, this.titulo);
 
         new Tween(this.BG).from({ x: 0, y: 0 }).to({ x: 0, y: -500 }, 15000).start().onComplete(this.BGdown.bind(this));
-
-        this.start = new PointButton(Texture.from("START.png"),
-            Texture.from("START hundido.png"),
-            Texture.from("START.png"))
-        this.start.x = 650
-        this.start.y = 400
-        this.start.scale.x = 0.5;
-        this.start.scale.y = 0.5;
-        this.start.on("pointerClick", this.onStartClick, this)
-
-
-        this.textscene = new PointButton(Texture.from("ABOUT.png"),
-            Texture.from("ABOUT hundido.png"),
-            Texture.from("ABOUT.png"))
-        this.textscene.x = 650
-        this.textscene.y = 600
-        this.textscene.scale.x = 0.5;
-        this.textscene.scale.y = 0.5;
-        this.textscene.on("pointerClick", this.onTextClick, this)
-
-        this.addChild(
-            this.BG,
-            this.buttonSound,
-            this.config,
-            this.start,
-            this.textscene,
-            this.titulo,
-        )
     }
-    onTextClick(): void {
+
+    public update(): void { }
+
+    private onTextClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new TextScene());
         sound.stop("StartBGM");
     }
 
-    onConfigClick(): void {
+    private onConfigClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new Config());
         sound.stop("StartBGM");
     }
 
-    onStartClick(): void {
+    private onStartClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new MapScene());
         sound.stop("StartBGM");
     }
 
-    BGdown(): void {
+    private BGdown(): void {
         new Tween(this.BG).from({ x: 0, y: -500 }).to({ x: 0, y: 0 }, 15000).start().onComplete(this.BGup.bind(this));
     }
 
-    BGup(): void {
+    private BGup(): void {
         new Tween(this.BG).from({ x: 0, y: 0 }).to({ x: 0, y: -500 }, 15000).start().onComplete(this.BGdown.bind(this));
     }
-
 }

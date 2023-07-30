@@ -11,8 +11,6 @@ import { MapScene } from "./MapScene";
 import { LETRA2 } from "../utils/constants";
 import { Player } from "../games/Player";
 import { GameSceneTwo } from "./GameSceneTwo";
-// import { GameScene } from "./GameScene";
-
 
 const RED = 0xAA0000;
 
@@ -197,7 +195,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
         this.cartel = Sprite.from("Cartel");
         this.cartel.x = 470;
         this.cartel.y = 200;
-
+        
         this.button1 = new PointButton(Texture.from("MapButtonOff"),
             Texture.from("MapButton"),
             Texture.from("MapButton"));

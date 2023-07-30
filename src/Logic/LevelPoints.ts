@@ -8,13 +8,23 @@ export class LevelPoints extends Container {
     public currentLevel: number = 1;
     public static requiredPoints: number;
     private player: Player;
+    private static instance: LevelPoints | null = null; // Variable para almacenar la instancia del LevelPoints (patrón Singleton)
 
-    constructor(player: Player) {
+    public constructor(player: Player) {
         super();
         this.player = player;
 
         this.getCurrentLevel();
-        console.log('this.getCurrentLevel()', this.getCurrentLevel())
+        console.log('this.getCurrentLevel()', this.getCurrentLevel());
+    }
+
+    public static getInstance(player: Player): LevelPoints {
+        // Si ya existe una instancia de LevelPoints, la retorna.
+        // De lo contrario, crea una nueva instancia y la retorna.
+        if (!LevelPoints.instance) {
+            LevelPoints.instance = new LevelPoints(player);
+        }
+        return LevelPoints.instance;
     }
 
     increasePoints(amount: number): void {
@@ -43,5 +53,3 @@ export class LevelPoints extends Container {
         return LevelPoints.points;
     }
 }
-
-

@@ -5,6 +5,7 @@ import { ToggleButton } from "../ui/ToggleButton";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
+import { button1, button2, createPointButton } from "../utils/ButtonParams";
 
 export class PauseScene extends Container {
     private buttonSound: ToggleButton;
@@ -26,22 +27,8 @@ export class PauseScene extends Container {
         this.cartel.x = SceneManager.WIDTH / 2;
         this.cartel.y = SceneManager.HEIGHT / 2;
 
-        this.button1 = new PointButton(Texture.from("MapButtonOff"),
-            Texture.from("MapButton"),
-            Texture.from("MapButton"));
-        this.button1.x = 640
-        this.button1.y = 420
-        this.button1.scale.x = 0.8;
-        this.button1.scale.y = 0.8;
-        this.button1.on("pointerClick", this.onCloseClick, this);
-
-        this.button2 = new PointButton(Texture.from("MapButtonOff"),
-            Texture.from("MapButton"),
-            Texture.from("MapButton"));
-        this.button2.x = 640;
-        this.button2.y = 350;
-        this.button2.scale.set(0.8);
-        this.button2.on("pointerClick", this.onMenu, this);
+        this.button1 = createPointButton(button1, "pointerClick", () => this.onCloseClick());
+        this.button2 = createPointButton(button2, "pointerClick", () => this.onMenu());
 
         // Sound ON-OFF
         this.buttonSound = new ToggleButton(
@@ -58,9 +45,9 @@ export class PauseScene extends Container {
         this.reiniciar = new Text("Pausado", PauseFont);
         this.reiniciar.anchor.set(0.5)
         this.reiniciar.y = -this.cartel.height / 4
-        this.salirSi = new Text("Reiniciar", PauseFont);
+        this.salirSi = new Text("Salir", PauseFont);
         this.salirSi.anchor.set(0.5);
-        this.salirNo = new Text("Salir", PauseFont);
+        this.salirNo = new Text("Reiniciar", PauseFont);
         this.salirNo.anchor.set(0.5);
 
         this.addChild(

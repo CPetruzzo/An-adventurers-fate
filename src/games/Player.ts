@@ -30,19 +30,29 @@ export class Player extends PhysicsContainer implements IHitBox {
     public static _hp: number = 100;
     private static _baseMaxHealth: number = 100;
     public static _maxHealth: number = 100;
-    public _strength: number = 10;
-    public _speed: number = 5;
+    public static _strength: number = 10;
+    public static _speed: number = 5;
     public static _punchDamage: number = 2;
     public static _bowDamage: number = 5;
     public _swordDamage: number = 40;
+
+    private static _instance: Player | null = null;
+
+    public static getInstance(): Player {
+        if (!Player._instance) {
+            Player._instance = new Player();
+        }
+        return Player._instance;
+    }
 
     // Getters y otros métodos...
 
     // Función para aumentar el nivel
     public increaseLevel(): void {
+        // Acceder a las variables estáticas para actualizar los stats.
         Player._hp += 20;
-        this._strength += 5;
-        this._speed += 1;
+        Player._strength += 5;
+        Player._speed += 1;
         Player._punchDamage += 0.5;
         Player._bowDamage += 0.5;
         this._swordDamage += 20;
@@ -53,21 +63,6 @@ export class Player extends PhysicsContainer implements IHitBox {
 
         // Actualizar la salud máxima con el nuevo valor base
         Player._maxHealth = Player._baseMaxHealth;
-    }
-
-    public checkWhatsHeDoing(): string | any {
-        let currentName: string;
-        this.bardo.on("currentAnimation", (current) => {
-            console.log(current);
-            currentName = this.bardo.currentState(current);
-            if (currentName != undefined) {
-                console.log(currentName);
-                return currentName;
-            } else {
-                console.log("no idea what's he doin");
-                return "no idea what's he doin";
-            }
-        });
     }
 
     constructor() {
@@ -193,7 +188,6 @@ export class Player extends PhysicsContainer implements IHitBox {
             0.1,
             true
         )
-
 
         this.bardo.addState("chargebow",
             ["adventurer-bow-00.png",
@@ -526,5 +520,20 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
         this.healthOnScreen.text = `${Player._hp}` + "HP";
         console.log("Player health: " + Player._hp);
+    }
+
+    public checkWhatsHeDoing(): string | any {
+        let currentName: string;
+        this.bardo.on("currentAnimation", (current) => {
+            console.log(current);
+            currentName = this.bardo.currentState(current);
+            if (currentName != undefined) {
+                console.log(currentName);
+                return currentName;
+            } else {
+                console.log("no idea what's he doin");
+                return "no idea what's he doin";
+            }
+        });
     }
 }
