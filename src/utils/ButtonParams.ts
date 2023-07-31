@@ -2,7 +2,6 @@ import { Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { BUTTON_SCALE, MOVEMENTS_SCALE, STAGE_SCALE, START_SCALE, UI_CONFIG, UI_SCALE } from "./constants";
 
-// 
 /** Use a function to create PointButtons with common parameters
  * @param params parameters for that pointerbutton, x, y, scale, texture def, over, down
  * @param _event name of the event, for example, pointer down
@@ -142,6 +141,33 @@ export const start: ButtonParams = {
 export const stageOne: ButtonParams = {
     x: 580,
     y: 750,
+    scale: STAGE_SCALE,
+    textureNameDef: "lineDark23.png",
+    textureOver: "lineLight26.png",
+    textureClick: "lineLight23.png",
+};
+
+export const stageTwo: ButtonParams = {
+    x: 645,
+    y: 150,
+    scale: STAGE_SCALE,
+    textureNameDef: "lineDark23.png",
+    textureOver: "lineLight26.png",
+    textureClick: "lineLight23.png",
+};
+
+export const stageThree: ButtonParams = {
+    x: 990,
+    y: 440,
+    scale: STAGE_SCALE,
+    textureNameDef: "lineDark23.png",
+    textureOver: "lineLight26.png",
+    textureClick: "lineLight23.png",
+};
+
+export const stageFour: ButtonParams = {
+    x: 70,
+    y: 450,
     scale: STAGE_SCALE,
     textureNameDef: "lineDark23.png",
     textureOver: "lineLight26.png",

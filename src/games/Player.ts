@@ -6,33 +6,36 @@ import { Keyboard } from "../utils/Keyboard";
 import { StateAnimation } from "../utils/StateAnimation";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
-import { INITIALARROWS } from "../utils/constants";
+import { INITIALARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
+import { playSound, stopSounds } from "../utils/SoundParams";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;
     private static readonly MOVE_SPEED = 350;
-    public canJump = true;
+
     private hitbox: Graphics;
     public healthOnScreen: Text;
     public currentHealth: number = 100;
-    public maxHealth: number = 100;
-    public canPunch: boolean = true;
-    public punchDamage: number = 2;
     public bardo: StateAnimation;
-    public canBow: boolean = true;
     public arrowsAvailable: number;
+    public levelPoints: LevelPoints;
+
     public hurted: boolean = false;
     public recovered: boolean = false;
-    public levelPoints: LevelPoints;
-    public static level: number;
+    public canJump = true;
+    public canPunch: boolean = true;
+    private canBow: boolean = true;
+    private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
+    private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
 
+    public static level: number;
     public static _hp: number = 100;
     private static _baseMaxHealth: number = 100;
     public static _maxHealth: number = 100;
     public static _strength: number = 10;
     public static _speed: number = 5;
-    public static _punchDamage: number = 2;
+    public static _punchDamage: number = 1;
     public static _bowDamage: number = 5;
     public _swordDamage: number = 40;
 
@@ -77,158 +80,19 @@ export class Player extends PhysicsContainer implements IHitBox {
 
         this.arrowsAvailable = INITIALARROWS;
 
-        this.bardo.addState("run",
-            [
-                "adventurer-run2-00.png",
-                "adventurer-run2-01.png",
-                "adventurer-run2-02.png",
-                "adventurer-run2-03.png",
-                "adventurer-run2-04.png",
-                "adventurer-run2-05.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("hurted",
-            [
-                "adventurer-knock-dwn-00.png",
-                "adventurer-knock-dwn-01.png",
-                "adventurer-knock-dwn-02.png",
-                "adventurer-knock-dwn-03.png",
-                "adventurer-knock-dwn-04.png",
-                "adventurer-knock-dwn-05.png",
-                "adventurer-knock-dwn-06.png",
-            ],
-            0.1,
-            false
-        )
-
-        this.bardo.addState("getUp",
-            [
-                "adventurer-get-up-00.png",
-                "adventurer-get-up-01.png",
-                "adventurer-get-up-02.png",
-                "adventurer-get-up-03.png",
-                "adventurer-get-up-04.png",
-                "adventurer-get-up-05.png",
-                "adventurer-get-up-06.png",
-            ],
-            0.1,
-            false
-        )
-
-        this.bardo.addState("punch",
-            [
-                "adventurer-punch-00.png",
-                "adventurer-punch-01.png",
-                "adventurer-punch-02.png",
-                "adventurer-punch-03.png",
-                "adventurer-punch-04.png",
-                "adventurer-punch-05.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("runPunch",
-            [
-                "adventurer-run-punch-00.png",
-                "adventurer-run-punch-01.png",
-                "adventurer-run-punch-02.png",
-                "adventurer-run-punch-03.png",
-                "adventurer-run-punch-04.png",
-                "adventurer-run-punch-05.png",
-                "adventurer-run-punch-06.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("idle",
-            ["adventurer-walk-00.png"],
-            0.05, true)
-
-        this.bardo.addState("crawl",
-            [
-                "adventurer-crouch-walk-00.png",
-                "adventurer-crouch-walk-01.png",
-                "adventurer-crouch-walk-02.png",
-                "adventurer-crouch-walk-03.png",
-                "adventurer-crouch-walk-04.png",
-                "adventurer-crouch-walk-05.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("jump",
-            [
-                "adventurer-drop-kick-00.png",
-                "adventurer-drop-kick-01.png",
-                "adventurer-drop-kick-02.png",
-                "adventurer-drop-kick-03.png",
-            ],
-            0.025,
-            false
-        )
-
-        this.bardo.addState("bow",
-            ["adventurer-bow-00.png",
-                "adventurer-bow-01.png",
-                "adventurer-bow-02.png",
-                "adventurer-bow-03.png",
-                "adventurer-bow-04.png",
-                "adventurer-bow-05.png",
-                "adventurer-bow-06.png",
-                "adventurer-bow-07.png",
-                "adventurer-bow-08.png",
-
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("chargebow",
-            ["adventurer-bow-00.png",
-                "adventurer-bow-01.png",
-                "adventurer-bow-02.png",
-                "adventurer-bow-03.png",
-                "adventurer-bow-04.png",
-                "adventurer-bow-05.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("chargedbow",
-            [
-                "adventurer-bow-04.png",
-                "adventurer-bow-05.png",
-            ],
-            0.1,
-            true
-        )
-
-        this.bardo.addState("shootingbow",
-            [
-                "adventurer-bow-06.png",
-                "adventurer-bow-07.png",
-                "adventurer-bow-08.png",
-            ], 0.1, true)
-
-        this.bardo.addState("jumpBow",
-            [
-                "adventurer-bow-jump-00.png",
-                "adventurer-bow-jump-01.png",
-                "adventurer-bow-jump-02.png",
-                "adventurer-bow-jump-03.png",
-                "adventurer-bow-jump-04.png",
-                "adventurer-bow-jump-05.png",
-            ],
-            0.1,
-            true
-        )
+        this.bardo.addState("run", ["adventurer-run2-00.png", "adventurer-run2-01.png", "adventurer-run2-02.png", "adventurer-run2-03.png", "adventurer-run2-04.png", "adventurer-run2-05.png",], 0.1, true)
+        this.bardo.addState("hurted", ["adventurer-knock-dwn-00.png", "adventurer-knock-dwn-01.png", "adventurer-knock-dwn-02.png", "adventurer-knock-dwn-03.png", "adventurer-knock-dwn-04.png", "adventurer-knock-dwn-05.png", "adventurer-knock-dwn-06.png",], 0.1, false)
+        this.bardo.addState("getUp", ["adventurer-get-up-00.png", "adventurer-get-up-01.png", "adventurer-get-up-02.png", "adventurer-get-up-03.png", "adventurer-get-up-04.png", "adventurer-get-up-05.png", "adventurer-get-up-06.png",], 0.1, false)
+        this.bardo.addState("punch", ["adventurer-punch-00.png", "adventurer-punch-01.png", "adventurer-punch-02.png", "adventurer-punch-03.png", "adventurer-punch-04.png", "adventurer-punch-05.png"], 0.1, true)
+        this.bardo.addState("runPunch", ["adventurer-run-punch-00.png", "adventurer-run-punch-01.png", "adventurer-run-punch-02.png", "adventurer-run-punch-03.png", "adventurer-run-punch-04.png", "adventurer-run-punch-05.png", "adventurer-run-punch-06.png",], 0.1, true)
+        this.bardo.addState("idle", ["adventurer-walk-00.png"], 0.05, true)
+        this.bardo.addState("crawl", ["adventurer-crouch-walk-00.png", "adventurer-crouch-walk-01.png", "adventurer-crouch-walk-02.png", "adventurer-crouch-walk-03.png", "adventurer-crouch-walk-04.png", "adventurer-crouch-walk-05.png",], 0.1, true)
+        this.bardo.addState("jump", ["adventurer-drop-kick-00.png", "adventurer-drop-kick-01.png", "adventurer-drop-kick-02.png", "adventurer-drop-kick-03.png",], 0.025, false)
+        this.bardo.addState("bow", ["adventurer-bow-00.png", "adventurer-bow-01.png", "adventurer-bow-02.png", "adventurer-bow-03.png", "adventurer-bow-04.png", "adventurer-bow-05.png", "adventurer-bow-06.png", "adventurer-bow-07.png", "adventurer-bow-08.png",], 0.1, true)
+        this.bardo.addState("chargebow", ["adventurer-bow-00.png", "adventurer-bow-01.png", "adventurer-bow-02.png", "adventurer-bow-03.png", "adventurer-bow-04.png", "adventurer-bow-05.png",], 0.1, true)
+        this.bardo.addState("chargedbow", ["adventurer-bow-04.png", "adventurer-bow-05.png",], 0.1, true)
+        this.bardo.addState("shootingbow", ["adventurer-bow-06.png", "adventurer-bow-07.png", "adventurer-bow-08.png",], 0.1, true)
+        this.bardo.addState("jumpBow", ["adventurer-bow-jump-00.png", "adventurer-bow-jump-01.png", "adventurer-bow-jump-02.png", "adventurer-bow-jump-03.png", "adventurer-bow-jump-04.png", "adventurer-bow-jump-05.png",], 0.1, true)
 
         this.bardo.playState("idle");
 
@@ -246,18 +110,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
         this.acceleration.y = Player.GRAVITY;
 
-        // MOVIMIENTOS
-        Keyboard.down.on("KeyW", this.jump, this);
-        Keyboard.down.on("KeyS", this.crawl, this);
-        Keyboard.down.on("KeyD", this.runRight, this);
-        Keyboard.down.on("KeyA", this.runLeft, this);
-        Keyboard.down.on("KeyJ", this.punch, this);
-        Keyboard.down.on("KeyL", this.bow, this);
-
-        Keyboard.up.on("KeyS", this.stopCrawl, this);
-        Keyboard.up.on("KeyD", this.stopRunRight, this);
-        Keyboard.up.on("KeyA", this.stopRunLeft, this);
-        Keyboard.up.on("KeyL", this.stopBow, this);
+        this.initKeyboardEvents(true);
 
         // this.addChild(auxZero);
         this.addChild(this.hitbox);
@@ -266,21 +119,53 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.addChild(this.bardo);
 
         if (Player._hp) {
-            this.healthOnScreen = new Text(`${Player._hp}` + "HP", { fontSize: 40, fontFamily: "Letra1" });
+            this.healthOnScreen = new Text(`${Player._hp}` + "HP", LETRA1SUBTITLE);
         } else if (Player._hp == undefined) {
             // Cambiamos todas las referencias a currentHealth por _hp
             let initialHealth: number = 100;
             Player._hp = initialHealth;
             Player._maxHealth = Player._baseMaxHealth;
         }
-        this.healthOnScreen = new Text(`${Player._hp}` + "HP", { fontSize: 40, fontFamily: "Letra1" });
+        this.healthOnScreen = new Text(`${Player._hp}` + "HP", LETRA1);
 
         // this.addChild(this.healthOnScreen);
         this.healthOnScreen.x = -60;
         this.healthOnScreen.y = -130;
     }
 
-    increasePoints(amount: number): void {
+    private initKeyboardEvents(state: boolean): void {
+        if (state) {
+            // Asignación de eventos de teclado
+            Keyboard.down.on("KeyW", this.jump, this);
+            Keyboard.down.on("KeyS", this.crawl, this);
+            Keyboard.down.on("KeyD", this.runRight, this);
+            Keyboard.down.on("KeyA", this.runLeft, this);
+            Keyboard.down.on("KeyJ", this.punch, this);
+            Keyboard.down.on("KeyL", this.bow, this);
+
+            // Keyboard.up.on("KeyW", this.stopJump, this);
+            Keyboard.up.on("KeyS", this.stopCrawl, this);
+            Keyboard.up.on("KeyD", this.stopRunRight, this);
+            Keyboard.up.on("KeyA", this.stopRunLeft, this);
+            // Keyboard.up.on("KeyL", this.stopBow, this);
+        } else {
+            // Asignación de eventos de teclado
+            Keyboard.down.off("KeyW", this.jump, this);
+            Keyboard.down.off("KeyS", this.crawl, this);
+            Keyboard.down.off("KeyD", this.runRight, this);
+            Keyboard.down.off("KeyA", this.runLeft, this);
+            Keyboard.down.off("KeyJ", this.punch, this);
+            Keyboard.down.off("KeyL", this.bow, this);
+
+            Keyboard.up.off("KeyW", this.stopJump, this);
+            Keyboard.up.off("KeyS", this.stopCrawl, this);
+            Keyboard.up.off("KeyD", this.stopRunRight, this);
+            Keyboard.up.off("KeyA", this.stopRunLeft, this);
+            // Keyboard.up.on("KeyL", this.stopBow, this);
+        }
+    }
+
+    public increasePoints(amount: number): void {
         this.levelPoints.increasePoints(amount);
         Player.level = this.levelPoints.getCurrentLevel();
     }
@@ -296,22 +181,8 @@ export class Player extends PhysicsContainer implements IHitBox {
     // ESTO ES PARA QUE CUANDO DESTRUYA EL PLAYER TAMBIÉN SE BORRE EL MÉTODO DE SALTAR KEYBOARD DOWN ARROW UP ----> THIS.JUMP
     public override destroy(options: boolean | IDestroyOptions | undefined): void {
         super.destroy(options);
-
-        Keyboard.down.off("KeyW", this.jump, this);
-        Keyboard.down.off("KeyS", this.crawl, this);
-        Keyboard.down.off("KeyD", this.runRight, this);
-        Keyboard.down.off("KeyA", this.runLeft, this);
-        Keyboard.down.off("KeyJ", this.punch, this);
-        Keyboard.down.off("KeyL", this.bow, this);
-
-        Keyboard.up.off("KeyW", this.stopJump, this);
-        Keyboard.up.off("KeyS", this.stopCrawl, this);
-        Keyboard.up.off("KeyD", this.stopRunRight, this);
-        Keyboard.up.off("KeyA", this.stopRunLeft, this);
-        Keyboard.up.off("KeyJ", this.stopPunch, this);
-        Keyboard.up.off("KeyL", this.stopBow, this);
+        this.initKeyboardEvents(false);
     }
-
 
     //  MOVIMIENTOS
     public override update(deltaMS: number): void {
@@ -319,15 +190,24 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardo.update(deltaMS / (1000 / 60));
     }
 
-
     /** Función para el salto (Función auxiliar, si no está separada no puedo borrarla cuando elimine a player) */
     public jump(): void {
         if (this.canJump) {
-            this.speed.y = -(Player.GRAVITY * 0.7)
+            stopSounds(["running"]);
+            playSound("jumper", { loop: false, volume: 0.05 })
+            this.speed.y = -(Player.GRAVITY * 0.7);
             this.canJump = false;
             this.bardo.playState("jump", true);
+            new Tween(this.bardo).to({}, 1450).start().onComplete(() => {
+                this.canJump = true;
+                if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA")) {
+                    playSound("running", { loop: true, volume: 0.05 })
+                    this.bardo.playState("run", true);
+                } else {
+                    this.bardo.playState("idle", true);
+                }
+            });
         }
-        sound.stop("running");
     }
 
     /** Caminar agachado */
@@ -341,62 +221,50 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.addChild(this.hitbox);
     }
 
-    /** Correr a la izquierda */
     public runLeft(): void {
-        const run = sound.find("running");
-        run.play({ loop: true, volume: 0.05 })
+        playSound("running", { loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
         this.bardo.playState("run");
     }
 
-    /** Correr a la derecha */
     public runRight(): void {
-        const run = sound.find("running");
-        run.play({ loop: true, volume: 0.05 })
+        playSound("running", { loop: true, volume: 0.05 });
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
         this.bardo.playState("run", true)
     }
 
-    /** Golpe de puño */
     public punch(): void {
         if (this.canPunch) {
             this.speed.x = this.speed.x * 2;
             this.bardo.playState("punch");
             this.canPunch = false;
-            this.punchDamage = 2;
-            new Tween(this.bardo).to({}, 550).start().onComplete(() => {
-                this.canPunch = true;
+            const punchDuration = 550;
+            new Tween(this.bardo).to({}, punchDuration).start().onComplete(() => {
                 this.stopPunch();
+                this.canPunch = true;
             });
-            this.canPunch = false;
-            this.punchDamage = 2;
         }
     }
 
-    /** Golpe corriendo */
     public punchRun(): void {
-        const atkbow = sound.find("bow");
-        atkbow.play({ loop: true, volume: 0.05 })
+        playSound("bow", { loop: false, volume: 0.05 });
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch", true)
     }
 
-    /** Jugador ocioso */
     public idlePlayer(): void {
         this.speed.x = 0;
         this.bardo.playState("idle", true)
     }
 
-    /** Jugador dañado */
     public fall(): void {
         this.bardo.playState("hurted");
         this.hurted = true;
         this.recovered = false;
     }
 
-    /** Jugador levantandose */
     public getUp(): void {
         if (this.hurted) {
             new Tween(this).to({ alpha: 1 }, 500).repeat(2).easing(Easing.Elastic.Out).start().onComplete(() => {
@@ -406,30 +274,37 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
     }
 
-    /** Función de arco en suelo y salto */
     public bow(): void {
-        // Arco y flecha mientras estoy en el piso
         if (this.canJump && this.canBow) {
             this.bardo.playState("bow");
             this.canBow = false;
-            new Tween(this.bardo).to({}, 750).start().onComplete(() => {
+            new Tween(this.bardo).to({}, this.bowCooldown).start().onComplete(() => {
                 this.emit("shoot");
-                const atkbow = sound.find("bow");
-                atkbow.play({ loop: false, volume: 0.05 })
-                this.stopBow();
+                playSound("bow", { loop: false, volume: 0.05 });
+                this.resetBowCooldown();
             });
         }
         // Arco y flecha mientras estoy saltando
         if (!this.canJump && this.canBow) {
             this.bardo.playState("jumpBow");
             this.canBow = false;
-            new Tween(this.bardo).to({}, 490).start().onComplete(() => {
+            new Tween(this.bardo).to({}, this.jumpBowCooldown).start().onComplete(() => {
                 this.emit("shoot");
-                const atkbow = sound.find("bow");
-                atkbow.play({ loop: false, volume: 0.05 })
-                this.stopBow();
+                playSound("bow", { loop: false, volume: 0.05 });
+                this.resetJumpBowCooldown();
             });
         }
+    }
+
+    private resetBowCooldown(): void {
+        setTimeout(() => {
+            this.stopBow();
+        }, this.bowCooldown);
+    }
+    private resetJumpBowCooldown(): void {
+        setTimeout(() => {
+            this.stopBow();
+        }, this.jumpBowCooldown);
     }
 
     private stopJump(): void {

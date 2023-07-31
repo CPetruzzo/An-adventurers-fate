@@ -1,7 +1,6 @@
 import { sound } from "@pixi/sound";
 import { Container, DisplayObject, Graphics, IDestroyOptions, Sprite, Text } from "pixi.js";
 import { Tween } from "tweedle.js";
-import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
@@ -9,10 +8,11 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
-import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, createPointButton, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageOne } from "../utils/ButtonParams";
+import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, createPointButton, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
 import { backShieldParams, bookOpenedParams, cartelParams, createSprite, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams } from "../utils/SpriteParams";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { BStrenghtParams, HpParams, PStrenghtParams, createText, levelParams, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
+import { Level } from "../utils/Level";
 
 const RED = 0xAA0000;
 
@@ -23,7 +23,6 @@ export class MapScene extends SceneBase implements IUpdateable {
     private map: Sprite;
     public minScale: number = 1;
     public maxScale: number = 0.5;
-    private stageOne: PointButton;
     private world: Container;
     private infoText: Text;
     public currentHeight: number = SceneManager.HEIGHT;
@@ -74,14 +73,29 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.graphicRed.drawRect(-50, -50, 50, 50);
         // this.world.addChild(this.graphicRed);
 
-        this.stageOne = createPointButton(stageOne, "pointerClick", () => this.onStageOneClick());
-        this.map.addChild(this.stageOne);
+        if (1 <= Level.Complete) {
+            const stageOneButton = createPointButton(stageOne, "pointerClick", () => this.onStageOneClick());
+            this.map.addChild(stageOneButton);
+        }
+        if (2 <= Level.Complete) {
+            const stageTwoButton = createPointButton(stageTwo, "pointerClick", () => this.onStageTwoClick());
+            this.map.addChild(stageTwoButton);
+        }
+        if (3 <= Level.Complete) {
+            const stageThreeButton = createPointButton(stageThree, "pointerClick", () => this.onStageThreeClick());
+            this.map.addChild(stageThreeButton);
+        }
+        if (4 <= Level.Complete) {
+            const stageFourButton = createPointButton(stageFour, "pointerClick", () => this.onStageFourClick());
+            this.map.addChild(stageFourButton);
+        }
+
         const pointOnMap = createSprite(pointOnMapParams);
         const pointOnMap2 = createSprite(pointOnMap2Params);
         const pointOnMap3 = createSprite(pointOnMap3Params);
         const pointOnMap4 = createSprite(pointOnMap4Params);
         this.map.addChild(pointOnMap, pointOnMap2, pointOnMap3, pointOnMap4);
-        
+
         this.nombre = createSprite(nombreParams);
         this.pie = createSprite(pieParams);
         this.backShield = createSprite(backShieldParams);
@@ -142,7 +156,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
 
-        this.Hp = createText(HpParams);         
+        this.Hp = createText(HpParams);
         this.PStrenght = createText(PStrenghtParams);
         this.BStrenght = createText(BStrenghtParams);
         this.salir = createText(salirParams);
@@ -307,6 +321,21 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private onStageOneClick(): void {
+        sound.stop("MapBGM");
+        SceneManager.changeScene(new GameScene());
+    }
+
+    private onStageTwoClick(): void {
+        sound.stop("MapBGM");
+        SceneManager.changeScene(new GameScene());
+    }
+
+    private onStageThreeClick(): void {
+        sound.stop("MapBGM");
+        SceneManager.changeScene(new GameScene());
+    }
+
+    private onStageFourClick(): void {
         sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
     }

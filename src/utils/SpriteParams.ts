@@ -1,12 +1,5 @@
 import { Sprite, Texture } from "pixi.js";
 
-interface SpriteParams {
-    texture: string;
-    position: { x: number; y: number };
-    scale: { x: number; y: number };
-    anchor?: { x: number; y: number };
-}
-
 export function createSprite(params: SpriteParams): Sprite {
     const sprite = new Sprite(Texture.from(params.texture));
     sprite.position.set(params.position.x, params.position.y);
@@ -15,8 +8,15 @@ export function createSprite(params: SpriteParams): Sprite {
     if (params.anchor) {
         sprite.anchor.set(params.anchor.x, params.anchor.y);
     }
-
+    
     return sprite;
+}
+
+interface SpriteParams {
+    texture: string;
+    position: { x: number; y: number };
+    scale: { x: number; y: number };
+    anchor?: { x: number; y: number };
 }
 
 // SpriteParams para los sprites mencionados en el ejemplo

@@ -1,4 +1,3 @@
-import { sound } from "@pixi/sound";
 import { Container, DisplayObject, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
@@ -24,6 +23,8 @@ import { buttonA, buttonB, buttonsOff, buttonsOn, createPointButton, moveDown, m
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
 import { closePopUp, createPopUp } from "../utils/PopUps";
+import { playSound, stopSounds } from "../utils/SoundParams";
+import { Level } from "../utils/Level";
 
 export class GameScene extends SceneBase implements IUpdateable {
     private playerBardo: Player;
@@ -50,7 +51,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     private potions: Potion[];
 
     private isPaused: boolean = false;
-    private causingDamage: boolean = false;
     private causingRangeDamage: boolean = false;
 
     private arek: Arek;
@@ -85,8 +85,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.arrows = [];
         this.world = new Container();
 
-        const BGM = sound.find("GameBGM");
-        BGM.play({ loop: true, volume: 0.05 })
+        playSound("GameBGM", { loop: true, volume: 0.05 })
 
         // FONDOS
         for (let i = 1; i < 6; i++) {
@@ -333,15 +332,15 @@ export class GameScene extends SceneBase implements IUpdateable {
         }
 
         if (this.gameOver) {
-            const GameOverBGM = sound.find("PartingBGM");
-            GameOverBGM.play({ loop: true, volume: 0.05 })
+            playSound("PartingBGM", { loop: true, volume: 0.05 })
             SceneManager.changeScene(new GameOverScene());
-            sound.stop("GameBGM");
+            stopSounds(["GameBGM"]);
+            return;
         }
 
         if (this.nextStage) {
             SceneManager.changeScene(new WinScene());
-            sound.stop("GameBGM");
+            stopSounds(["GameBGM"]);
         }
 
         if (!this.gotToChest) {
@@ -422,10 +421,6 @@ export class GameScene extends SceneBase implements IUpdateable {
                 if (this.arek.currentHealth <= 0) {
                     this.playerBardo.increasePoints(1000);
                     this.levelOnScreen();
-                    console.log("bow", Player._bowDamage)
-                    console.log("Current Level: ", Player.getLevel());
-                    console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
-                    console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to({ alpha: 0 }, 5000).repeat(3).start().onComplete(() => this.world.removeChild(this.arek));
                 }
@@ -446,11 +441,6 @@ export class GameScene extends SceneBase implements IUpdateable {
                     if (this.arek.currentHealth <= 0) {
                         this.playerBardo.increasePoints(1000);
                         this.levelOnScreen();
-                        console.log("sworddamage", this.playerBardo._swordDamage)
-                        console.log("Current Level: ", Player.getLevel());
-                        console.log("bow", Player._bowDamage)
-                        console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
-                        console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                         this.arek.playDestroyAnimation(this.arek);
                         new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                     }
@@ -464,6 +454,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         const fin = checkCollision(this.playerBardo, this.chest);
         if (fin != null) {
             this.gotToChest = true;
+            Level.Complete = 2;
             this.chest.destroy();
             this.addChild(this.win);
         }
@@ -494,16 +485,12 @@ export class GameScene extends SceneBase implements IUpdateable {
     private hitWithMelee(): void {
         const pelea2 = checkCollision(this.melee, this.arek);
         if (pelea2 != null) {
-            if ((this.causingDamage || Keyboard.state.get("KeyJ"))) {
+            if ((!this.playerBardo.canPunch)) {
                 this.arek.getEnemyHurt(Player._punchDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
                     this.playerBardo.increasePoints(10000);
                     this.levelOnScreen();
-                    console.log("bow", Player._bowDamage)
-                    console.log("Current Level: ", Player.getLevel());
-                    console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
-                    console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                 }
@@ -530,7 +517,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         for (let potion of this.potions) {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
-                sound.play("PotionSound1", { volume: 0.5 });
+                playSound("PotionSound1", { volume: 0.5 })
                 potion.destroy();
                 this.playerBardo.drinkPotion(50);
                 this.changePlayerHP();
@@ -605,7 +592,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     /** Pausado de la escena */
     private onPause(): void {
         this.pauseScene = new PauseScene();
-
         const objectsToRemove = [[]];
         const objectsToAdd = [[this.pauseScene, this.pauseOff]];
         createPopUp("pause", objectsToRemove, objectsToAdd, this, this.popUps);
@@ -650,7 +636,6 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     // UI DE MOVIMIENTOS
-
     /** Tiro con arco y flecha */
     private onButtonB(): void {
         this.playerBardo.bow();
@@ -660,16 +645,14 @@ export class GameScene extends SceneBase implements IUpdateable {
     /** Golpe de puño */
     private onButtonA(): void {
         this.playerBardo.punch();
-        this.causingDamage = true;
-        sound.stop("bow");
+        stopSounds(["bow"]);
     }
 
     /** Función para habilidad especial - Salto */
     private habilityClick(): void {
         this.playerBardo.jump();
         this.winStage = true;
-        sound.stop("running");
-        sound.stop("bow");
+        stopSounds(["running", "bow"]);
     }
 
     /** Correr hacia la derecha */
@@ -685,23 +668,18 @@ export class GameScene extends SceneBase implements IUpdateable {
     /** Agacharse */
     private DownMove(): void {
         this.playerBardo.crawl();
-
     }
 
     /** Salto */
     private UpMove(): void {
         this.playerBardo.jump();
-        sound.stop("running");
-
+        stopSounds(["running"]);
     }
 
     /** Alto de todos los movimientos */
     private Stop(): void {
         this.playerBardo.idlePlayer();
-        sound.stop("running");
-        sound.stop("bow");
+        stopSounds(["running", "bow"]);
         this.causingRangeDamage = false;
-        this.causingDamage = false;
     }
-
 }

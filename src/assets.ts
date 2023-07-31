@@ -41,6 +41,7 @@ export const assets = [
     { url: "./StageOne/Parting.mp3", name: "PartingBGM", },
     { url: "./StartMenu/Earth.mp3", name: "MapBGM", },
     { url: "./StageOne/WinItem.mp3", name: "ItemBGM", },
+    { url: "./sounds/MaleHurt.mp3", name: "jumper", },
 
     // SOUND EFFECTS
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1" },

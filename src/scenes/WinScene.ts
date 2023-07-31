@@ -3,7 +3,7 @@ import { AnimatedSprite, Container, Sprite, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneManager } from "../utils/SceneManager";
-import { MapScene2 } from "./MapScene2";
+import { MapScene } from "./MapScene";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -90,7 +90,7 @@ export class WinScene extends Container {
     public NextStage(): void {
         sound.stop("GameBGM");
         sound.stop("ItemBGM");
-        SceneManager.changeScene(new MapScene2());
+        SceneManager.changeScene(new MapScene());
     }
 }
 
