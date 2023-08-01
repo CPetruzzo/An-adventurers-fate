@@ -7,8 +7,11 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@capacitor-community/keep-awake": "^4.0.0",
     "@capacitor/android": "^5.2.2",
+    "@capacitor/app": "^5.0.6",
     "@capacitor/core": "^5.2.2",
+    "@capacitor/status-bar": "^5.0.6",
     "@pixi/particle-emitter": "^5.0.8",
     "@pixi/sound": "^4.2.0",
     "pixi-webfont-loader": "^1.0.2",

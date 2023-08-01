@@ -17,7 +17,8 @@ export namespace SceneManager {
 
         app = new Application({
             view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-            resolution: window.devicePixelRatio || 1,
+            // resolution: window.devicePixelRatio || 1,
+            resolution: 1,
             autoDensity: true,
             backgroundColor: 0x6495ed,
             width: WIDTH,

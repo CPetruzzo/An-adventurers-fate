@@ -19,3 +19,11 @@ export function stopSounds(sounds: any[]): void {
         }
     });
 }
+
+export function pauseSounds(): void {
+    sound.pauseAll();
+}
+
+export function resumeSounds(): void {
+    sound.resumeAll();
+}
