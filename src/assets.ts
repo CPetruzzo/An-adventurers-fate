@@ -6,7 +6,8 @@ export const assets = [
     { url: "./PauseMenu/PAUSA.png", name: "PAUSA" },
     { url: "./StageOne/Lose.png", name: "LOSE" },
     { url: "./READ.png", name: "READ" },
-    
+    { url: "./Maps/itemBG.png", name: "itemBG" },
+
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
     { url: "./StageOne/B2.png", name: "B2" },
@@ -34,7 +35,6 @@ export const assets = [
     { url: "./spritesheet (10).json", name: "PlayerBow" },
     { url: "./arrow.png", name: "Arrow" },
 
-
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
     { url: "./StageOne/FinalBattle.mp3", name: "GameBGM", },
@@ -42,6 +42,8 @@ export const assets = [
     { url: "./StartMenu/Earth.mp3", name: "MapBGM", },
     { url: "./StageOne/WinItem.mp3", name: "ItemBGM", },
     { url: "./sounds/MaleHurt.mp3", name: "jumper", },
+    { url: "./sounds/SwordDraw.mp3", name: "shield" },
+    { url: "./sounds/Backpack.mp3", name: "backpack" },
 
     // SOUND EFFECTS
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1" },
@@ -50,19 +52,19 @@ export const assets = [
     { url: "./sounds/Escritura.mp3", name: "handWriting" },
     { url: "./run.mp3", name: "running", },
     { url: "./sounds/Arrow.mp3", name: "bow", },
-    
+
     // POTION
     { url: "./StageOne/Potion.png", name: "Potion", },
     { url: "./chestboxs.json", name: "Chest", },
     { url: "./StageOne/ChestBox.png", name: "ChestBox", },
 
     //health bar
-    { url: "./HealthBar.png", name: "HealthBar"},
-    { url: "./GreenHealthBar.png", name: "GreenHealthBar"},
-    { url: "./aljava.png", name: "aljava"},
-    { url: "./hpFrame.png", name: "hpFrame"},
-    { url: "./hpFrame2.png", name: "hpFrame2"},
-    
+    { url: "./HealthBar.png", name: "HealthBar" },
+    { url: "./GreenHealthBar.png", name: "GreenHealthBar" },
+    { url: "./aljava.png", name: "aljava" },
+    { url: "./hpFrame.png", name: "hpFrame" },
+    { url: "./hpFrame2.png", name: "hpFrame2" },
+
     // FONTS
     { url: "./fonts/ST02R.TTF", name: "Letra1" },
     { url: "./fonts/FREETAPE_ttf.ttf", name: "Letra2" },
@@ -96,7 +98,7 @@ export const assets = [
     { url: "./Maps/itemShield.png", name: "itemShield" },
     { url: "./Maps/swordBlade.png", name: "itemSword" },
     { url: "./Maps/bow&arrow.png", name: "itemBow" },
-    
+
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },
     { url: "./RingsSwordsPotions.json", name: "RingsSwordsPotions" },

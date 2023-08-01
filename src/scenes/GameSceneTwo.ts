@@ -24,6 +24,7 @@ import { Arrow } from "../games/Weapon/Arrow";
 import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
+import { playSound } from "../utils/SoundParams";
 
 export class GameSceneTwo extends SceneBase implements IUpdateable {
     private playerBardo: Player;
@@ -72,11 +73,6 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     private aljava: Sprite;
     public myLevel: Text;
 
-    // private aboutMe: Text;
-    // private aboutMeText: Text;
-    // private aboutMe2: Text;
-    // private aboutMeText2: Text;
-
     constructor() {
         super();
 
@@ -102,10 +98,6 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         this.playerBardo.scale.set(2);
         this.playerBardo.position.y = 450;
         this.world.addChild(this.playerBardo);
-
-        console.log("Current Level: ", Player.getLevel());
-        console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
-        console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
         this.playerBardo.on("shoot", () => {
             this.shootArrow();
@@ -262,7 +254,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             const pot = new Potion("Potion", 200, 200);
             pot.scale.set(0.1);
             pot.spr.tint = 0x00ff;
-            
+
             pot.position.set(positions[i].x, positions[i].y);
             this.world.addChild(pot);
             this.potions.push(pot);
@@ -350,8 +342,6 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             this.world.addChild(newArrow);
             this.playerBardo.arrowsAvailable -= 1;
 
-            // console.log("Arrows shooted: ", this.arrows.length);
-            // console.log("Arrows left: ", this.playerBardo.arrowsAvailable);
             this.emit("changeArrowAmount", this.playerBardo.arrowsAvailable);
         } else {
             console.log("No arrows left");
@@ -574,7 +564,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         for (let potion of this.potions) {
             const overlap = checkCollision(this.playerBardo, potion);
             if (overlap != null) {
-                sound.play("PotionSound1", { volume: 0.5 });
+                playSound("PotionSound1", { volume: 0.5 });
                 potion.destroy();
                 this.playerBardo.drinkPotion(50);
                 this.changePlayerHP();

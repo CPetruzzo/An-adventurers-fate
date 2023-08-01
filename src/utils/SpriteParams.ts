@@ -1,4 +1,5 @@
 import { Sprite, Texture } from "pixi.js";
+import { book, menuBag, shield } from "./ButtonParams";
 
 export function createSprite(params: SpriteParams): Sprite {
     const sprite = new Sprite(Texture.from(params.texture));
@@ -8,7 +9,7 @@ export function createSprite(params: SpriteParams): Sprite {
     if (params.anchor) {
         sprite.anchor.set(params.anchor.x, params.anchor.y);
     }
-    
+
     return sprite;
 }
 
@@ -17,9 +18,32 @@ interface SpriteParams {
     position: { x: number; y: number };
     scale: { x: number; y: number };
     anchor?: { x: number; y: number };
+    alpha?: number
 }
 
 // SpriteParams para los sprites mencionados en el ejemplo
+
+export const bagBG: SpriteParams = {
+    texture: "Cartel",
+    position: { x: menuBag.x - 70, y: menuBag.y -70},
+    scale: { x: 0.45, y: 0.45 },
+    alpha: 0.5
+};
+
+export const shieldBG: SpriteParams = {
+    texture: "Cartel",
+    position: { x: shield.x - 70, y: shield.y -60 },
+    scale: { x: 0.45, y: 0.45 },
+    alpha: 0.5
+};
+
+export const bookBG: SpriteParams = {
+    texture: "Cartel",
+    position: { x: book.x - 70, y: book.y -70 },
+    scale: { x: 0.45, y: 0.45 },
+    alpha: 0.5
+};
+
 export const mapParams: SpriteParams = {
     texture: "Map1",
     position: { x: 0, y: -240 },

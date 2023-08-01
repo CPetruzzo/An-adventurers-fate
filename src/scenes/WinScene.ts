@@ -4,6 +4,7 @@ import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
+import { playSound } from "../utils/SoundParams";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -60,7 +61,7 @@ export class WinScene extends Container {
         this.removeChild(this.box);
         this.addChild(this.openingBox);
         this.openingBox.play();
-        sound.play("Chest1");
+        playSound("Chest1", {});
         new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
     }
 

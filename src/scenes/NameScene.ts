@@ -6,7 +6,7 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
 
-export class NameScene extends SceneBase implements IUpdateable{
+export class NameScene extends SceneBase implements IUpdateable {
 
     private textoViejo: Text;
     public characterName: string;
@@ -17,22 +17,22 @@ export class NameScene extends SceneBase implements IUpdateable{
 
         let texto = prompt("Introduce tu nombre");
         if (texto != null) {
-            this.characterName=texto;
-            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill:  0xAA0000 });
+            this.characterName = texto;
+            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill: 0xAA0000 });
         } else {
-            this.characterName="Jugador";
-            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill:  0xAA0000 });
+            this.characterName = "Jugador";
+            this.textoViejo = new Text(this.characterName, { fontFamily: "Letra2", fontSize: 48, fill: 0xAA0000 });
         }
         this.textoViejo.x = 300;
         this.textoViejo.y = 120;
-        
-        this.start= new PointButton(Texture.from("START.png"),
-        Texture.from("START hundido.png"),
-        Texture.from("START.png"))
+
+        this.start = new PointButton(Texture.from("START.png"),
+            Texture.from("START hundido.png"),
+            Texture.from("START.png"))
         this.start.x = 650
         this.start.y = 400
-        this.start.scale.x=0.5;
-        this.start.scale.y=0.5;
+        this.start.scale.x = 0.5;
+        this.start.scale.y = 0.5;
         this.start.on("pointerClick", this.onStartClick, this)
 
         this.addChild(this.start);
@@ -46,6 +46,6 @@ export class NameScene extends SceneBase implements IUpdateable{
         SceneManager.changeScene(new MapScene());
         sound.stop("StartBGM");
     }
-    
+
 
 }
