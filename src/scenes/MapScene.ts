@@ -11,8 +11,9 @@ import { LETRA2 } from "../utils/constants";
 import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, createPointButton, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
 import { backShieldParams, bookOpenedParams, cartelParams, createSprite, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams } from "../utils/SpriteParams";
 import { closePopUp, createPopUp } from "../utils/PopUps";
-import { BStrenghtParams, HpParams, PStrenghtParams, createText, levelParams, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
+import { BStrenghtParams, HpParams, PStrenghtParams, createText, getPlayerName, levelParams, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
+import { GameSceneTwo } from "./GameSceneTwo";
 
 const RED = 0xAA0000;
 
@@ -143,15 +144,27 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.removeGroups([this.buttonsCloseBook, this.buttonsCloseShield, this.buttonsBackMenuClose], this.buttonRefs)
 
         // // NOMBRE DEL JUGADOR
-        MapScene.texto = prompt("Introduce tu nombre");
-        if (MapScene.texto != null || MapScene.texto === "") {
-            this.textoViejo = new Text(MapScene.texto || "Jugador", LETRA2);
-        } else {
-            MapScene.texto = "Jugador";
-            this.textoViejo = new Text(MapScene.texto, LETRA2);
+        // MapScene.texto = prompt("Introduce tu nombre");
+        // if (MapScene.texto != null || MapScene.texto === "") {
+        //     this.textoViejo = new Text(MapScene.texto || "Jugador", LETRA2);
+        // } else {
+        //     MapScene.texto = "Jugador";
+        //     this.textoViejo = new Text(MapScene.texto, LETRA2);
+        // }
+        // this.textoViejo.x = 400 - (this.textoViejo.width / 2);
+        // this.textoViejo.y = 120;
+
+        //IMPLEMENTAR ALGO CON CONTINUAR EN LA ESCENA DE INICIO (SOLO SI HAY UN NOMBRE GUARDADO)
+        // Crear el objeto Text con el nombre del jugador
+        function createPlayerNameText(): Text {
+            const playerName = getPlayerName();
+            const textoViejo = new Text(playerName, LETRA2);
+            textoViejo.x = 400 - (textoViejo.width / 2);
+            textoViejo.y = 120;
+            return textoViejo;
         }
-        this.textoViejo.x = 400 - (this.textoViejo.width / 2);
-        this.textoViejo.y = 120;
+
+        this.textoViejo = createPlayerNameText();
 
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
@@ -327,7 +340,7 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onStageTwoClick(): void {
         sound.stop("MapBGM");
-        SceneManager.changeScene(new GameScene());
+        SceneManager.changeScene(new GameSceneTwo());
     }
 
     private onStageThreeClick(): void {

@@ -148,8 +148,8 @@ export const stageOne: ButtonParams = {
 };
 
 export const stageTwo: ButtonParams = {
-    x: 645,
-    y: 150,
+    x: 250,
+    y: 100,
     scale: STAGE_SCALE,
     textureNameDef: "lineDark23.png",
     textureOver: "lineLight26.png",

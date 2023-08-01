@@ -2,6 +2,19 @@ import { Text, TextStyle } from "pixi.js";
 import { LETRA2 } from "./constants";
 import { Player } from "../games/Player";
 
+// Función para obtener el nombre del jugador desde el almacenamiento local
+export function getPlayerName(): string {
+    const storedName = localStorage.getItem("playerName");
+    let playerName: string;
+    if (storedName === null || storedName === "") {
+        playerName = prompt("Introduce tu nombre") || "Jugador";
+        localStorage.setItem("playerName", playerName);
+    } else {
+        playerName = storedName;
+    }
+    return playerName;
+}
+
 export interface TextParams {
     text: string;
     style: TextStyle;
@@ -14,12 +27,6 @@ export function createText(params: TextParams): Text {
     textObj.position.set(position.x, position.y);
     return textObj;
 }
-
-export const myTextParams: TextParams = {
-    text: "Hello, world!",
-    style: LETRA2,
-    position: { x: 100, y: 200 },
-};
 
 export const PStrenghtParams: TextParams = {
     text: `Punch: ${Player._punchDamage}`,
