@@ -102,4 +102,7 @@ export const assets = [
     // AWARDS
     { url: "./StageOne/SwordPrize.png", name: "SwordPrize" },
     { url: "./RingsSwordsPotions.json", name: "RingsSwordsPotions" },
+    { url: "./openBag.png", name: "openBag" },
+    { url: "./scroll.png", name: "scroll" },
+    
 ]

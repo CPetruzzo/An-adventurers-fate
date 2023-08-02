@@ -5,6 +5,7 @@ import { PointButton } from "../ui/PointButton";
 import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
 import { playSound } from "../utils/SoundParams";
+import { Level } from "../utils/Level";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -41,10 +42,28 @@ export class WinScene extends Container {
         this.openingBox.position.set(400, 130);
 
         // IMAGEN DEL PREMIO
-        this.award = new Sprite(Texture.from("itemSword"));
-        this.award.position.set(500, 230);
-        this.award.scale.set(0.2);
-        this.award.alpha = 0;
+        switch (Level.CurrentLevel) {
+            case 1:
+                this.award = new Sprite(Texture.from("itemSword"));
+                this.award.position.set(500, 230);
+                this.award.scale.set(0.2);
+                this.award.alpha = 0;
+                break;
+            case 2:
+                this.award = new Sprite(Texture.from("scroll"));
+                this.award.position.set(500, 230);
+                this.award.rotation = Math.PI / 2;
+                this.award.scale.set(0.7);
+                this.award.alpha = 0;
+                break;
+            default:
+                this.award = new Sprite(Texture.from("itemSword"));
+                this.award.position.set(500, 230);
+                this.award.scale.set(0.2);
+                this.award.alpha = 0;
+                break;
+        }
+
     }
 
     public update(deltaTime: number) {

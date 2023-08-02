@@ -27,7 +27,7 @@ import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 
 export class GameScene extends SceneBase implements IUpdateable {
-    private playerBardo: Player;
+    private player: Player;
     private world: Container;
     public numero: number = 0;
     private backgrounds: TilingSprite[];
@@ -81,6 +81,8 @@ export class GameScene extends SceneBase implements IUpdateable {
     constructor() {
         super();
 
+        Level.CurrentLevel = 1;
+
         this.backgrounds = [];
         this.arrows = [];
         this.world = new Container();
@@ -98,18 +100,18 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.backgrounds.push(background);
         }
 
-        this.playerBardo = new Player();
+        this.player = new Player();
         /** el problema es que esto hace que arranque desde donde se murió o desde donde ganó (es algo bueno si quiero ver como guardar una partida) */
         // this.playerBardo = Player.getInstance();
-        this.playerBardo.scale.set(2);
-        this.playerBardo.position.y = 450;
-        this.world.addChild(this.playerBardo);
+        this.player.scale.set(2);
+        this.player.position.y = 450;
+        this.world.addChild(this.player);
 
         console.log("Current Level: ", Player.getLevel());
         console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
         console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
-        this.playerBardo.on("shoot", () => {
+        this.player.on("shoot", () => {
             this.shootArrow();
         });
 
@@ -173,7 +175,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.aljava.anchor.set(0.5);
         this.addChild(this.aljava);
 
-        let arrowsAvailable = this.playerBardo.arrowsAvailable;
+        let arrowsAvailable = this.player.arrowsAvailable;
         this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra3") });
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
@@ -185,7 +187,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         // Contador de flechas en pantalla
         this.on("changeArrowAmount", () => {
             this.removeChild(this.arrowsOnScreen);
-            let arrowsAvailable = this.playerBardo.arrowsAvailable;
+            let arrowsAvailable = this.player.arrowsAvailable;
             this.arrowsOnScreen = new Text(`${arrowsAvailable}`, { fontSize: 20, fontFamily: ("Letra3") });
             this.arrowsOnScreen.position.set(400, 55)
             this.addChild(this.arrowsOnScreen);
@@ -228,14 +230,14 @@ export class GameScene extends SceneBase implements IUpdateable {
 
         this.melee = new Melee();
         this.melee.position.x = -10
-        this.playerBardo.addChild(this.melee);
+        this.player.addChild(this.melee);
 
         this.melee2 = new Melee();
         this.melee2.position.x = -90;
         this.arek.addChild(this.melee2)
 
         this.range = new Range();
-        this.playerBardo.addChild(this.range);
+        this.player.addChild(this.range);
 
         this.potions = [];
         const positions = [
@@ -302,17 +304,17 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     /** Función de disparo de las flechas */
     public shootArrow(): void {
-        if (this.playerBardo.arrowsAvailable > 0) {
+        if (this.player.arrowsAvailable > 0) {
             const newArrow = new Arrow();
             newArrow.angle = -20
-            newArrow.position.set(this.playerBardo.x + this.playerBardo.width / 3, this.playerBardo.y - this.playerBardo.height / 3);
-            newArrow.shoot(newArrow, newArrow.position, this.playerBardo.scale.x);
+            newArrow.position.set(this.player.x + this.player.width / 3, this.player.y - this.player.height / 3);
+            newArrow.shoot(newArrow, newArrow.position, this.player.scale.x);
 
             this.arrows.push(newArrow);
             this.world.addChild(newArrow);
-            this.playerBardo.arrowsAvailable -= 1;
+            this.player.arrowsAvailable -= 1;
 
-            this.emit("changeArrowAmount", this.playerBardo.arrowsAvailable);
+            this.emit("changeArrowAmount", this.player.arrowsAvailable);
         } else {
             console.log("No arrows left");
             this.removeChild(this.aljava);
@@ -344,7 +346,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         }
 
         if (!this.gotToChest) {
-            this.playerBardo.update(deltaTime); // Actualizacion del personaje
+            this.player.update(deltaTime); // Actualizacion del personaje
         }
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
@@ -355,39 +357,39 @@ export class GameScene extends SceneBase implements IUpdateable {
             for (let i = 0; i < this.backgrounds.length; i++) {
                 const background = this.backgrounds[i];
                 const factor = (i / 6);
-                if (this.playerBardo.x < 0) {
+                if (this.player.x < 0) {
                     background.tilePosition.x = background.tilePosition.x;
                 }
                 else {
-                    background.tilePosition.x -= factor * this.playerBardo.speed.x / 50;
+                    background.tilePosition.x -= factor * this.player.speed.x / 50;
                 }
             }
         }
 
         // LA COLISION PARA QUE TENGA SU FISICA Y NO CAIGA A TRAVES DE LAS PLATAFORMAS
         for (let platform of this.platforms) {
-            const overlap = checkCollision(this.playerBardo, platform);
+            const overlap = checkCollision(this.player, platform);
             if (overlap != null) {
-                this.playerBardo.separate(overlap, platform.position);
+                this.player.separate(overlap, platform.position);
             }
         }
 
         // LIMITE IZQUIERDO 
-        if (this.playerBardo.x < 0) {
-            this.playerBardo.x = 0;
+        if (this.player.x < 0) {
+            this.player.x = 0;
             this.world.x = 0;
-            this.playerBardo.scale.set(-2, 2);
+            this.player.scale.set(-2, 2);
         }
 
         // LIMITE INFERIOR
-        if (this.playerBardo.y > (SceneManager.HEIGHT)) {
-            this.playerBardo.y = (SceneManager.HEIGHT);
-            this.playerBardo.canJump = true;
+        if (this.player.y > (SceneManager.HEIGHT)) {
+            this.player.y = (SceneManager.HEIGHT);
+            this.player.canJump = true;
             this.gameOver = true;
         }
 
         // CAMARA SEGUÍ A MI PERSONAJE
-        (this.world.x = - this.playerBardo.x * this.worldTransform.a + SceneManager.WIDTH / 3)
+        (this.world.x = - this.player.x * this.worldTransform.a + SceneManager.WIDTH / 3)
 
         // Chequeo de cada una de las situaciones posibles en el update
         this.enemyCloseToPlayer();
@@ -419,7 +421,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.arek.getEnemyHurt(Player._bowDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
-                    this.playerBardo.increasePoints(1000);
+                    this.player.increasePoints(1000);
                     this.levelOnScreen();
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to({ alpha: 0 }, 5000).repeat(3).start().onComplete(() => this.world.removeChild(this.arek));
@@ -439,7 +441,7 @@ export class GameScene extends SceneBase implements IUpdateable {
                     arrow.getEnemyHurt(this.arrowDamage, this.arek);
                     this.changeEnemyHP();
                     if (this.arek.currentHealth <= 0) {
-                        this.playerBardo.increasePoints(1000);
+                        this.player.increasePoints(1000);
                         this.levelOnScreen();
                         this.arek.playDestroyAnimation(this.arek);
                         new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
@@ -451,10 +453,12 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     /** Chequeo de fin de pantalla */
     private endStage(): void {
-        const fin = checkCollision(this.playerBardo, this.chest);
+        const fin = checkCollision(this.player, this.chest);
         if (fin != null) {
             this.gotToChest = true;
-            Level.Complete = 2;
+            if (Level.Complete === 1) {
+                Level.Complete = 2;
+            }
             this.chest.destroy();
             this.addChild(this.win);
         }
@@ -462,18 +466,18 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     /** Función de daño del enemigo al jugador */
     private enemyHitPlayer(): void {
-        const pelea3 = checkCollision(this.melee2, this.playerBardo);
+        const pelea3 = checkCollision(this.melee2, this.player);
         if (pelea3 != null) {
             this.arek.attackArek();
-            this.playerBardo.getPlayerHurt(this.arekDamage);
+            this.player.getPlayerHurt(this.arekDamage);
             this.changePlayerHP();
 
             if (Player._hp <= 0) {
-                this.playerBardo.fall();
+                this.player.fall();
             }
 
-            if (this.playerBardo.hurted) {
-                this.playerBardo.getUp();
+            if (this.player.hurted) {
+                this.player.getUp();
             }
 
         } else {
@@ -485,11 +489,11 @@ export class GameScene extends SceneBase implements IUpdateable {
     private hitWithMelee(): void {
         const pelea2 = checkCollision(this.melee, this.arek);
         if (pelea2 != null) {
-            if ((!this.playerBardo.canPunch)) {
+            if ((!this.player.canPunch)) {
                 this.arek.getEnemyHurt(Player._punchDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
-                    this.playerBardo.increasePoints(10000);
+                    this.player.increasePoints(10000);
                     this.levelOnScreen();
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
@@ -500,13 +504,13 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     /** Función de daño por contacto entre jugador y enemigo */
     private enemyCloseToPlayer(): void {
-        const pelea = checkCollision(this.playerBardo, this.arek);
+        const pelea = checkCollision(this.player, this.arek);
         if (pelea != null) {
-            this.playerBardo.separate(pelea, this.arek.position);
-            this.playerBardo.getPlayerHurt(this.arekDamage / 5);
+            this.player.separate(pelea, this.arek.position);
+            this.player.getPlayerHurt(this.arekDamage / 5);
             this.changePlayerHP();
             if (Player._hp <= 0) {
-                this.world.removeChild(this.playerBardo);
+                this.world.removeChild(this.player);
                 this.gameOver = true;
             }
         }
@@ -515,11 +519,11 @@ export class GameScene extends SceneBase implements IUpdateable {
     /** Función de poción */
     private checkDrinkPotion(): void {
         for (let potion of this.potions) {
-            const overlap = checkCollision(this.playerBardo, potion);
+            const overlap = checkCollision(this.player, potion);
             if (overlap != null) {
                 playSound("PotionSound1", { volume: 0.5 })
                 potion.destroy();
-                this.playerBardo.drinkPotion(50);
+                this.player.drinkPotion(50);
                 this.changePlayerHP();
             }
         }
@@ -638,47 +642,47 @@ export class GameScene extends SceneBase implements IUpdateable {
     // UI DE MOVIMIENTOS
     /** Tiro con arco y flecha */
     private onButtonB(): void {
-        this.playerBardo.bow();
+        this.player.bow();
         this.causingRangeDamage = true;
     }
 
     /** Golpe de puño */
     private onButtonA(): void {
-        this.playerBardo.punch();
+        this.player.punch();
         stopSounds(["bow"]);
     }
 
     /** Función para habilidad especial - Salto */
     private habilityClick(): void {
-        this.playerBardo.jump();
+        this.player.jump();
         this.winStage = true;
         stopSounds(["running", "bow"]);
     }
 
     /** Correr hacia la derecha */
     private RightMove(): void {
-        this.playerBardo.runRight();
+        this.player.runRight();
     }
 
     /** Correr hacia la izquierda */
     private LeftMove(): void {
-        this.playerBardo.runLeft();
+        this.player.runLeft();
     }
 
     /** Agacharse */
     private DownMove(): void {
-        this.playerBardo.crawl();
+        this.player.crawl();
     }
 
     /** Salto */
     private UpMove(): void {
-        this.playerBardo.jump();
+        this.player.jump();
         stopSounds(["running"]);
     }
 
     /** Alto de todos los movimientos */
     private Stop(): void {
-        this.playerBardo.idlePlayer();
+        this.player.idlePlayer();
         stopSounds(["running", "bow"]);
         this.causingRangeDamage = false;
     }

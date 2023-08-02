@@ -148,8 +148,8 @@ export const stageOne: ButtonParams = {
 };
 
 export const stageTwo: ButtonParams = {
-    x: 250,
-    y: 100,
+    x: 282,
+    y: 132,
     scale: STAGE_SCALE,
     textureNameDef: "lineDark23.png",
     textureOver: "lineLight26.png",
@@ -157,8 +157,8 @@ export const stageTwo: ButtonParams = {
 };
 
 export const stageThree: ButtonParams = {
-    x: 990,
-    y: 440,
+    x: 1022,
+    y: 432,
     scale: STAGE_SCALE,
     textureNameDef: "lineDark23.png",
     textureOver: "lineLight26.png",
@@ -166,8 +166,8 @@ export const stageThree: ButtonParams = {
 };
 
 export const stageFour: ButtonParams = {
-    x: 70,
-    y: 450,
+    x: 102,
+    y: 482,
     scale: STAGE_SCALE,
     textureNameDef: "lineDark23.png",
     textureOver: "lineLight26.png",

@@ -1,34 +1,31 @@
-import { sound } from "@pixi/sound";
 import { Graphics, IDestroyOptions, ObservablePoint, Rectangle, Text } from "pixi.js";
 import { Easing, Tween } from "tweedle.js";
-
 import { Keyboard } from "../utils/Keyboard";
 import { StateAnimation } from "../utils/StateAnimation";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
 import { INITIALARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
-import { playSound, stopSounds } from "../utils/SoundParams";
+import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;
     private static readonly MOVE_SPEED = 350;
+    private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
+    private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
 
-    private hitbox: Graphics;
-    public healthOnScreen: Text;
-    public currentHealth: number = 100;
     public bardo: StateAnimation;
+    public healthOnScreen: Text;
+    private hitbox: Graphics;
     public arrowsAvailable: number;
-    public levelPoints: LevelPoints;
 
     public hurted: boolean = false;
     public recovered: boolean = false;
     public canJump = true;
     public canPunch: boolean = true;
     private canBow: boolean = true;
-    private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
-    private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
 
+    public currentHealth: number = 100;
     public static level: number;
     public static _hp: number = 100;
     private static _baseMaxHealth: number = 100;
@@ -39,16 +36,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     public static _bowDamage: number = 5;
     public _swordDamage: number = 40;
 
+    public levelPoints: LevelPoints;
     private static _instance: Player | null = null;
-
     public static getInstance(): Player {
         if (!Player._instance) {
             Player._instance = new Player();
         }
         return Player._instance;
     }
-
-    // Getters y otros métodos...
 
     // Función para aumentar el nivel
     public increaseLevel(): void {
@@ -60,12 +55,9 @@ export class Player extends PhysicsContainer implements IHitBox {
         Player._bowDamage += 0.5;
         this._swordDamage += 20;
 
-        // Incrementar la salud máxima en un valor base cada vez que se sube de nivel
         const healthIncreasePerLevel = 20;
-        Player._baseMaxHealth += healthIncreasePerLevel;
-
-        // Actualizar la salud máxima con el nuevo valor base
-        Player._maxHealth = Player._baseMaxHealth;
+        Player._baseMaxHealth += healthIncreasePerLevel;   // Incrementar la salud máxima en un valor base cada vez que se sube de nivel
+        Player._maxHealth = Player._baseMaxHealth;   // Actualizar la salud máxima con el nuevo valor base
     }
 
     constructor() {
@@ -75,9 +67,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.bardo.scale.set(2)
         this.bardo.pivot.set(0.55, 17);
 
-        this.levelPoints = new LevelPoints(this); // Inicializa con 0 puntos y un multiplicador de 1.5
-        console.log('this.levelPoints', this.levelPoints)
-
+        this.levelPoints = new LevelPoints(this);
         this.arrowsAvailable = INITIALARROWS;
 
         this.bardo.addState("run", ["adventurer-run2-00.png", "adventurer-run2-01.png", "adventurer-run2-02.png", "adventurer-run2-03.png", "adventurer-run2-04.png", "adventurer-run2-05.png",], 0.1, true)
@@ -111,17 +101,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.acceleration.y = Player.GRAVITY;
 
         this.initKeyboardEvents(true);
-
-        // this.addChild(auxZero);
-        this.addChild(this.hitbox);
-
-        // agrego todos los movimientos a la clase player
-        this.addChild(this.bardo);
+        this.addChild(this.hitbox, this.bardo);
 
         if (Player._hp) {
             this.healthOnScreen = new Text(`${Player._hp}` + "HP", LETRA1SUBTITLE);
         } else if (Player._hp == undefined) {
-            // Cambiamos todas las referencias a currentHealth por _hp
             let initialHealth: number = 100;
             Player._hp = initialHealth;
             Player._maxHealth = Player._baseMaxHealth;
@@ -142,26 +126,20 @@ export class Player extends PhysicsContainer implements IHitBox {
             Keyboard.down.on("KeyA", this.runLeft, this);
             Keyboard.down.on("KeyJ", this.punch, this);
             Keyboard.down.on("KeyL", this.bow, this);
-
-            // Keyboard.up.on("KeyW", this.stopJump, this);
             Keyboard.up.on("KeyS", this.stopCrawl, this);
             Keyboard.up.on("KeyD", this.stopRunRight, this);
             Keyboard.up.on("KeyA", this.stopRunLeft, this);
-            // Keyboard.up.on("KeyL", this.stopBow, this);
         } else {
-            // Asignación de eventos de teclado
             Keyboard.down.off("KeyW", this.jump, this);
             Keyboard.down.off("KeyS", this.crawl, this);
             Keyboard.down.off("KeyD", this.runRight, this);
             Keyboard.down.off("KeyA", this.runLeft, this);
             Keyboard.down.off("KeyJ", this.punch, this);
             Keyboard.down.off("KeyL", this.bow, this);
-
             Keyboard.up.off("KeyW", this.stopJump, this);
             Keyboard.up.off("KeyS", this.stopCrawl, this);
             Keyboard.up.off("KeyD", this.stopRunRight, this);
             Keyboard.up.off("KeyA", this.stopRunLeft, this);
-            // Keyboard.up.on("KeyL", this.stopBow, this);
         }
     }
 
@@ -194,14 +172,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     public jump(): void {
         if (this.canJump) {
             stopSounds(["running"]);
-            playSound("jumper", { loop: false, volume: 0.05 })
+            playSFX("jumper", { loop: false, volume: 0.05 })
             this.speed.y = -(Player.GRAVITY * 0.7);
             this.canJump = false;
             this.bardo.playState("jump", true);
             new Tween(this.bardo).to({}, 1450).start().onComplete(() => {
                 this.canJump = true;
                 if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA")) {
-                    playSound("running", { loop: true, volume: 0.05 })
+                    playSFX("running", { loop: true, volume: 0.05 })
                     this.bardo.playState("run", true);
                 } else {
                     this.bardo.playState("idle", true);
@@ -222,14 +200,16 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runLeft(): void {
-        playSound("running", { loop: true, volume: 0.05 })
+        stopAllSFX();
+        playSFX("running", { loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
         this.bardo.playState("run");
     }
 
     public runRight(): void {
-        playSound("running", { loop: true, volume: 0.05 });
+        stopAllSFX();
+        playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
         this.bardo.playState("run", true)
@@ -249,7 +229,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punchRun(): void {
-        playSound("bow", { loop: false, volume: 0.05 });
+        playSFX("bow", { loop: false, volume: 0.05 });
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch", true)
     }
@@ -280,7 +260,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.canBow = false;
             new Tween(this.bardo).to({}, this.bowCooldown).start().onComplete(() => {
                 this.emit("shoot");
-                playSound("bow", { loop: false, volume: 0.05 });
+                playSFX("bow", { loop: false, volume: 0.05 });
                 this.resetBowCooldown();
             });
         }
@@ -290,7 +270,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.canBow = false;
             new Tween(this.bardo).to({}, this.jumpBowCooldown).start().onComplete(() => {
                 this.emit("shoot");
-                playSound("bow", { loop: false, volume: 0.05 });
+                playSFX("bow", { loop: false, volume: 0.05 });
                 this.resetJumpBowCooldown();
             });
         }
@@ -301,6 +281,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.stopBow();
         }, this.bowCooldown);
     }
+
     private resetJumpBowCooldown(): void {
         setTimeout(() => {
             this.stopBow();
@@ -323,14 +304,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunLeft(): void {
-        sound.stop("running");
+        stopSFX("running");
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardo.playState("idle", true)
     }
 
     private stopRunRight(): void {
-        sound.stop("running");
+        stopSFX("running");
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle", true)

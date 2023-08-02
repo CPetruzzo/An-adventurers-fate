@@ -24,24 +24,27 @@ interface SpriteParams {
 // SpriteParams para los sprites mencionados en el ejemplo
 
 export const bagBG: SpriteParams = {
-    texture: "Cartel",
-    position: { x: menuBag.x - 70, y: menuBag.y -70},
-    scale: { x: 0.45, y: 0.45 },
-    alpha: 0.5
+    texture: "itemBG",
+    position: { x: menuBag.x, y: menuBag.y + 5 },
+    scale: { x: 0.17, y: 0.17 },
+    alpha: 0.5,
+    anchor: { x: 0.5, y: 0.5 }
 };
 
 export const shieldBG: SpriteParams = {
-    texture: "Cartel",
-    position: { x: shield.x - 70, y: shield.y -60 },
-    scale: { x: 0.45, y: 0.45 },
-    alpha: 0.5
+    texture: "itemBG",
+    position: { x: shield.x, y: shield.y + 15 },
+    scale: { x: 0.17, y: 0.17 },
+    alpha: 0.5,
+    anchor: { x: 0.5, y: 0.5 }
 };
 
 export const bookBG: SpriteParams = {
-    texture: "Cartel",
-    position: { x: book.x - 70, y: book.y -70 },
-    scale: { x: 0.45, y: 0.45 },
-    alpha: 0.5
+    texture: "itemBG",
+    position: { x: book.x, y: book.y + 5 },
+    scale: { x: 0.17, y: 0.17 },
+    alpha: 0.5,
+    anchor: { x: 0.5, y: 0.5 }
 };
 
 export const mapParams: SpriteParams = {
@@ -99,6 +102,13 @@ export const itemWeapon3Params: SpriteParams = {
 export const itemBowParams: SpriteParams = {
     texture: "itemBow",
     position: { x: itemWeapon1Params.position.x, y: itemWeapon1Params.position.y },
+    scale: { x: 0.07, y: 0.07 },
+    anchor: { x: 0.5, y: 0.5 },
+};
+
+export const itemSwordParams: SpriteParams = {
+    texture: "itemSword",
+    position: { x: itemWeapon2Params.position.x, y: itemWeapon2Params.position.y },
     scale: { x: 0.07, y: 0.07 },
     anchor: { x: 0.5, y: 0.5 },
 };

@@ -2,6 +2,7 @@ import { Application, Ticker } from "pixi.js";
 import { Group } from "tweedle.js";
 import { Keyboard } from "./Keyboard";
 import { SceneBase } from "./SceneBase";
+import { stopAllSounds } from "./SoundParams";
 
 export namespace SceneManager {
     export const WIDTH = 1280;
@@ -52,6 +53,7 @@ export namespace SceneManager {
     }
 
     export function changeScene(newScene: SceneBase): void {
+        stopAllSounds();
         if (currentScene) {
             currentScene.destroy();
         }

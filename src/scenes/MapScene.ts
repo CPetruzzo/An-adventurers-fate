@@ -9,12 +9,13 @@ import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
 import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, createPointButton, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
-import { backShieldParams, bookOpenedParams, cartelParams, createSprite, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG } from "../utils/SpriteParams";
+import { backShieldParams, bookOpenedParams, cartelParams, createSprite, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG, itemSwordParams } from "../utils/SpriteParams";
 import { closePopUp, createPopUp } from "../utils/PopUps";
-import { BStrenghtParams, HpParams, PStrenghtParams, createText, getPlayerName, levelParams, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
+import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
 import { GameSceneTwo } from "./GameSceneTwo";
 import { playSound, stopSounds } from "../utils/SoundParams";
+import { Player } from "../games/Player";
 
 const RED = 0xAA0000;
 
@@ -59,9 +60,14 @@ export class MapScene extends SceneBase implements IUpdateable {
     private buttonsCloseShield: string[];
     private buttonsBackMenuClose: string[];
     private popUps: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } } = {};
+    public itemSword: Sprite;
+    public openBag: Sprite;
+    public playerData: Player;
 
     constructor() {
         super();
+
+        this.playerData = Player.getInstance()
 
         this.world = new Container();
         this.addChild(this.world);
@@ -75,28 +81,32 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.graphicRed.drawRect(-50, -50, 50, 50);
         // this.world.addChild(this.graphicRed);
 
-        if (1 <= Level.Complete) {
-            const stageOneButton = createPointButton(stageOne, "pointerClick", () => this.onStageOneClick());
-            this.map.addChild(stageOneButton);
-        }
-        if (2 <= Level.Complete) {
-            const stageTwoButton = createPointButton(stageTwo, "pointerClick", () => this.onStageTwoClick());
-            this.map.addChild(stageTwoButton);
-        }
-        if (3 <= Level.Complete) {
-            const stageThreeButton = createPointButton(stageThree, "pointerClick", () => this.onStageThreeClick());
-            this.map.addChild(stageThreeButton);
-        }
-        if (4 <= Level.Complete) {
-            const stageFourButton = createPointButton(stageFour, "pointerClick", () => this.onStageFourClick());
-            this.map.addChild(stageFourButton);
-        }
-
         const pointOnMap1 = createSprite(pointOnMap1Params);
         const pointOnMap2 = createSprite(pointOnMap2Params);
         const pointOnMap3 = createSprite(pointOnMap3Params);
         const pointOnMap4 = createSprite(pointOnMap4Params);
         this.map.addChild(pointOnMap1, pointOnMap2, pointOnMap3, pointOnMap4);
+
+        if (1 <= Level.Complete) {
+            const stageOneButton = createPointButton(stageOne, "pointerClick", () => this.onStageOneClick());
+            // this.map.removeChild(pointOnMap1);
+            this.map.addChild(stageOneButton);
+        }
+        if (2 <= Level.Complete) {
+            const stageTwoButton = createPointButton(stageFour, "pointerClick", () => this.onStageTwoClick());
+            // this.map.removeChild(pointOnMap2);
+            this.map.addChild(stageTwoButton);
+        }
+        if (3 <= Level.Complete) {
+            const stageThreeButton = createPointButton(stageThree, "pointerClick", () => this.onStageThreeClick());
+            // this.map.removeChild(pointOnMap3);
+            this.map.addChild(stageThreeButton);
+        }
+        if (4 <= Level.Complete) {
+            const stageFourButton = createPointButton(stageTwo, "pointerClick", () => this.onStageFourClick());
+            // this.map.removeChild(pointOnMap4);
+            this.map.addChild(stageFourButton);
+        }
 
         this.itemWeapon1 = createSprite(itemWeapon1Params);
         this.itemWeapon2 = createSprite(itemWeapon2Params);
@@ -109,14 +119,15 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.bookOpened = createSprite(bookOpenedParams);
         this.cartel = createSprite(cartelParams);
         this.itemBow = createSprite(itemBowParams);
+        this.itemSword = createSprite(itemSwordParams);
         this.player = createSprite(playerParams);
         this.marcoTopLeft = createSprite(marcoTopLeftParams);
         this.marcoBottomRight = createSprite(marcoBottomRightParams);
         this.nombre = createSprite(nombreParams);
         this.pie = createSprite(pieParams);
+        this.openBag = createSprite({ texture: "openBag", position: { x: 400, y: 100 }, scale: { x: 1, y: 1 } });
 
         this.infoText = new Text("", LETRA2);
-
 
         const bagBackground = createSprite(bagBG);
         const shieldBackground = createSprite(shieldBG);
@@ -137,11 +148,12 @@ export class MapScene extends SceneBase implements IUpdateable {
             { ref: 'MapDown', params: mapDownParams, onClick: () => this.stopMap() },
             { ref: 'buttonClose', params: buttonCloseParams, onClick: () => this.onBackMenuClose() },
             { ref: 'shieldClose', params: shieldCloseParams, onClick: () => this.onCloseShieldClick() },
+            { ref: 'bagClose', params: shieldCloseParams, onClick: () => this.onMenuBagStopClick() },
         ];
         // ACA SEPARO/DECLARO GRUPOS, DEPENDE COMO QUIERA MANEJARLOS
         this.buttonsBackMenuClose = ['buttonClose', 'button2', 'button1'];
         this.buttonsCloseBook = ['closeBook'];
-        this.buttonsCloseShield = ['shieldClose'];
+        this.buttonsCloseShield = ['shieldClose', 'bagClose'];
         this.buttonsUI = ['book', 'shield', 'menuBag', 'backMenu'];
         this.buttonsMapUpDown = ['MapUp', 'MapDown'];
         // DECLARAMOS VACIO PRIMERO PARA QUE SE CREE
@@ -177,13 +189,13 @@ export class MapScene extends SceneBase implements IUpdateable {
         const mapMsc = sound.find("MapBGM");
         mapMsc.play({ loop: true, volume: 0.05 })
 
-        this.Hp = createText(HpParams);
-        this.PStrenght = createText(PStrenghtParams);
-        this.BStrenght = createText(BStrenghtParams);
+        this.Hp = createText({ text: `Max hp: ${Player._maxHealth}`, style: LETRA2, position: { x: 320, y: 275 } });
+        this.PStrenght = createText({ text: `Punch: ${Player._punchDamage}`, style: LETRA2, position: { x: 320, y: 325 } });
+        this.BStrenght = createText({ text: `Bow: ${Player._bowDamage}`, style: LETRA2, position: { x: 320, y: 375 } });
         this.salir = createText(salirParams);
         this.salirSi = createText(salirSiParams);
         this.salirNo = createText(salirNoParams);
-        this.level = createText(levelParams);
+        this.level = createText({ text: `Level: ${Player.getLevel()}`, style: LETRA2, position: { x: 350, y: 510 }, });
 
         this.world.addChild(this.map);
 
@@ -212,7 +224,11 @@ export class MapScene extends SceneBase implements IUpdateable {
     // Ejemplo de uso en tus funciones
     private onShieldClick(): void {
         playSound("shield", { volume: 0.1 })
-        createPopUp("shield", [], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemWeapon1 && this.itemBow]], this, this.popUps)
+        if (Level.Complete === 1) {
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, this.popUps)
+        } else if (Level.Complete === 2) {
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
+        } 
     }
     private onCloseShieldClick(): void {
         closePopUp("shield", this, this.popUps); // Cerramos el pop-up 'shield'
@@ -267,12 +283,22 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onMenuBagClick(): void {
         playSound("backpack", { volume: 1.5 })
-        new Tween(this.buttonRefs['menuBag']).to({}, 1500).start().onComplete(this.onMenuBagStopClick.bind(this));
+        new Tween(this.buttonRefs['menuBag']).to({}, 1500).start().onComplete(this.stopMenuSound.bind(this));
+        createPopUp("menuBag", // Nombre del pop-up
+            [[this.buttonRefs['menuBag']]],
+            [[this.openBag, this.buttonRefs['bagClose']]]
+            , this, this.popUps);
+
     }
 
     private onMenuBagStopClick(): void {
+        closePopUp("menuBag", this, this.popUps); // Cerramos el pop-up 'book'
+    }
+
+    private stopMenuSound(): void {
         stopSounds(["backpack"]);
     }
+
 
     public override destroy(options: boolean | IDestroyOptions | undefined) {
         super.destroy(options);
@@ -350,27 +376,22 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private onStageOneClick(): void {
-        sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
     }
 
     private onStageTwoClick(): void {
-        sound.stop("MapBGM");
         SceneManager.changeScene(new GameSceneTwo());
     }
 
     private onStageThreeClick(): void {
-        sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
     }
 
     private onStageFourClick(): void {
-        sound.stop("MapBGM");
         SceneManager.changeScene(new GameScene());
     }
 
     private onMenu(): void {
-        sound.stop("MapBGM");
         SceneManager.changeScene(new GameStartScene());
     }
 
