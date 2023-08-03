@@ -1,24 +1,24 @@
-import { AnimatedSprite, Texture, TextureSource} from "pixi.js";
+import { AnimatedSprite, Texture, TextureSource } from "pixi.js";
 import { PhysicsContainer } from "./PhysicsContainer";
 
-export class HealthBar extends PhysicsContainer{
-    
+export class HealthBar extends PhysicsContainer {
+
     public shape: TextureSource;
     public bar: AnimatedSprite;
 
-    constructor(shape: TextureSource, width: number, height: number, tint?: number){
+    constructor(shape: TextureSource, width: number, height: number, tint?: number) {
         super();
-        this.shape= shape;
-            
+        this.shape = shape;
+
         this.bar = new AnimatedSprite([
             Texture.from(shape),]
         );
-        this.bar.width= width;
-        this.bar.height= height;
-        this.bar.position.set(30, 28);    
+        this.bar.width = width;
+        this.bar.height = height;
+        this.bar.position.set(30, 28);
         // verde: 0x90EE90
         this.bar.tint ? tint : 0xffffff;
-        this.addChild(this.bar);        
+        this.addChild(this.bar);
     }
 
     public override update(deltaMS: number) {

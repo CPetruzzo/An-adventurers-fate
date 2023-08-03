@@ -180,7 +180,8 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.arrowsOnScreen.position.set(400, 55)
         this.addChild(this.arrowsOnScreen);
 
-        this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
+        this.myLevel = new Text("", LETRA1);
+        this.getPlayerLevel();
         this.myLevel.position.set(450, 45)
         this.addChild(this.myLevel);
 
@@ -286,25 +287,13 @@ export class GameScene extends SceneBase implements IUpdateable {
         )
     }
 
-    public levelOnScreen(): void {
-        if (this.myLevel != undefined) {
-            this.removeChild(this.myLevel);
-            this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
-            this.myLevel.position.set(450, 45)
-            this.addChild(this.myLevel);
-        } else {
-            this.myLevel = new Text(`Player's current level is: ${Player.getLevel()}`, LETRA1)
-            this.myLevel.position.set(450, 45)
-            this.addChild(this.myLevel);
-        }
-        console.log("bow", Player._bowDamage)
-        console.log("punch", Player._punchDamage)
-        console.log("maxhp", Player._maxHealth)
+    private getPlayerLevel(): void {
+        this.myLevel.text = `Player's current level is: ${Player.getLevel()}`;
     }
 
     /** Función de disparo de las flechas */
     public shootArrow(): void {
-        if (this.player.arrowsAvailable > 0) {
+        if (this.player.arrowsAvailable > 1) {
             const newArrow = new Arrow();
             newArrow.angle = -20
             newArrow.position.set(this.player.x + this.player.width / 3, this.player.y - this.player.height / 3);
@@ -313,8 +302,26 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.arrows.push(newArrow);
             this.world.addChild(newArrow);
             this.player.arrowsAvailable -= 1;
-
             this.emit("changeArrowAmount", this.player.arrowsAvailable);
+        } else if (this.player.arrowsAvailable === 1) {
+            const newArrow = new Arrow();
+            newArrow.angle = -20
+            newArrow.position.set(this.player.x + this.player.width / 3, this.player.y - this.player.height / 3);
+            newArrow.shoot(newArrow, newArrow.position, this.player.scale.x);
+
+            this.arrows.push(newArrow);
+            this.world.addChild(newArrow);
+            this.player.arrowsAvailable -= 1;
+            this.emit("changeArrowAmount", this.player.arrowsAvailable);
+
+            console.log("You run out of arrows");
+            this.removeChild(this.aljava);
+            this.aljava = Sprite.from("aljava");
+            this.aljava.alpha = 0.3;
+            this.aljava.position.set(400, 40);
+            this.aljava.scale.set(0.1);
+            this.aljava.anchor.set(0.5);
+            this.addChild(this.aljava);
         } else {
             console.log("No arrows left");
             this.removeChild(this.aljava);
@@ -417,12 +424,12 @@ export class GameScene extends SceneBase implements IUpdateable {
     private rangeHit(): void {
         const pelea4 = checkCollision(this.range, this.arek);
         if (pelea4 != null) {
-            if ((this.causingRangeDamage || Keyboard.state.get("KeyK"))) {
+            if ((!this.player.canBow) || Keyboard.state.get("KeyK")) {
                 this.arek.getEnemyHurt(Player._bowDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
-                    this.player.increasePoints(1000);
-                    this.levelOnScreen();
+                    this.player.increasePoints(300);
+                    this.getPlayerLevel();
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to({ alpha: 0 }, 5000).repeat(3).start().onComplete(() => this.world.removeChild(this.arek));
                 }
@@ -441,8 +448,8 @@ export class GameScene extends SceneBase implements IUpdateable {
                     arrow.getEnemyHurt(this.arrowDamage, this.arek);
                     this.changeEnemyHP();
                     if (this.arek.currentHealth <= 0) {
-                        this.player.increasePoints(1000);
-                        this.levelOnScreen();
+                        this.player.increasePoints(300);
+                        this.getPlayerLevel();
                         this.arek.playDestroyAnimation(this.arek);
                         new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                     }
@@ -493,8 +500,8 @@ export class GameScene extends SceneBase implements IUpdateable {
                 this.arek.getEnemyHurt(Player._punchDamage);
                 this.changeEnemyHP();
                 if (this.arek.currentHealth <= 0) {
-                    this.player.increasePoints(10000);
-                    this.levelOnScreen();
+                    this.player.increasePoints(300);
+                    this.getPlayerLevel();
                     this.arek.playDestroyAnimation(this.arek);
                     new Tween(this.arek).to(1000).start().onComplete(() => this.world.removeChild(this.arek));
                 }

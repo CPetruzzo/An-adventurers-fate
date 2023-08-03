@@ -23,7 +23,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     public recovered: boolean = false;
     public canJump = true;
     public canPunch: boolean = true;
-    private canBow: boolean = true;
+    public canBow: boolean = true;
 
     public currentHealth: number = 100;
     public static level: number;

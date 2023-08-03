@@ -39,7 +39,7 @@ export class LoaderScene extends SceneBase {
         // Loader.shared.add({ name: 'From Google 3', url: 'https://fonts.googleapis.com/css2?family=Quintessential&display=swap' });
         Loader.shared.onComplete.once(this.whenLoadFinishes.bind(this));
         Loader.shared.load();
-        Loader.shared.onProgress.add(Loader => this.setBarPercent(Loader.progress));
+        Loader.shared.onProgress.add((Loader: { progress: number; }) => this.setBarPercent(Loader.progress));
     };
 
     private setBarPercent(percent: number) {

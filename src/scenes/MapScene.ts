@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, DisplayObject, Graphics, IDestroyOptions, Sprite, Text } from "pixi.js";
+import { Container, DisplayObject, Graphics, IDestroyOptions, Point, Sprite, Text } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
@@ -16,6 +16,7 @@ import { Level } from "../utils/Level";
 import { GameSceneTwo } from "./GameSceneTwo";
 import { playSound, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
+import { ScrollView } from "../utils/ScrollView";
 
 const RED = 0xAA0000;
 
@@ -63,17 +64,30 @@ export class MapScene extends SceneBase implements IUpdateable {
     public itemSword: Sprite;
     public openBag: Sprite;
     public playerData: Player;
+    private scrollview: ScrollView;
 
     constructor() {
         super();
-
         this.playerData = Player.getInstance()
 
         this.world = new Container();
         this.addChild(this.world);
-
+        
         this.map = createSprite(mapParams);
-        this.world.addChild(this.map);
+        this.map.y=-240
+
+        const contAux = new Container();
+        // contAux.addChild(this.map);
+
+        this.scrollview = new ScrollView("disabled", 800, {
+            addToContent: contAux,
+            startDragThreshold: new Point(10, 50),
+            scrollLimits: contAux.getLocalBounds().clone(),
+        });
+		this.scrollview.x = 0;
+		this.scrollview.y = 0;
+        this.scrollview.content.interactive = true;
+		// this.scrollview.content.x = 0;
 
         this.graphicRed = new Graphics();
         this.graphicRed.lineStyle({ color: RED, width: 10 });
@@ -198,6 +212,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.level = createText({ text: `Level: ${Player.getLevel()}`, style: LETRA2, position: { x: 350, y: 510 }, });
 
         this.world.addChild(this.map);
+        // this.world.addChild(this.scrollview);
 
         Keyboard.down.on("NumpadAdd", () => this.world.scale.set(this.world.scale.x + 0.1));
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
@@ -228,7 +243,7 @@ export class MapScene extends SceneBase implements IUpdateable {
             createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, this.popUps)
         } else if (Level.Complete === 2) {
             createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
-        } 
+        }
     }
     private onCloseShieldClick(): void {
         closePopUp("shield", this, this.popUps); // Cerramos el pop-up 'shield'

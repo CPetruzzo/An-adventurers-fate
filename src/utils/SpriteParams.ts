@@ -49,7 +49,7 @@ export const bookBG: SpriteParams = {
 
 export const mapParams: SpriteParams = {
     texture: "Map1",
-    position: { x: 0, y: -240 },
+    position: { x: 0, y: 0 },
     scale: { x: 1, y: 1 },
 };
 
