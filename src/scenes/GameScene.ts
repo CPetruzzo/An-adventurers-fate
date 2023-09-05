@@ -668,11 +668,13 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     /** Correr hacia la derecha */
     private RightMove(): void {
+        this.player.runningPostJump = true;
         this.player.runRight();
     }
 
     /** Correr hacia la izquierda */
     private LeftMove(): void {
+        this.player.runningPostJump = true;
         this.player.runLeft();
     }
 

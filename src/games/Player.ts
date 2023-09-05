@@ -38,6 +38,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public levelPoints: LevelPoints;
     private static _instance: Player | null = null;
+    public runningPostJump: boolean | undefined = false;
     public static getInstance(): Player {
         if (!Player._instance) {
             Player._instance = new Player();
@@ -178,8 +179,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.bardo.playState("jump", true);
             new Tween(this.bardo).to({}, 1450).start().onComplete(() => {
                 this.canJump = true;
-                if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA")) {
-                    playSFX("running", { loop: true, volume: 0.05 })
+                if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA") || this.runningPostJump) {
                     this.bardo.playState("run", true);
                 } else {
                     this.bardo.playState("idle", true);
@@ -235,7 +235,9 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public idlePlayer(): void {
+        stopSFX("running");
         this.speed.x = 0;
+        this.runningPostJump = false;
         this.bardo.playState("idle", true)
     }
 

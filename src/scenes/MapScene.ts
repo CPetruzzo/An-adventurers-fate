@@ -243,6 +243,8 @@ export class MapScene extends SceneBase implements IUpdateable {
             createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, this.popUps)
         } else if (Level.Complete === 2) {
             createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
+        } else if (Level.Complete === 3) {
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
         }
     }
     private onCloseShieldClick(): void {
