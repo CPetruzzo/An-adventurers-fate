@@ -7,6 +7,7 @@ import { PhysicsContainer } from "./PhysicsContainer";
 import { INITIALARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
+import { Timer } from "../utils/SceneManager";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;
@@ -181,8 +182,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                 this.canJump = true;
                 if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA") || this.runningPostJump) {
                     this.bardo.playState("run", true);
+                    playSFX("running", { loop: true, volume: 0.05 })
                 } else {
                     this.bardo.playState("idle", true);
+                    stopSounds(["running"]);
                 }
             });
         }
@@ -200,7 +203,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runLeft(): void {
-        stopAllSFX();
+        stopSFX("running");
         playSFX("running", { loop: true, volume: 0.05 })
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
@@ -208,7 +211,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runRight(): void {
-        stopAllSFX();
+        stopSFX("running");
         playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
@@ -235,7 +238,8 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public idlePlayer(): void {
-        stopSFX("running");
+        stopAllSFX();
+        stopSounds(["running"]);
         this.speed.x = 0;
         this.runningPostJump = false;
         this.bardo.playState("idle", true)
@@ -279,19 +283,16 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private resetBowCooldown(): void {
-        setTimeout(() => {
-            this.stopBow();
-        }, this.bowCooldown);
+        Timer(this.bowCooldown, () => this.stopBow());
     }
 
     private resetJumpBowCooldown(): void {
-        setTimeout(() => {
-            this.stopBow();
-        }, this.jumpBowCooldown);
+        Timer(this.jumpBowCooldown, () => this.stopBow());
     }
 
     private stopJump(): void {
-        this.bardo.playState("idle", true)
+        this.bardo.playState("idle", true);
+        stopSounds(["running"]);
     }
 
     private stopCrawl(): void {
@@ -313,10 +314,10 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunRight(): void {
-        stopSFX("running");
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle", true)
+        stopSFX("running");
     }
 
     public stopPunch(): void {

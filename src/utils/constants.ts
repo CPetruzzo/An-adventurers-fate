@@ -1,9 +1,15 @@
 import { TextStyle } from "pixi.js";
 
-/ Cantidad de flechas iniciales */
+/** Flag para determinar si quiero que haya sonido en el juego o no
+ * @argument if true then all sounds are shut down from start
+ */
+export const DEBUG_SOUND: boolean = true;
+export const DEBUG_SFX: boolean = false;
+
+/** Cantidad de flechas iniciales */
 export const INITIALARROWS: number = 10;
 
-/ Escalas para los botones de UI en escena */
+/** Escalas para los botones de UI en escena */
 export const BUTTON_SCALE: number = 1;
 export const START_SCALE = 1.2;
 export const MOVEMENTS_SCALE = 1.8;

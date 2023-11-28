@@ -6,7 +6,7 @@ export class PointButton extends Container{
         private def: Texture;
         private down: Texture;
         private over: Texture;
-        private spr: Sprite;
+        public spr: Sprite;
 
     constructor(def:Texture, down:Texture, over:Texture, _position?: Point, _scale?: number){
         super();

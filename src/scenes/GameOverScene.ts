@@ -5,6 +5,7 @@ import { ToggleButton } from "../ui/ToggleButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
+import { Keyboard } from "../utils/Keyboard";
 
 export class GameOverScene extends SceneBase {
 
@@ -41,6 +42,8 @@ export class GameOverScene extends SceneBase {
         this.lose.scale.x=0.5;
         this.lose.scale.y=0.5;
         this.lose.on("pointerClick", this.onLoseClick, this)
+
+        Keyboard.down.on("Enter", ()=> this.onLoseClick());
 
         this.addChild(
             this.BG,

@@ -1,6 +1,6 @@
-import { sound } from "@pixi/sound";
 import { Container } from "pixi.js";
 import { Player } from "../games/Player";
+import { playSound } from "../utils/SoundParams";
 
 export class LevelPoints extends Container {
     public static points: number = 0;
@@ -27,7 +27,7 @@ export class LevelPoints extends Container {
         return LevelPoints.instance;
     }
 
-    increasePoints(amount: number): void {
+    public increasePoints(amount: number): void {
         LevelPoints.points += amount;
         this.checkLevelUp();
     }
@@ -38,18 +38,16 @@ export class LevelPoints extends Container {
             // LevelPoints.points -= LevelPoints.requiredPoints;
             this.currentLevel++;
             this.player.increaseLevel(); // Aquí se llama al setter para actualizar las propiedades del jugador
-            const winbgm = sound.find("ItemBGM");
-            winbgm.volume = 0.1;
-            winbgm.play();
+            playSound("ItemBGM", {volume:0.1})
             this.checkLevelUp();
         }
     }
 
-    getCurrentLevel(): number {
+    public getCurrentLevel(): number {
         return this.currentLevel;
     }
 
-    getPoints(): number {
+    public getPoints(): number {
         return LevelPoints.points;
     }
 }

@@ -23,8 +23,9 @@ import { buttonA, buttonB, buttonsOff, buttonsOn, createPointButton, moveDown, m
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
 import { closePopUp, createPopUp } from "../utils/PopUps";
-import { playSound, stopSounds } from "../utils/SoundParams";
+import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
+import { isMobileDevice } from "..";
 
 export class GameScene extends SceneBase implements IUpdateable {
     private player: Player;
@@ -285,6 +286,10 @@ export class GameScene extends SceneBase implements IUpdateable {
             this.pauseOn,
             this.buttonsOn,
         )
+
+        if(!isMobileDevice){
+            this.removeButtons();
+        }
     }
 
     private getPlayerLevel(): void {
@@ -341,6 +346,7 @@ export class GameScene extends SceneBase implements IUpdateable {
         }
 
         if (this.gameOver) {
+            stopAllSFX();
             playSound("PartingBGM", { loop: true, volume: 0.05 })
             SceneManager.changeScene(new GameOverScene());
             stopSounds(["GameBGM"]);

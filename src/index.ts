@@ -12,6 +12,15 @@ SceneManager.changeScene(new LoaderScene());
 
 window.addEventListener("contextmenu", e => e.preventDefault())
 
+export let isMobileDevice: boolean;
+if (navigator.userAgent.includes("Mobile")) {
+    isMobileDevice = true;
+    console.log("Estás accediendo desde un dispositivo móvil.");
+} else {
+    isMobileDevice = false;
+	console.log("Estás accediendo desde una computadora.");
+}
+
 if (Capacitor.isNativePlatform()) {
     StatusBar.hide();
     KeepAwake.keepAwake();
@@ -25,3 +34,4 @@ if (Capacitor.isNativePlatform()) {
         }
     })
 }
+

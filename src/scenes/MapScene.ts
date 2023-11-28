@@ -14,7 +14,7 @@ import { closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
 import { GameSceneTwo } from "./GameSceneTwo";
-import { playSound, stopSounds } from "../utils/SoundParams";
+import { playSound, stopAllSounds, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
 
@@ -200,8 +200,7 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         this.textoViejo = createPlayerNameText();
 
-        const mapMsc = sound.find("MapBGM");
-        mapMsc.play({ loop: true, volume: 0.05 })
+        playSound("MapBGM", { loop: true, volume: 0.05 });
 
         this.Hp = createText({ text: `Max hp: ${Player._maxHealth}`, style: LETRA2, position: { x: 320, y: 275 } });
         this.PStrenght = createText({ text: `Punch: ${Player._punchDamage}`, style: LETRA2, position: { x: 320, y: 325 } });
@@ -393,22 +392,27 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private onStageOneClick(): void {
+        stopAllSounds();
         SceneManager.changeScene(new GameScene());
     }
 
     private onStageTwoClick(): void {
+        stopAllSounds();
         SceneManager.changeScene(new GameSceneTwo());
     }
 
     private onStageThreeClick(): void {
+        stopAllSounds();
         SceneManager.changeScene(new GameScene());
     }
 
     private onStageFourClick(): void {
+        stopAllSounds();
         SceneManager.changeScene(new GameScene());
     }
 
     private onMenu(): void {
+        stopAllSounds();
         SceneManager.changeScene(new GameStartScene());
     }
 
