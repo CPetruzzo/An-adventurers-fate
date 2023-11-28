@@ -8,52 +8,50 @@ import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
 
 export class GameOverScene extends SceneBase {
+  private buttonSound: ToggleButton;
+  private BG: Sprite;
+  private lose: PointButton;
 
-    public update(): void {}
-    
+  constructor() {
+    super();
 
-    private buttonSound: ToggleButton;
-    private BG: Sprite;
-    private lose: PointButton;
+    //Habillity Circle
+    this.BG = new Sprite(Texture.from("LOSE"));
 
-    constructor() {
-        super();
+    // Sound ON-OFF
+    this.buttonSound = new ToggleButton(
+      Texture.from("lineDark12.png"),
+      Texture.from("lineDark14.png")
+    );
+    this.buttonSound.height = 70;
+    this.buttonSound.width = 70;
+    this.buttonSound.x = 1150;
+    this.buttonSound.y = 40;
+    this.buttonSound.on(ToggleButton.TOGGLE_EVENT, (newState) => {
+      console.log("toggle changed to:", newState);
+    });
 
-        //Habillity Circle
-        this.BG=new Sprite(Texture.from("LOSE"));
-        
-        // Sound ON-OFF
-        this.buttonSound = new ToggleButton(
-            Texture.from("lineDark12.png"),
-            Texture.from("lineDark14.png"));
-        this.buttonSound.height = 70;
-        this.buttonSound.width = 70;
-        this.buttonSound.x = 1150
-        this.buttonSound.y = 40
-        this.buttonSound.on(ToggleButton.TOGGLE_EVENT, (newState) => {
-            console.log("toggle changed to:", newState)
-        })
+    this.lose = new PointButton(
+      Texture.from("BACK.png"),
+      Texture.from("BACK hundido.png"),
+      Texture.from("BACK.png")
+    );
+    this.lose.x = 650;
+    this.lose.y = 400;
+    this.lose.scale.x = 0.5;
+    this.lose.scale.y = 0.5;
+    this.lose.on("pointerClick", this.onLoseClick, this);
 
-        this.lose= new PointButton(Texture.from("BACK.png"),
-        Texture.from("BACK hundido.png"),
-        Texture.from("BACK.png"))
-        this.lose.x = 650
-        this.lose.y = 400
-        this.lose.scale.x=0.5;
-        this.lose.scale.y=0.5;
-        this.lose.on("pointerClick", this.onLoseClick, this)
+    Keyboard.down.on("Enter", () => this.onLoseClick());
 
-        Keyboard.down.on("Enter", ()=> this.onLoseClick());
+    this.addChild(this.BG, this.buttonSound, this.lose);
+  }
 
-        this.addChild(
-            this.BG,
-            this.buttonSound,
-            this.lose,
-            )
-    }
-    onLoseClick(): void {
-        console.log("Apreté Config", this);
-        SceneManager.changeScene(new GameStartScene());
-        sound.stop("PartingBGM");
-    }
+  public onLoseClick(): void {
+    console.log("Apreté Config", this);
+    SceneManager.changeScene(new GameStartScene());
+    sound.stop("PartingBGM");
+  }
+
+  public update(): void {}
 }
