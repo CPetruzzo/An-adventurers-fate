@@ -4,7 +4,7 @@ import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
-import { playSound } from "../utils/SoundParams";
+import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 
 export class WinScene extends Container {
@@ -89,10 +89,8 @@ export class WinScene extends Container {
         this.addChild(this.award);
         this.award.visible = true;
 
-        sound.stop("Chest1");
-        const winbgm = sound.find("ItemBGM");
-        winbgm.volume = 0.2;
-        winbgm.play();
+        stopSounds(["Chest1"]);
+        playSound("ItemBGM", { volume: 0.2 })
 
         new Tween(this.award)
             .to({ x: 400, y: 130, alpha: 1 }, 2000)

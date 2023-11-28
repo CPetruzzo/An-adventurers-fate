@@ -38,7 +38,7 @@ export class LevelPoints extends Container {
             // LevelPoints.points -= LevelPoints.requiredPoints;
             this.currentLevel++;
             this.player.increaseLevel(); // Aquí se llama al setter para actualizar las propiedades del jugador
-            playSound("ItemBGM", {volume:0.1})
+            playSound("ItemBGM", {volume: 0.1});
             this.checkLevelUp();
         }
     }

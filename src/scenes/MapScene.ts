@@ -14,7 +14,8 @@ import { closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
 import { GameSceneTwo } from "./GameSceneTwo";
-import { playSound, stopAllSounds, stopSounds } from "../utils/SoundParams";
+import { stopAllSounds } from "../utils/SoundParams";
+import { playSFX, playSound, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
 
@@ -289,7 +290,7 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private bookSound(): void {
-        sound.play("SoundBook")
+        playSFX("SoundBook", {});
         new Tween(this.buttonRefs['book']).to({}, 1000).start().onComplete(this.stopBookSound.bind(this));
     }
 

@@ -173,14 +173,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     /** Función para el salto (Función auxiliar, si no está separada no puedo borrarla cuando elimine a player) */
     public jump(): void {
         if (this.canJump) {
-            stopSounds(["running"]);
+            stopSFX("running");
             playSFX("jumper", { loop: false, volume: 0.05 })
             this.speed.y = -(Player.GRAVITY * 0.7);
-            this.canJump = false;
             this.bardo.playState("jump", true);
             new Tween(this.bardo).to({}, 1450).start().onComplete(() => {
                 this.canJump = true;
                 if (Keyboard.state.get("KeyD") || Keyboard.state.get("KeyA") || this.runningPostJump) {
+                    stopSFX("running");        
                     this.bardo.playState("run", true);
                     playSFX("running", { loop: true, volume: 0.05 })
                 } else {
@@ -188,6 +188,7 @@ export class Player extends PhysicsContainer implements IHitBox {
                     stopSounds(["running"]);
                 }
             });
+            this.canJump = false;
         }
     }
 
@@ -219,6 +220,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punch(): void {
+        stopSounds(["running"])
         if (this.canPunch) {
             this.speed.x = this.speed.x * 2;
             this.bardo.playState("punch");
@@ -232,6 +234,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public punchRun(): void {
+        stopSounds(["running"])
         playSFX("bow", { loop: false, volume: 0.05 });
         this.speed.x = this.speed.x * 2;
         this.bardo.playState("runPunch", true)
@@ -307,13 +310,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopRunLeft(): void {
-        stopSFX("running");
+        stopSounds(["running"])
         this.speed.x = 0;
         this.scale.set(-2, 2);
         this.bardo.playState("idle", true)
     }
 
     private stopRunRight(): void {
+        stopSounds(["running"])
         this.speed.x = 0;
         this.scale.set(2, 2);
         this.bardo.playState("idle", true)

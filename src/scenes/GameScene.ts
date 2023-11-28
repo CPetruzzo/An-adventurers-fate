@@ -2,7 +2,7 @@ import { Container, DisplayObject, Sprite, Text, Texture, TilingSprite } from "p
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
-import { checkCollision } from "../games/IHitBox";
+import { checkCollision, checkCollisionX } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
@@ -365,15 +365,14 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
         this.win.update(deltaTime); // Actualizacion del caja al final de la partida
 
-        // PARALLAX
-        if (!this.gotToChest) {
+        // Dentro del ciclo for para el parallax
+        if (!this.gotToChest && !this.isCollidingWithPlatform()) { // Agregar la condición !this.isCollidingWithPlatform()
             for (let i = 0; i < this.backgrounds.length; i++) {
                 const background = this.backgrounds[i];
                 const factor = (i / 6);
                 if (this.player.x < 0) {
                     background.tilePosition.x = background.tilePosition.x;
-                }
-                else {
+                } else {
                     background.tilePosition.x -= factor * this.player.speed.x / 50;
                 }
             }
@@ -414,7 +413,16 @@ export class GameScene extends SceneBase implements IUpdateable {
         this.endStage();
         this.myOwnHp();
     }
-
+    // Método para verificar si el personaje está colisionando con alguna plataforma en el eje X
+    private isCollidingWithPlatform(): boolean {
+        for (let platform of this.platforms) {
+            const overlap = checkCollisionX(this.player, platform); // Reemplazar checkCollisionX con la función de colisión solo en el eje X
+            if (overlap !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
     /** Checks hp situation and changes hpbar color */
     private myOwnHp(): void {
         if (Player._hp > Player._maxHealth * 0.7) {

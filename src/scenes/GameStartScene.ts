@@ -2,7 +2,6 @@ import { Sprite, Texture, IDestroyOptions } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { ToggleButton } from "../ui/ToggleButton";
-import { createPointButton, startParams, configParams, textSceneParams } from "../utils/ButtonParams";
 import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
@@ -14,6 +13,7 @@ import { Config } from "./Config";
 import { MapScene } from "./MapScene";
 import { TextScene } from "./TextScene";
 import { Text } from "pixi.js";
+import { configParams, createPointButton, startParams, textSceneParams } from "../utils/ButtonParams";
 
 export class GameStartScene extends SceneBase {
   private titulo: Text;

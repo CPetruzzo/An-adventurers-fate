@@ -24,7 +24,7 @@ import { Arrow } from "../games/Weapon/Arrow";
 import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
-import { playSound } from "../utils/SoundParams";
+import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 
 export class GameSceneTwo extends SceneBase implements IUpdateable {
@@ -82,8 +82,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         this.arrows = [];
         this.world = new Container();
 
-        const BGM = sound.find("GameBGM");
-        BGM.play({ loop: true, volume: 0.05 })
+        playSound("GameBGM", {loop: true, volume: 0.05})
 
         // FONDOS
         for (let i = 7; i < 12; i++) {
@@ -370,15 +369,14 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             console.log('this.playerBardo.levelPoints.requiredPoints', LevelPoints.requiredPoints)
             console.log('this.playerBardo.levelPoints.points', LevelPoints.points)
 
-            const GameOverBGM = sound.find("PartingBGM");
-            GameOverBGM.play({ loop: true, volume: 0.05 })
+            stopSounds(["GameBGM", "running", "jumper"])
+            playSound("PartingBGM", { loop: true, volume: 0.05 })
             SceneManager.changeScene(new GameOverScene());
-            sound.stop("GameBGM");
         }
 
         if (this.nextStage) {
             SceneManager.changeScene(new WinScene());
-            sound.stop("GameBGM");
+            stopSounds(["GameBGM"])
         }
 
         this.player.update(deltaTime); // Actualizacion del personaje

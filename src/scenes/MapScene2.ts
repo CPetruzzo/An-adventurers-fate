@@ -11,6 +11,7 @@ import { MapScene } from "./MapScene";
 import { LETRA2 } from "../utils/constants";
 import { Player } from "../games/Player";
 import { GameSceneTwo } from "./GameSceneTwo";
+import { playSound } from "../utils/SoundParams";
 
 const RED = 0xAA0000;
 
@@ -257,8 +258,7 @@ export class MapScene2 extends SceneBase implements IUpdateable {
             this.textoViejo = new Text("Jugador", LETRA2);
         }
 
-        const mapMsc = sound.find("MapBGM");
-        mapMsc.play({ loop: true, volume: 0.05 })
+        playSound("MapBGM", { loop: true, volume: 0.05 })
         this.textoViejo.x = 400 - (this.textoViejo.width / 2);
         this.textoViejo.y = 120;
 

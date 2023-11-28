@@ -7,6 +7,7 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
+import { playSFX } from "../utils/SoundParams";
 
 export class TextScene extends SceneBase {
   private buttonMouse: PointButton;
@@ -126,9 +127,9 @@ export class TextScene extends SceneBase {
       .onComplete(this.onButtonText2.bind(this));
   }
 
-  soundWriting() {
-    sound.play("handWriting");
-  }
+    soundWriting(){
+        playSFX("handWriting", {});
+    }
 
   onButtonText2() {
     new Tween(this.title).to({ alpha: 0 }, 2500).start();
