@@ -70,12 +70,13 @@ export class MapScene extends SceneBase implements IUpdateable {
     constructor() {
         super();
         this.playerData = Player.getInstance()
+        this.playerData.initKeyboardEvents(false);
 
         this.world = new Container();
         this.addChild(this.world);
-        
+
         this.map = createSprite(mapParams);
-        this.map.y=-240
+        this.map.y = -240
 
         const contAux = new Container();
         // contAux.addChild(this.map);
@@ -85,10 +86,10 @@ export class MapScene extends SceneBase implements IUpdateable {
             startDragThreshold: new Point(10, 50),
             scrollLimits: contAux.getLocalBounds().clone(),
         });
-		this.scrollview.x = 0;
-		this.scrollview.y = 0;
+        this.scrollview.x = 0;
+        this.scrollview.y = 0;
         this.scrollview.content.interactive = true;
-		// this.scrollview.content.x = 0;
+        // this.scrollview.content.x = 0;
 
         this.graphicRed = new Graphics();
         this.graphicRed.lineStyle({ color: RED, width: 10 });
@@ -218,7 +219,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         Keyboard.down.on("NumpadSubtract", () => this.world.scale.set(this.world.scale.x - 0.1));
     }
 
-    private createButtons(buttonsConfig: any) {
+    private createButtons(buttonsConfig: any): any {
         buttonsConfig.forEach((buttonConfig: any) => {
             const { ref, params, onClick } = buttonConfig;
             this.buttonRefs[ref] = createPointButton(params, 'pointerClick', onClick);

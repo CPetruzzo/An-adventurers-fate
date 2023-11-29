@@ -1,5 +1,5 @@
 import { sound } from "@pixi/sound";
-import { Container, Point, Sprite, Text, Texture, TilingSprite } from "pixi.js";
+import { Container, DisplayObject, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
@@ -21,11 +21,13 @@ import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
 import { Arrow } from "../games/Weapon/Arrow";
-import { ButtonParams, buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
+import { buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, createPointButton, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
 import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
+import { closePopUp, createPopUp } from "../utils/PopUps";
+import { isMobileDevice } from "..";
 
 export class GameSceneTwo extends SceneBase implements IUpdateable {
     private player: Player;
@@ -49,7 +51,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     private platforms: Platform[];
     private buttonsOn: PointButton;
     private buttonsOff: PointButton;
-    private config: PointButton;
+    public config: PointButton;
     private potions: Potion[];
 
     private isPaused: boolean = false;
@@ -73,6 +75,14 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     public arrowsOnScreen: Text;
     private aljava: Sprite;
     public myLevel: Text;
+    private popUps: {
+        [name: string]: {
+            objectsToRemove: DisplayObject[][];
+            objectsToAdd: DisplayObject[][];
+        };
+    } = {};
+    private gotToChest: boolean = false;
+
 
     constructor() {
         super();
@@ -82,7 +92,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         this.arrows = [];
         this.world = new Container();
 
-        playSound("GameBGM", {loop: true, volume: 0.05})
+        playSound("GameBGM", { loop: true, volume: 0.05 })
 
         // FONDOS
         for (let i = 7; i < 12; i++) {
@@ -182,30 +192,23 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             this.addChild(this.arrowsOnScreen);
         });
 
-        this.start = this.createPointButton(start);
-        this.start.on("pointer down", this.habilityClick, this);
+        this.start = createPointButton(start, "pointer down", () => this.habilityClick());
 
-        this.buttonA = this.createPointButton(buttonA);
-        this.buttonA.on("pointer down", this.onButtonA, this)
+        this.buttonA = createPointButton(buttonA, "pointer down", () => this.onButtonA());
         this.buttonA.on("pointerClick", this.Stop, this);
 
-        this.buttonB = this.createPointButton(buttonB);
-        this.buttonB.on("pointer down", this.onButtonB, this)
+        this.buttonB = createPointButton(buttonB, "pointer down", () => this.onButtonB())
         this.buttonB.on("pointerClick", this.Stop, this);
 
-        this.moveUp = this.createPointButton(moveUp);
-        this.moveUp.on("pointer down", this.UpMove, this)
+        this.moveUp = createPointButton(moveUp, "pointer down", () => this.UpMove())
 
-        this.moveDown = this.createPointButton(moveDown);
-        this.moveDown.on("pointer down", this.DownMove, this)
+        this.moveDown = createPointButton(moveDown, "pointer down", () => this.DownMove())
         this.moveDown.on("pointerClick", this.Stop, this)
 
-        this.moveLeft = this.createPointButton(moveLeft);
-        this.moveLeft.on("pointer down", this.LeftMove, this)
+        this.moveLeft = createPointButton(moveLeft, "pointer down", () => this.LeftMove())
         this.moveLeft.on("pointerClick", this.Stop, this)
 
-        this.moveRight = this.createPointButton(moveRight);
-        this.moveRight.on("pointer down", this.RightMove, this)
+        this.moveRight = createPointButton(moveRight, "pointer down", () => this.RightMove())
         this.moveRight.on("pointerClick", this.Stop, this)
 
         this.buttonSound = new ToggleButton(
@@ -219,20 +222,11 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             console.log("toggle changed to:", newState)
         })
 
-        this.pauseOn = this.createPointButton(pauseOn);
-        this.pauseOn.on("pointerClick", this.onPause, this)
-
-        this.pauseOff = this.createPointButton(pauseOff);
-        this.pauseOff.on("pointerClick", this.offPause, this)
-
-        this.buttonsOn = this.createPointButton(buttonsOn);
-        this.buttonsOn.on("pointerClick", this.removeButtons, this);
-
-        this.buttonsOff = this.createPointButton(buttonsOff);
-        this.buttonsOff.on("pointerClick", this.showButtons, this)
-
-        this.config = this.createPointButton(configButtonGame);
-        this.config.on("pointerClick", this.onConfigClick, this)
+        this.pauseOn = createPointButton(pauseOn, "pointerClick", () => this.onPause());
+        this.pauseOff = createPointButton(pauseOff, "pointerClick", () => this.offPause());
+        this.buttonsOn = createPointButton(buttonsOn, "pointerClick", () => this.removeButtons());
+        this.buttonsOff = createPointButton(buttonsOff, "pointerClick", () => this.showButtons())
+        this.config = createPointButton(configButtonGame, "pointerClick", () => this.onConfigClick())
 
         this.melee = new Melee();
         this.melee.position.x = -10
@@ -294,6 +288,9 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         )
 
 
+        if (!isMobileDevice) {
+            this.removeButtons();
+        }
         // // PORTFOLIO
         // this.aboutMe = new Text("Portfolio", { fontFamily: "Arial", fill: "#fff", align: "center" });
         // this.aboutMe.anchor.set(0.5, 0);
@@ -378,8 +375,11 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
             SceneManager.changeScene(new WinScene());
             stopSounds(["GameBGM"])
         }
-
-        this.player.update(deltaTime); // Actualizacion del personaje
+        if (!this.gotToChest) {
+            this.player.update(deltaTime); // Actualizacion del personaje
+        } else {
+            this.player.initKeyboardEvents(false);
+        }
         this.HPbar.update(deltaTime); // Actualizacion del barra de vida
         this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
         this.win.update(deltaTime); // Actualizacion del caja al final de la partida
@@ -498,7 +498,8 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     private endStage(): void {
         const fin = checkCollision(this.player, this.chest);
         if (fin != null) {
-            if(Level.Complete <= 2){
+            this.gotToChest = true;
+            if (Level.Complete <= 2) {
                 Level.Complete = 3;
             }
             this.chest.destroy();
@@ -642,37 +643,17 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     // BOTON DE PAUSE
     /** Pausado de la escena */
     private onPause(): void {
-        this.isPaused = true;
         this.pauseScene = new PauseScene();
-        this.removeChild(this.start,
-            this.buttonA,
-            this.buttonB,
-            this.moveUp,
-            this.moveDown,
-            this.moveLeft,
-            this.moveRight,
-            this.cartel
-        );
-        this.addChild(this.pauseScene,
-            this.pauseOff,
-        );
+        const objectsToRemove = [[]];
+        const objectsToAdd = [[this.pauseScene, this.pauseOff]];
+        createPopUp("pause", objectsToRemove, objectsToAdd, this, this.popUps);
+        this.isPaused = true;
     }
 
     /** Función para salir de pausa */
     private offPause(): void {
         this.isPaused = false;
-        this.removeChild(this.pauseScene,
-            this.pauseOff,
-        );
-        this.addChild(this.start,
-            this.buttonA,
-            this.buttonB,
-            this.moveUp,
-            this.moveDown,
-            this.moveLeft,
-            this.moveRight,
-            this.cartel
-        );
+        closePopUp("pause", this, this.popUps);
     }
 
     // BOTONES ON - OFF
@@ -707,12 +688,6 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     }
 
     // UI DE MOVIMIENTOS
-    /** Cambio de escena a la escena de Configuración */
-    private onConfigClick(): void {
-        SceneManager.changeScene(new Config());
-        sound.stop("GameBGM");
-    }
-
     /** Tiro con arco y flecha */
     private onButtonB(): void {
         this.player.bow();
@@ -722,58 +697,49 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     /** Golpe de puño */
     private onButtonA(): void {
         this.player.punch();
-        this.causingDamage = true;
-        sound.stop("bow");
+        stopSounds(["bow"]);
     }
 
     /** Función para habilidad especial - Salto */
     private habilityClick(): void {
         this.player.jump();
         this.winStage = true;
-        sound.stop("running");
-        sound.stop("bow");
+        stopSounds(["running", "bow"]);
     }
 
     /** Correr hacia la derecha */
     private RightMove(): void {
+        this.player.runningPostJump = true;
         this.player.runRight();
     }
 
     /** Correr hacia la izquierda */
     private LeftMove(): void {
+        this.player.runningPostJump = true;
         this.player.runLeft();
     }
 
     /** Agacharse */
     private DownMove(): void {
         this.player.crawl();
-
     }
 
     /** Salto */
     private UpMove(): void {
         this.player.jump();
-        sound.stop("running");
-
+        stopSounds(["running"]);
     }
 
     /** Alto de todos los movimientos */
     private Stop(): void {
         this.player.idlePlayer();
-        sound.stop("running");
-        sound.stop("bow");
+        stopSounds(["running", "bow"]);
         this.causingRangeDamage = false;
-        this.causingDamage = false;
     }
-
-    // Use a function to create PointButtons with common parameters
-    public createPointButton(params: ButtonParams): PointButton {
-        return new PointButton(
-            Texture.from(params.textureNameDef),
-            Texture.from(params.textureOver),
-            Texture.from(params.textureNameDef),
-            new Point(params.x, params.y),
-            params.scale
-        );
-    };
+    // UI DE MOVIMIENTOS
+    /** Cambio de escena a la escena de Configuración */
+    private onConfigClick(): void {
+        SceneManager.changeScene(new Config());
+        sound.stop("GameBGM");
+    }
 }

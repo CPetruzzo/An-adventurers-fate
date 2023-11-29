@@ -123,6 +123,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     }
 
     this.player = new Player();
+    this.player.initKeyboardEvents(true);
     /** el problema es que esto hace que arranque desde donde se murió o desde donde ganó (es algo bueno si quiero ver como guardar una partida) */
     // this.playerBardo = Player.getInstance();
     this.player.scale.set(2);
@@ -554,16 +555,20 @@ export class GameScene extends SceneBase implements IUpdateable {
       playSound("PartingBGM", { loop: true, volume: 0.05 });
       SceneManager.changeScene(new GameOverScene());
       stopSounds(["GameBGM"]);
+      this.player.initKeyboardEvents(false);
       return;
     }
 
     if (this.nextStage) {
+      this.player.initKeyboardEvents(false);
       SceneManager.changeScene(new WinScene());
       stopSounds(["GameBGM"]);
     }
 
     if (!this.gotToChest) {
       this.player.update(deltaTime); // Actualizacion del personaje
+    } else {
+      this.player.initKeyboardEvents(false);
     }
     this.HPbar.update(deltaTime); // Actualizacion del barra de vida
     this.HPbar2.update(deltaTime); // Actualizacion del barra de vida
