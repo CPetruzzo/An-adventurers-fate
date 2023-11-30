@@ -647,6 +647,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         const objectsToRemove = [[]];
         const objectsToAdd = [[this.pauseScene, this.pauseOff]];
         createPopUp("pause", objectsToRemove, objectsToAdd, this, this.popUps);
+        // createPopUp({name:"pause", objectsToRemove: objectsToRemove, objectsToAdd: objectsToAdd, context: this, popups: this.popUps});
         this.isPaused = true;
     }
 

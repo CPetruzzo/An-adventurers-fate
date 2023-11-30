@@ -1,8 +1,9 @@
 import { Graphics } from "pixi.js";
 import { StateAnimation } from "../../utils/StateAnimation";
 import { Enemy } from "./Enemy";
+import { Trigger } from "../../utils/Trigger";
 
-export class Arek extends Enemy {
+export class Arek extends Enemy implements Trigger {
     public canJump = true;
     static MOVE_SPEED: number = 200;
     private arek: StateAnimation;
@@ -51,6 +52,10 @@ export class Arek extends Enemy {
 
         // agrego todos los movimientos a la clase player
         this.addChild(this.arek)
+    }
+    
+    public activate(doSomething: void): void {
+        doSomething;
     }
 
     //  MOVIMIENTOS

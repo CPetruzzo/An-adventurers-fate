@@ -740,7 +740,9 @@ export class GameScene extends SceneBase implements IUpdateable {
           new Tween(this.arek)
             .to(1000)
             .start()
-            .onComplete(() => this.world.removeChild(this.arek));
+            .onComplete(() => {
+              // this.arek.activate(this.onPause());
+              this.world.removeChild(this.arek)});
         }
       }
     }

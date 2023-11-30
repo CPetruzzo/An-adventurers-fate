@@ -69,6 +69,8 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     constructor() {
         super();
+        // this.pivot.set(this.width/2, this.height/2)
+
         this.playerData = Player.getInstance()
         this.playerData.initKeyboardEvents(false);
 
@@ -306,6 +308,13 @@ export class MapScene extends SceneBase implements IUpdateable {
             [[this.buttonRefs['menuBag']]],
             [[this.openBag, this.buttonRefs['bagClose']]]
             , this, this.popUps);
+        // to change to: 
+        // createPopUp({
+        //     name: "menuBag",
+        //     objectsToRemove: [[this.buttonRefs['menuBag']]],
+        //     objectsToAdd: [[this.openBag, this.buttonRefs['bagClose']]],
+        //     context: this, popups: this.popUps
+        // });
 
     }
 
