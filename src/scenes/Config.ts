@@ -7,79 +7,91 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA1, LETRA1SUBTITLE, LETRA1TITLE } from "../utils/constants";
+import { ConfigInfo } from "../ui/ConfigInfo";
+import { getGlobalVolume, setVolume } from "../utils/SoundParams";
 
 export class Config extends SceneBase {
-    private buttonMouse: PointButton;
-    public mostrarEscrito: boolean = false;
-    private settings: Sprite;
-    private title: Text;
-    private control1: Text;
-    private control2: Text;
-    private control3: Text;
-    private control4: Text;
-    private control5: Text;
-    private control6: Text;
-    private control7: Text;
+  private buttonMouse: PointButton;
+  public mostrarEscrito: boolean = false;
+  private settings: Sprite;
+  private title: Text;
+  private control1: Text;
+  private control2: Text;
+  private control3: Text;
+  private control4: Text;
+  private control5: Text;
+  private control6: Text;
+  private control7: Text;
 
-    constructor() {
-        super();
-        this.settings = Sprite.from("B6");
+  constructor() {
+    super();
+    this.settings = Sprite.from("B6");
 
-        this.buttonMouse = new PointButton(Texture.from("BACK.png"),
-            Texture.from("BACK hundido.png"),
-            Texture.from("BACK.png"));
-        this.buttonMouse.x = 650
-        this.buttonMouse.y = 670
-        this.buttonMouse.scale.x = 0.5;
-        this.buttonMouse.scale.y = 0.5;
-        this.buttonMouse.on("pointerClick", this.onButtonClick, this);
+    this.buttonMouse = new PointButton(
+      Texture.from("BACK.png"),
+      Texture.from("BACK hundido.png"),
+      Texture.from("BACK.png")
+    );
+    this.buttonMouse.x = 650;
+    this.buttonMouse.y = 670;
+    this.buttonMouse.scale.x = 0.5;
+    this.buttonMouse.scale.y = 0.5;
+    this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
-        this.title = new Text("Settings", LETRA1TITLE);
-        this.title.position.set(520, 100);
+    this.title = new Text("Settings", LETRA1TITLE);
+    this.title.position.set(520, 100);
 
-        this.control1 = new Text("Movement:", LETRA1SUBTITLE);
-        this.control1.position.set(150, 320);
+    this.control1 = new Text("Movement:", LETRA1SUBTITLE);
+    this.control1.position.set(150, 320);
 
-        this.control2 = new Text("Jump: KeyW / click Main hability", LETRA1);
-        this.control2.position.set(600, 400);
+    this.control2 = new Text("Jump: KeyW / click Main hability", LETRA1);
+    this.control2.position.set(600, 400);
 
-        this.control3 = new Text("Crawl: KeyS / click arrowDown", LETRA1);
-        this.control3.position.set(150, 480);
+    this.control3 = new Text("Crawl: KeyS / click arrowDown", LETRA1);
+    this.control3.position.set(150, 480);
 
-        this.control4 = new Text("Left: KeyA / click arrowLeft", LETRA1);
-        this.control4.position.set(150, 560);
+    this.control4 = new Text("Left: KeyA / click arrowLeft", LETRA1);
+    this.control4.position.set(150, 560);
 
-        this.control5 = new Text("Right: KeyD / click arrowRight", LETRA1);
-        this.control5.position.set(150, 400);
+    this.control5 = new Text("Right: KeyD / click arrowRight", LETRA1);
+    this.control5.position.set(150, 400);
 
-        this.control6 = new Text("Punch: KeyJ / click button A", LETRA1);
-        this.control6.position.set(600, 480);
+    this.control6 = new Text("Punch: KeyJ / click button A", LETRA1);
+    this.control6.position.set(600, 480);
 
-        this.control7 = new Text("Range Attack: KeyK / click button B", LETRA1);
-        this.control7.position.set(600, 560);
+    this.control7 = new Text("Range Attack: KeyK / click button B", LETRA1);
+    this.control7.position.set(600, 560);
 
+    this.addChild(
+      this.settings,
+      this.title,
+      this.control1,
+      this.control2,
+      this.control3,
+      this.control4,
+      this.control5,
+      this.control6,
+      this.control7,
+      this.buttonMouse
+    );
 
-        this.addChild(
-            this.settings,
-            this.title,
-            this.control1,
-            this.control2,
-            this.control3,
-            this.control4,
-            this.control5,
-            this.control6,
-            this.control7,
-            this.buttonMouse,
-        )
-    }
+    const volumeInfo = new ConfigInfo({
+      name: "Volume",
+      min: 0,
+      max: 10,
+      current: getGlobalVolume(),
+      step: 1,
+    });
+    volumeInfo.position.set(400, 300);
+    this.addChild(volumeInfo);
+    setVolume(volumeInfo.current);
+  }
 
+  public update(): void {}
 
-    public update(): void {
-    }
-
-    //BUTTON.TS            HACER FUNCIONAR EL NUEVO BOTÓN  
-    private onButtonClick(): void {
-        console.log("Apreté volver", this);
-        SceneManager.changeScene(new GameStartScene());
-    }
+  //BUTTON.TS            HACER FUNCIONAR EL NUEVO BOTÓN
+  private onButtonClick(): void {
+    console.log("Apreté volver", this);
+    SceneManager.changeScene(new GameStartScene());
+  }
 }

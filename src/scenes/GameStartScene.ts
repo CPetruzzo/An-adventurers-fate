@@ -11,7 +11,7 @@ import {
 import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
-import { playSound, stopAllSounds } from "../utils/SoundParams";
+import { getGlobalVolume, playSound, stopAllSounds } from "../utils/SoundParams";
 import { createSprite } from "../utils/SpriteParams";
 import { createText } from "../utils/TextParams";
 import { LETRA3 } from "../utils/constants";
@@ -33,7 +33,10 @@ export class GameStartScene extends SceneBase {
   constructor() {
     super();
 
-    playSound("StartBGM", { loop: true, volume: 0.05 });
+    if (getGlobalVolume()!=undefined) {
+      const globalvolume = getGlobalVolume();
+      playSound("StartBGM", { loop: true, volume: globalvolume });
+    }
 
     this.BG = createSprite({
       texture: "GameStartScene1.png",

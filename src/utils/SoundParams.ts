@@ -106,3 +106,12 @@ export function stopAllSoundTracks(): void {
   });
   activeSounds = {}; // Limpia el registro de sonidos de fondo activos
 }
+
+export function setVolume(value: number): void {
+  sound.volumeAll = value;
+  console.log(getGlobalVolume());
+}
+
+export function getGlobalVolume(): number {
+  return sound.volumeAll;
+}
