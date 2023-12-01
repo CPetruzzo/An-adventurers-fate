@@ -1,6 +1,8 @@
 import { Container, Graphics, Text } from "pixi.js";
 import { createText } from "../utils/TextParams";
 import { LETRA1 } from "../utils/constants";
+import { getGlobalVolume, setVolume } from "../utils/SoundParams";
+import { Player } from "../games/Player";
 
 export interface ConfigParams {
   name: string;
@@ -24,7 +26,7 @@ export class ConfigInfo extends Container {
   private plus: Graphics;
   private minus: Graphics;
 
-  constructor(configParam: ConfigParams) {
+  constructor(configParam: ConfigParams, _functionToApply?: void) {
     super();
 
     this.paramName = configParam.name;
@@ -57,7 +59,7 @@ export class ConfigInfo extends Container {
     this.plus.drawCircle(0, 0, 30);
     this.plus.endFill();
     this.plus.position.set(this.maxText.x, this.maxText.y);
-    this.plus.pivot.set(this.plus.width/2, this.plus.height/2)
+    this.plus.pivot.set(this.plus.width / 2, this.plus.height / 2)
     this.plus.interactive = true;
     this.plus.buttonMode = true;
 
@@ -65,7 +67,7 @@ export class ConfigInfo extends Container {
     this.minus.beginFill(0xff0000, 1);
     this.minus.drawCircle(0, 0, 30);
     this.minus.endFill();
-    this.minus.pivot.set(this.minus.width/2, this.minus.height/2)
+    this.minus.pivot.set(this.minus.width / 2, this.minus.height / 2)
     this.minus.position.set(this.minText.x, this.minText.y);
     this.minus.interactive = true;
     this.minus.buttonMode = true;
@@ -74,7 +76,7 @@ export class ConfigInfo extends Container {
     this.handle.beginFill(0xffffff, 1);
     this.handle.drawRect(-60, -8, 60, 16);
     this.handle.endFill();
-    this.handle.pivot.set(this.handle.width/2, this.handle.height/2)
+    this.handle.pivot.set(this.handle.width / 2, this.handle.height / 2)
     this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
 
     this.plus.on("pointerdown", () => {
@@ -82,6 +84,19 @@ export class ConfigInfo extends Container {
         this.current += this.step;
         console.log("this.current", this.current);
         this.updateHandlePosition();
+        switch (this.paramName) {
+          case "Volume":
+            this.updateVolume();
+            break;
+          case "PlayerHP":
+            Player._maxHealth = this.current;
+            break;
+          case "PlayerATK":
+            Player._strength = this.current;
+            break;
+          default:
+            break;
+        }
       } else {
         console.log("Max");
       }
@@ -92,6 +107,14 @@ export class ConfigInfo extends Container {
         this.current -= this.step;
         console.log("this.current", this.current);
         this.updateHandlePosition();
+        switch (this.paramName) {
+          case "Volume":
+            setVolume(this.current);
+            break;
+
+          default:
+            break;
+        }
       } else {
         console.log("Min");
       }
@@ -113,6 +136,12 @@ export class ConfigInfo extends Container {
       .lineStyle(2, 0xffffff)
       .beginFill(value, 1)
       .drawRect(-60, -8, 60, 16);
-      this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
+    this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
+  }
+
+  private updateVolume(): void {
+    setVolume(this.current);
+    localStorage.setItem("volume", this.current.toString());
+    console.log(getGlobalVolume())
   }
 }

@@ -33,8 +33,9 @@ export class GameStartScene extends SceneBase {
   constructor() {
     super();
 
-    if (getGlobalVolume()!=undefined) {
-      const globalvolume = getGlobalVolume();
+    const globalvolume = getGlobalVolume();
+    console.log('globalvolume', globalvolume)
+    if (globalvolume != undefined) {
       playSound("StartBGM", { loop: true, volume: globalvolume });
     }
 
@@ -169,11 +170,11 @@ export class GameStartScene extends SceneBase {
         }
       });
     } else {
-      Keyboard.down.off("ArrowDown", () => {});
+      Keyboard.down.off("ArrowDown", () => { });
 
-      Keyboard.down.off("ArrowUp", () => {});
+      Keyboard.down.off("ArrowUp", () => { });
 
-      Keyboard.down.off("Enter", () => {});
+      Keyboard.down.off("Enter", () => { });
     }
   }
 

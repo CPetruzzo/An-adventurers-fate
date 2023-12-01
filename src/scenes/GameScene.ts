@@ -575,8 +575,9 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.win.update(deltaTime); // Actualizacion del caja al final de la partida
 
     // Dentro del ciclo for para el parallax
-    if (!this.gotToChest && !this.isCollidingWithPlatform()) {
-      // Agregar la condición !this.isCollidingWithPlatform()
+    // if (!this.gotToChest && !this.isCollidingWithPlatform()) {
+      if (!this.gotToChest ) {
+        // Agregar la condición !this.isCollidingWithPlatform()
       for (let i = 0; i < this.backgrounds.length; i++) {
         const background = this.backgrounds[i];
         const factor = i / 6;
@@ -625,7 +626,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.myOwnHp();
   }
   // Método para verificar si el personaje está colisionando con alguna plataforma en el eje X
-  private isCollidingWithPlatform(): boolean {
+  public isCollidingWithPlatform(): boolean {
     for (let platform of this.platforms) {
       const overlap = checkCollisionX(this.player, platform); // Reemplazar checkCollisionX con la función de colisión solo en el eje X
       if (overlap !== null) {

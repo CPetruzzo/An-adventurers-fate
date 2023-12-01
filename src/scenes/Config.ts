@@ -8,7 +8,8 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA1, LETRA1SUBTITLE, LETRA1TITLE } from "../utils/constants";
 import { ConfigInfo } from "../ui/ConfigInfo";
-import { getGlobalVolume, setVolume } from "../utils/SoundParams";
+import { getGlobalVolume } from "../utils/SoundParams";
+import { Player } from "../games/Player";
 
 export class Config extends SceneBase {
   private buttonMouse: PointButton;
@@ -78,13 +79,32 @@ export class Config extends SceneBase {
     const volumeInfo = new ConfigInfo({
       name: "Volume",
       min: 0,
-      max: 10,
+      max: 1,
       current: getGlobalVolume(),
-      step: 1,
+      step: 0.1,
     });
     volumeInfo.position.set(400, 300);
     this.addChild(volumeInfo);
-    setVolume(volumeInfo.current);
+
+    const playerHP = new ConfigInfo({
+      name: "PlayerHP",
+      min: 100,
+      max: 1000,
+      current: Player._maxHealth,
+      step: 100,
+    });
+    playerHP.position.set(400, 500);
+    this.addChild(playerHP);
+
+    const playerATK = new ConfigInfo({
+      name: "PlayerHP",
+      min: 100,
+      max: 1000,
+      current: Player._strength,
+      step: 100,
+    });
+    playerATK.position.set(400, 600);
+    this.addChild(playerATK);
   }
 
   public update(): void {}
