@@ -1,5 +1,5 @@
 // import { sound } from "@pixi/sound";
-// import { sound } from "@pixi/sound";
+import { sound } from "@pixi/sound";
 import { Graphics, Text, TextStyle, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
@@ -8,19 +8,15 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
 import { playSFX, stopSFX } from "../utils/SoundParams";
-import { sound } from "@pixi/sound";
 
 export class TextScene extends SceneBase {
   private buttonMouse: PointButton;
   public mostrarEscrito: boolean = false;
+  public title: Text;
+  public panelTexto: Graphics;
   public buttonText: PointButton;
   public fondo: Graphics;
-
-  public title: Text;
   public title2: Text;
-  public title3: Text = new Text("");
-
-  public panelTexto: Graphics;
   public panelTexto2: Graphics;
 
   constructor() {
@@ -33,7 +29,7 @@ export class TextScene extends SceneBase {
 
     const TangerineTitle = new TextStyle({
       fontFamily: "Letra5",
-      fontSize: 60,
+      fontSize: 100,
       fill: 0x111,
     });
 
@@ -58,33 +54,23 @@ export class TextScene extends SceneBase {
     this.buttonText.x = this.fondo.width - this.buttonText.width / 2;
     this.buttonText.y =
       SceneManager.HEIGHT - this.fondo.height + this.buttonText.height / 2;
-    // this.buttonText.on("pointerClick", this.showText, this);
+
     this.buttonText.on("pointerClick", this.onButtonText, this);
 
-
-    // "This is Arek the great's story, the one that nobody",
+    //TEXTO
     this.title = new Text(
-      "This is a way that tweens alpha value",
-      TangerineTitle
-    );
-    this.title.position.x = SceneManager.WIDTH / 2 - this.title.width / 2;
-    this.title.position.x = 0;
-    this.title.position.y = SceneManager.HEIGHT - 300;
-
-    this.title2 = new Text(
-      "This is another way that tweens mask position",
-      TangerineTitle
-    );
-    this.title2.position.x = 0;
-    this.title2.position.y = this.title.y + this.title.height;
-
-    this.title3 = new Text(
       "",
       TangerineTitle
     );
-    this.title3.position.x = 0;
-    this.title3.position.y = this.title2.y + this.title2.height;
+    this.title.position.x = 0;
+    this.title.position.y = SceneManager.HEIGHT - 250;
 
+    this.title2 = new Text(
+      "",
+      TangerineTitle
+    );
+    this.title2.position.x = SceneManager.WIDTH / 2 - this.title2.width / 2;
+    this.title2.position.y = SceneManager.HEIGHT - 150;
 
     this.panelTexto = new Graphics();
     this.panelTexto.beginFill(0xff3, 1);
@@ -116,10 +102,9 @@ export class TextScene extends SceneBase {
       this.fondo,
       this.title,
       this.title2,
-      this.title3,
       this.buttonMouse,
-      this.panelTexto,
-      this.panelTexto2,
+      // this.panelTexto,
+      // this.panelTexto2,
       this.buttonText
     );
   }
@@ -134,79 +119,126 @@ export class TextScene extends SceneBase {
     }
   }
 
-  public onButtonText() {
-    this.soundWriting();
-    new Tween(this.panelTexto)
-      // .to({ x: 1280 }, 3500)
-      .to({ alpha: 0 }, 2500)
-      .start()
-      .onComplete(this.onButtonText2.bind(this));
-  }
+  // private onButtonText() {
+  //   this.soundWriting();
+  //   new Tween(this.panelTexto)
+  //     .to({ x: 1280 }, 7500)
+  //     .start()
+  //     .onComplete(this.onButtonText2.bind(this));
+  // }
 
-  private soundWriting(): void {
+  soundWriting() {
     playSFX("handWriting", {});
   }
 
-  private onButtonText2(): void {
+  onButtonText2() {
     new Tween(this.title).to({ alpha: 0 }, 2500).start();
     new Tween(this.panelTexto2)
-      .to({ x: this.title2.width }, 2500)
+      .to({ x: 1280 }, 7500)
       .start()
       .onComplete(this.onButtonTextStop.bind(this));
   }
 
-  private onButtonTextStop(): void {
+  onButtonTextStop() {
     new Tween(this.title2)
       .to({ alpha: 0 }, 2000)
       .start()
-      .onComplete(() => {
-        this.showText();
-      }
-      );
+      .onComplete(this.onButtonTextStop.bind(this));
   }
 
   public update(): void { }
 
+  //BUTTON.TS   HACER FUNCIONAR EL NUEVO BOTÓN
   private onButtonClick(): void {
     console.log("Apreté volver", this);
     stopSFX("handWriting");
     SceneManager.changeScene(new GameStartScene());
   }
 
-  public showText(): void {
+  private onButtonText(): void {
     this.mostrarEscrito = true;
     console.log("apreté el texto");
     console.log(this.mostrarEscrito);
-    const texto: string = "This is a way, one by one";
+    const texto: string = "Hola, soy un texto";
     const subtexto = texto.split('');
 
     if (this.mostrarEscrito) {
-      console.log("mostrando escrito");
-      console.log('texto', texto)
-      console.log('texto.length', texto.length)
+        console.log("mostrando escrito");
 
-      let delay = 100;
-      for (let i = 0; i < subtexto.length; i++) {
-        setTimeout(() => {
-          new Tween({})
-            .to({}, 50)
-            .onUpdate(() => {
-              const partialText = subtexto.slice(0, i + 1).join('');
-              this.title3.text = partialText;
-              console.log('this.title.text', this.title.text)
-            })
-            .start()
-            .onComplete(() => {
-              if (i == texto.length - 1) {
-                new Tween(this.title3).to({ alpha: 0 }, 1500).start();
-                stopSFX("handWriting");
-              }
-            });
-          sound.play("PotionSound1");
-        }, delay);
-        delay += 50;
-
-      }
+        let delay = 0;
+        for (let i = 0; i < subtexto.length; i++) {
+            setTimeout(() => {
+                new Tween({ val: 0 })
+                    .to({ val: 1 }, 100)
+                    .onUpdate(() => {
+                        const partialText = subtexto.slice(0, i + 1).join('');
+                        this.title.text = partialText;
+                        console.log('this.title.text', this.title.text)
+                    })
+                    .start();
+                sound.play("PotionSound1");
+            }, delay);
+            delay += 100; // Incrementa el retraso para la siguiente letra
+        }
     }
+}
+
+
+
+  // codigo para escribir letras de un texto una por una
+
+  //         const textoescrito = new Text(subtexto[i], {
+  //             fontFamily: "Arial",
+  //             fontSize: "50px",
+  //             fill: "white",
+  //             align: "center",
+  //             wordWrap: true,
+  //             lineHeight: 50,
+  //             padding: 10,
+  //             stroke: "black",
+  //             strokeThickness: 5,
+  //             dropShadow: true,
+  //             dropShadowColor: "black",
+  //             dropShadowBlur: 4,
+  //             dropShadowAngle: Math.PI / 6,
+  //             dropShadowDistance: 6,
+  //             wordWrapWidth: this.width - 100,
+  //         });
+  //         this.addChild(textoescrito);
+  //         textoescrito.position.set(200,200);
+  //     }
+  // }
+
+  private soundText() {
+      sound.play("PotionSound1");
+  }
+
+  public Waiting(): void {
+      console.log("waiting");
+      new Tween(this.buttonText).to({}, 3000).start();
+      this.soundText();
+
   }
 }
+
+// private aux: HTMLDivElement;
+
+// let str:string= "Hola, soy un texto que va a ser mostrado en pantalla.\n"
+// let currentText = new Tween(this.str.substring(0, str.length-1)).to({},3000).start();
+// this.textOnScreen = new Text(`${currentText}`, { fontSize: 40, fontFamily: ("Arial") });
+// this.addChild(this.textOnScreen);
+
+// this.addChild(str);
+
+// this.aux= document.createElement("div");
+// const text = new Typed(this.aux, {
+//     strings: [subtexto],
+//     typeSpeed: 50,
+//     loop: false,
+//     showCursor: false,
+//     startDelay: 1000,
+//     onStringTyped: () => {
+//         console.log("String typed");
+//     }
+//  });
+//  text.start();

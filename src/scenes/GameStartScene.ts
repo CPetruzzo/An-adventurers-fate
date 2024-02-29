@@ -100,7 +100,7 @@ export class GameStartScene extends SceneBase {
       .from({ x: 0, y: 0 })
       .to({ x: 0, y: -500 }, 15000)
       .start()
-      .onComplete(this.BGdown.bind(this));
+      .onComplete(this.bGdown.bind(this));
 
     this.initKeyboardEvents(true);
   }
@@ -194,19 +194,19 @@ export class GameStartScene extends SceneBase {
     SceneManager.changeScene(new MapScene());
   }
 
-  private BGdown(): void {
+  private bGdown(): void {
     new Tween(this.BG)
       .from({ x: 0, y: -500 })
       .to({ x: 0, y: 0 }, 15000)
       .start()
-      .onComplete(this.BGup.bind(this));
+      .onComplete(this.bGup.bind(this));
   }
 
-  private BGup(): void {
+  private bGup(): void {
     new Tween(this.BG)
       .from({ x: 0, y: 0 })
       .to({ x: 0, y: -500 }, 15000)
       .start()
-      .onComplete(this.BGdown.bind(this));
+      .onComplete(this.bGdown.bind(this));
   }
 }

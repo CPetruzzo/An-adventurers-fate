@@ -18,6 +18,7 @@ import { stopAllSounds } from "../utils/SoundParams";
 import { playSFX, playSound, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
+import { Inventory } from "../games/Inventory";
 
 const RED = 0xAA0000;
 
@@ -241,6 +242,23 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     // Ejemplo de uso en tus funciones
     private onShieldClick(): void {
+        // Obtener la instancia del inventario
+        const inventory = Inventory.getInstance();
+
+        // Obtener los elementos del inventario
+        const items = inventory.items;
+
+        // Mostrar los elementos del inventario en los logs
+        console.log("Inventario:");
+        if (items.length > 0) {
+            items.forEach(item => {
+                console.log(`${item.name}: ${item.quantity}`);
+
+            });
+        } else {
+            console.log("no tenes items")
+        }
+
         playSound("shield", { volume: 0.1 })
         if (Level.Complete === 1) {
             createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, this.popUps)

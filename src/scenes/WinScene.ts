@@ -6,6 +6,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
 import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
+import { Inventory, Weapon } from "../games/Inventory";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -100,6 +101,10 @@ export class WinScene extends Container {
 
     /** Timer */
     private Waiting(): void {
+        // Agregar una espada al inventario desde una escena
+        const sword = new Weapon("Sword", "A sharp blade", 1, 10);
+        console.log('sword', sword)
+        Inventory.getInstance().addItem(sword);
         console.log("waiting");
         new Tween(this.award).to({}, 2000).start().onComplete(this.NextStage.bind(this));
     }

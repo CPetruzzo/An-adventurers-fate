@@ -561,7 +561,11 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     if (this.nextStage) {
       this.player.initKeyboardEvents(false);
+
       SceneManager.changeScene(new WinScene());
+      // Ejemplo de uso
+
+
       stopSounds(["GameBGM"]);
     }
 

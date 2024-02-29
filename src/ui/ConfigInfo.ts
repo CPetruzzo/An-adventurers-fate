@@ -142,6 +142,6 @@ export class ConfigInfo extends Container {
   private updateVolume(): void {
     setVolume(this.current);
     localStorage.setItem("volume", this.current.toString());
-    console.log(getGlobalVolume())
+    console.log(getGlobalVolume());
   }
 }

@@ -7,13 +7,13 @@ import {
 } from "pixi.js";
 import { Easing, Tween } from "tweedle.js";
 import { Keyboard } from "../utils/Keyboard";
-import { StateAnimation } from "../utils/StateAnimation";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
 import { INITIALARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
 import { Timer } from "../utils/SceneManager";
+import { PlayerAnimations } from "./PlayerAnimations";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;
@@ -21,7 +21,6 @@ export class Player extends PhysicsContainer implements IHitBox {
     private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
     private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
 
-    public bardo: StateAnimation;
     public healthOnScreen: Text;
     private hitbox: Graphics;
     public arrowsAvailable: number;
@@ -46,6 +45,9 @@ export class Player extends PhysicsContainer implements IHitBox {
     public levelPoints: LevelPoints;
     private static _instance: Player | null = null;
     public runningPostJump: boolean | undefined = false;
+
+    public animations: PlayerAnimations;
+
     public static getInstance(): Player {
         if (!Player._instance) {
             Player._instance = new Player();
@@ -71,166 +73,12 @@ export class Player extends PhysicsContainer implements IHitBox {
     constructor() {
         super();
 
-        this.bardo = new StateAnimation();
-        this.bardo.scale.set(2);
-        this.bardo.pivot.set(0.55, 17);
-
         this.levelPoints = new LevelPoints(this);
         this.arrowsAvailable = INITIALARROWS;
 
-        this.bardo.addState(
-            "run",
-            [
-                "adventurer-run2-00.png",
-                "adventurer-run2-01.png",
-                "adventurer-run2-02.png",
-                "adventurer-run2-03.png",
-                "adventurer-run2-04.png",
-                "adventurer-run2-05.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "hurted",
-            [
-                "adventurer-knock-dwn-00.png",
-                "adventurer-knock-dwn-01.png",
-                "adventurer-knock-dwn-02.png",
-                "adventurer-knock-dwn-03.png",
-                "adventurer-knock-dwn-04.png",
-                "adventurer-knock-dwn-05.png",
-                "adventurer-knock-dwn-06.png",
-            ],
-            0.1,
-            false
-        );
-        this.bardo.addState(
-            "getUp",
-            [
-                "adventurer-get-up-00.png",
-                "adventurer-get-up-01.png",
-                "adventurer-get-up-02.png",
-                "adventurer-get-up-03.png",
-                "adventurer-get-up-04.png",
-                "adventurer-get-up-05.png",
-                "adventurer-get-up-06.png",
-            ],
-            0.1,
-            false
-        );
-        this.bardo.addState(
-            "punch",
-            [
-                "adventurer-punch-00.png",
-                "adventurer-punch-01.png",
-                "adventurer-punch-02.png",
-                "adventurer-punch-03.png",
-                "adventurer-punch-04.png",
-                "adventurer-punch-05.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "runPunch",
-            [
-                "adventurer-run-punch-00.png",
-                "adventurer-run-punch-01.png",
-                "adventurer-run-punch-02.png",
-                "adventurer-run-punch-03.png",
-                "adventurer-run-punch-04.png",
-                "adventurer-run-punch-05.png",
-                "adventurer-run-punch-06.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState("idle", ["adventurer-walk-00.png"], 0.05, true);
-        this.bardo.addState(
-            "crawl",
-            [
-                "adventurer-crouch-walk-00.png",
-                "adventurer-crouch-walk-01.png",
-                "adventurer-crouch-walk-02.png",
-                "adventurer-crouch-walk-03.png",
-                "adventurer-crouch-walk-04.png",
-                "adventurer-crouch-walk-05.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "jump",
-            [
-                "adventurer-drop-kick-00.png",
-                "adventurer-drop-kick-01.png",
-                "adventurer-drop-kick-02.png",
-                "adventurer-drop-kick-03.png",
-            ],
-            0.025,
-            false
-        );
-        this.bardo.addState(
-            "bow",
-            [
-                "adventurer-bow-00.png",
-                "adventurer-bow-01.png",
-                "adventurer-bow-02.png",
-                "adventurer-bow-03.png",
-                "adventurer-bow-04.png",
-                "adventurer-bow-05.png",
-                "adventurer-bow-06.png",
-                "adventurer-bow-07.png",
-                "adventurer-bow-08.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "chargebow",
-            [
-                "adventurer-bow-00.png",
-                "adventurer-bow-01.png",
-                "adventurer-bow-02.png",
-                "adventurer-bow-03.png",
-                "adventurer-bow-04.png",
-                "adventurer-bow-05.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "chargedbow",
-            ["adventurer-bow-04.png", "adventurer-bow-05.png"],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "shootingbow",
-            [
-                "adventurer-bow-06.png",
-                "adventurer-bow-07.png",
-                "adventurer-bow-08.png",
-            ],
-            0.1,
-            true
-        );
-        this.bardo.addState(
-            "jumpBow",
-            [
-                "adventurer-bow-jump-00.png",
-                "adventurer-bow-jump-01.png",
-                "adventurer-bow-jump-02.png",
-                "adventurer-bow-jump-03.png",
-                "adventurer-bow-jump-04.png",
-                "adventurer-bow-jump-05.png",
-            ],
-            0.1,
-            true
-        );
+        this.animations = new PlayerAnimations();
 
-        this.bardo.playState("idle");
+        this.animations.idle();
 
         // PUNTO GUÍA
         const auxZero = new Graphics();
@@ -247,7 +95,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         this.acceleration.y = Player.GRAVITY;
 
         this.initKeyboardEvents(true);
-        this.addChild(this.hitbox, this.bardo);
+        this.addChild(this.hitbox, this.animations);
 
         if (Player._hp) {
             this.healthOnScreen = new Text(`${Player._hp}` + "HP", LETRA1SUBTITLE);
@@ -313,7 +161,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     //  MOVIMIENTOS
     public override update(deltaMS: number): void {
         super.update(deltaMS / 1000);
-        this.bardo.update(deltaMS / (1000 / 60));
+        this.animations.update(deltaMS / (1000 / 60));
     }
 
     /** Función para el salto (Función auxiliar, si no está separada no puedo borrarla cuando elimine a player) */
@@ -322,8 +170,8 @@ export class Player extends PhysicsContainer implements IHitBox {
             stopSFX("running");
             playSFX("jumper", { loop: false, volume: 0.05 });
             this.speed.y = -(Player.GRAVITY * 0.7);
-            this.bardo.playState("jump", true);
-            new Tween(this.bardo)
+            this.animations.jump();
+            new Tween(this.animations)
                 .to({}, 1450)
                 .start()
                 .onComplete(() => {
@@ -334,10 +182,10 @@ export class Player extends PhysicsContainer implements IHitBox {
                         this.runningPostJump
                     ) {
                         stopSFX("running");
-                        this.bardo.playState("run", true);
+                        this.animations.run();
                         playSFX("running", { loop: true, volume: 0.05 });
                     } else {
-                        this.bardo.playState("idle", true);
+                        this.animations.idle();
                         stopSounds(["running"]);
                     }
                 });
@@ -347,7 +195,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     /** Caminar agachado */
     public crawl(): void {
-        this.bardo.playState("crawl", true);
+        this.animations.crawl();
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xff00ff, 0);
@@ -361,7 +209,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = -Player.MOVE_SPEED;
         this.scale.set(-2, 2);
-        this.bardo.playState("run");
+        this.animations.run();
     }
 
     public runRight(): void {
@@ -369,17 +217,17 @@ export class Player extends PhysicsContainer implements IHitBox {
         playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = Player.MOVE_SPEED;
         this.scale.set(2, 2);
-        this.bardo.playState("run", true);
+        this.animations.run();
     }
 
     public punch(): void {
         stopSounds(["running"]);
         if (this.canPunch) {
             this.speed.x = this.speed.x * 2;
-            this.bardo.playState("punch");
+            this.animations.punch();
             this.canPunch = false;
             const punchDuration = 550;
-            new Tween(this.bardo)
+            new Tween(this.animations)
                 .to({}, punchDuration)
                 .start()
                 .onComplete(() => {
@@ -393,7 +241,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSounds(["running"]);
         playSFX("bow", { loop: false, volume: 0.05 });
         this.speed.x = this.speed.x * 2;
-        this.bardo.playState("runPunch", true);
+        this.animations.runPunch();
     }
 
     public idlePlayer(): void {
@@ -401,11 +249,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSounds(["running"]);
         this.speed.x = 0;
         this.runningPostJump = false;
-        this.bardo.playState("idle", true);
+        this.animations.idle();
     }
 
     public fall(): void {
-        this.bardo.playState("hurted");
+        this.animations.hurted();
         this.hurted = true;
         this.recovered = false;
     }
@@ -418,7 +266,7 @@ export class Player extends PhysicsContainer implements IHitBox {
                 .easing(Easing.Elastic.Out)
                 .start()
                 .onComplete(() => {
-                    this.bardo.playState("getUp");
+                    this.animations.getUp();
                     this.hurted = false;
                 });
         }
@@ -426,9 +274,9 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public bow(): void {
         if (this.canJump && this.canBow) {
-            this.bardo.playState("bow");
+            this.animations.bow();
             this.canBow = false;
-            new Tween(this.bardo)
+            new Tween(this.animations)
                 .to({}, this.bowCooldown)
                 .start()
                 .onComplete(() => {
@@ -439,9 +287,9 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
         // Arco y flecha mientras estoy saltando
         if (!this.canJump && this.canBow) {
-            this.bardo.playState("jumpBow");
+            this.animations.jumpBow();
             this.canBow = false;
-            new Tween(this.bardo)
+            new Tween(this.animations)
                 .to({}, this.jumpBowCooldown)
                 .start()
                 .onComplete(() => {
@@ -461,12 +309,12 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopJump(): void {
-        this.bardo.playState("idle", true);
+        this.animations.idle();
         stopSounds(["running"]);
     }
 
     private stopCrawl(): void {
-        this.bardo.playState("idle", true);
+        this.animations.idle();
         this.speed.x = 0;
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
@@ -480,24 +328,24 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSounds(["running"]);
         this.speed.x = 0;
         this.scale.set(-2, 2);
-        this.bardo.playState("idle", true);
+        this.animations.idle();
     }
 
     private stopRunRight(): void {
         stopSounds(["running"]);
         this.speed.x = 0;
         this.scale.set(2, 2);
-        this.bardo.playState("idle", true);
+        this.animations.idle();
         stopSFX("running");
     }
 
     public stopPunch(): void {
         this.speed.x = this.speed.x / 2;
-        this.bardo.playState("idle", true);
+        this.animations.idle();
     }
 
     public stopBow(): void {
-        this.bardo.playState("idle", true);
+        this.animations.idle();
         this.canBow = true;
     }
 
@@ -536,7 +384,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
         if (Player._hp <= 0) {
             Player._hp = 0;
-            this.bardo.playState("hurted", true);
+            this.animations.playState("hurted", true);
             new Tween(this)
                 .to({ x: 5, alpha: 0.5 }, 500)
                 .start()
@@ -556,9 +404,9 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public checkWhatsHeDoing(): string | any {
         let currentName: string;
-        this.bardo.on("currentAnimation", (current) => {
+        this.animations.on("currentAnimation", (current) => {
             console.log(current);
-            currentName = this.bardo.currentState(current);
+            currentName = this.animations.currentState(current);
             if (currentName != undefined) {
                 console.log(currentName);
                 return currentName;
