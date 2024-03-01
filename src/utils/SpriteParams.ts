@@ -1,6 +1,28 @@
+import { Sprite, Texture } from "pixi.js";
 import { book, menuBag, shield } from "./ButtonParams";
-import { SpriteParams } from "./FunctionManager";
 
+/** Use a function to create Sprites with common parameters
+ * @param params parameters for that sprite
+ */
+export function createSprite(params: SpriteParams): Sprite {
+    const sprite = new Sprite(Texture.from(params.texture));
+    sprite.position.set(params.position.x, params.position.y);
+    sprite.scale.set(params.scale.x, params.scale.y);
+
+    if (params.anchor) {
+        sprite.anchor.set(params.anchor.x, params.anchor.y);
+    }
+
+    return sprite;
+}
+
+export interface SpriteParams {
+    texture: string;
+    position: { x: number; y: number };
+    scale: { x: number; y: number };
+    anchor?: { x: number; y: number };
+    alpha?: number
+}
 // SpriteParams para los sprites mencionados en el ejemplo
 
 export const bagBG: SpriteParams = {

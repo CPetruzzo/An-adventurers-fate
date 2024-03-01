@@ -9,7 +9,7 @@ import {
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
-import { checkCollision, checkCollisionX } from "../games/IHitBox";
+import { checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
@@ -46,6 +46,7 @@ import { closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
+// import { DialogBox } from "../utils/DialogBox";
 
 export class GameScene extends SceneBase implements IUpdateable {
   private player: Player;
@@ -542,6 +543,18 @@ export class GameScene extends SceneBase implements IUpdateable {
       this.aljava.anchor.set(0.5);
       this.addChild(this.aljava);
     }
+
+    // // Crear una instancia de DialogBox
+    // const dialogBox = new DialogBox(100, 100, 300, 100);
+
+    // // Agregar la instancia a la escena
+    // this.addChild(dialogBox);
+    // dialogBox.position.set(500,500)
+
+    // // Establecer el texto del diálogo
+    // dialogBox.setText("Hola, ¿cómo estás?");
+    // console.log('\"Hola, ¿cómo estás?\"', "Hola, ¿cómo estás?")
+
   }
 
   // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
@@ -580,8 +593,8 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     // Dentro del ciclo for para el parallax
     // if (!this.gotToChest && !this.isCollidingWithPlatform()) {
-      if (!this.gotToChest ) {
-        // Agregar la condición !this.isCollidingWithPlatform()
+    if (!this.gotToChest) {
+      // Agregar la condición !this.isCollidingWithPlatform()
       for (let i = 0; i < this.backgrounds.length; i++) {
         const background = this.backgrounds[i];
         const factor = i / 6;
@@ -629,16 +642,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.endStage();
     this.myOwnHp();
   }
-  // Método para verificar si el personaje está colisionando con alguna plataforma en el eje X
-  public isCollidingWithPlatform(): boolean {
-    for (let platform of this.platforms) {
-      const overlap = checkCollisionX(this.player, platform); // Reemplazar checkCollisionX con la función de colisión solo en el eje X
-      if (overlap !== null) {
-        return true;
-      }
-    }
-    return false;
-  }
+
   /** Checks hp situation and changes hpbar color */
   private myOwnHp(): void {
     if (Player._hp > Player._maxHealth * 0.7) {
@@ -747,7 +751,8 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(() => {
               // this.arek.activate(this.onPause());
-              this.world.removeChild(this.arek)});
+              this.world.removeChild(this.arek)
+            });
         }
       }
     }

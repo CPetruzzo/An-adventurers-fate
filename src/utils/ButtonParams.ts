@@ -1,6 +1,36 @@
-import { ButtonParams } from "./FunctionManager";
+import { Texture } from "pixi.js";
 import { BUTTON_SCALE, MOVEMENTS_SCALE, STAGE_SCALE, START_SCALE, UI_CONFIG } from "./constants";
+import { PointButton } from "../ui/PointButton";
 
+/** Use a function to create PointButtons with common parameters
+ * @param params parameters for that pointerbutton, x, y, scale, texture def, over, down
+ * @param _event name of the event, for example, pointer down
+ * @param _callback void function that's applyied when the pointerbutton launches it's event
+ */
+export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any): PointButton {
+    const button = new PointButton(
+        Texture.from(params.textureNameDef),
+        Texture.from(params.textureOver),
+        Texture.from(params.textureClick)
+    );
+    button.x = params.x;
+    button.y = params.y;
+    button.scale.set(params.scale);
+
+    // Añadir eventos al botón
+    button.on(event, fn, context);
+
+    return button;
+};
+
+export type ButtonParams = {
+    x: number,
+    y: number,
+    scale: number,
+    textureNameDef: string;
+    textureOver: string;
+    textureClick: string;
+};
 
 export const configButtonGame: ButtonParams = {
     x: 650,

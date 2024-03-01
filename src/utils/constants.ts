@@ -3,8 +3,8 @@ import { TextStyle } from "pixi.js";
 /** Flag para determinar si quiero que haya sonido en el juego o no
  * @argument if true then all sounds are shut down from start
  */
-export const DEBUG_SOUND: boolean = true;
-export const DEBUG_SFX: boolean = true;
+export const DEBUG_SOUND: boolean = false;
+export const DEBUG_SFX: boolean = false;
 export const DEBUG_ALL_SOUNDS: boolean = false;
 
 /** Cantidad de flechas iniciales */
