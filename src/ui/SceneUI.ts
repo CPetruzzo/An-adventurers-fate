@@ -273,7 +273,7 @@ export class SceneUI extends Container {
 
     private onConfigClick(): void {
         SceneManager.changeScene(new Config());
-        sound.stop("GameBGM");
+        // sound.stop("GameBGM");
     }
 
 

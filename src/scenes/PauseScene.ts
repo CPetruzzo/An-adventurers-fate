@@ -5,7 +5,8 @@ import { ToggleButton } from "../ui/ToggleButton";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { MapScene } from "./MapScene";
-import { button1, button2, createPointButton } from "../utils/ButtonParams";
+import { button1, button2 } from "../utils/ButtonParams";
+import { createPointButton } from "../utils/FunctionManager";
 
 export class PauseScene extends Container {
     private buttonSound: ToggleButton;
@@ -52,7 +53,7 @@ export class PauseScene extends Container {
 
         this.addChild(
             // this.BG,
-            this.buttonSound,
+            // this.buttonSound,
             this.cartel,
             this.button1,
             this.button2,

@@ -1,5 +1,25 @@
 import { sound } from "@pixi/sound";
-import { DEBUG_SFX, DEBUG_SOUND } from "./constants";
+import { DEBUG_ALL_SOUNDS, DEBUG_SFX, DEBUG_SOUND } from "./constants";
+
+export enum SoundNames {
+  RUN = "running",
+  JUMP = "jumper",
+  BOW = "bow",
+  BOOK = "SoundBook",
+  WRITE = "handWriting",
+  POTION = "PotionSound1",
+  ITEM = "ItemBGM",
+  SHIELD = "shield",
+  BACKPACK = "backpack",
+  CHEST = "Chest1"
+}
+
+export enum MusicNames {
+  BEGIN = "StartBGM",
+  LOSE = "PartingBGM",
+  MAP = "MapBGM",
+  SCENE = "GameBGM",
+}
 
 // Mantén un registro de los efectos de sonido que se están reproduciendo
 let activeSFX: { [name: string]: any } = {};
@@ -14,7 +34,7 @@ export interface SoundParams {
 }
 
 export function playSound(soundName: string, soundParams: SoundParams): void {
-  if (!DEBUG_SOUND) {
+  if (!DEBUG_SOUND || !DEBUG_ALL_SOUNDS) {
     const soundTrack = sound.find(soundName);
     if (!soundTrack.isPlaying) {
       const soundInstance = soundTrack.play(soundParams);
@@ -52,7 +72,7 @@ export function resumeSounds(): void {
 }
 
 export function playSFX(soundName: string, soundParams: SoundParams): void {
-  if (!DEBUG_SFX) {
+  if (!DEBUG_SFX || !DEBUG_ALL_SOUNDS) {
     const sfx = sound.find(soundName);
     if (!sfx.isPlaying) {
       const soundInstance = sfx.play(soundParams);

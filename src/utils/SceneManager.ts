@@ -6,7 +6,7 @@ import { SceneBase } from "./SceneBase";
 export namespace SceneManager {
   export const WIDTH = 1280;
   export const HEIGHT = 720;
-  let currentScene: SceneBase;
+  export let currentScene: SceneBase;
   let app: Application;
 
   export function initialize(): void {
@@ -51,12 +51,19 @@ export namespace SceneManager {
     Ticker.shared.add(update);
   }
 
-  export function changeScene(newScene: SceneBase): void {
+  export function changeScene(newScene: SceneBase, _transition?: any): void {
     if (currentScene) {
       currentScene.destroy();
     }
+
     currentScene = newScene;
+
+    // if(_transition.closed){
     app.stage.addChild(currentScene);
+    // }
+    if (_transition) {
+      app.stage.addChild(_transition);
+    }
   }
 
   function update(framePassed: number): void {

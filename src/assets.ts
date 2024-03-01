@@ -6,6 +6,12 @@ export const assets = [
     { url: "./PauseMenu/PAUSA.png", name: "PAUSA" },
     { url: "./StageOne/Lose.png", name: "LOSE" },
     { url: "./READ.png", name: "READ" },
+    { url: "./boton.png", name: "genericButton" },
+    { url: "./plus.png", name: "plus" },
+    { url: "./soundButton.png", name: "soundButton" },
+    { url: "./soundBtn.png", name: "soundBtn" },
+    { url: "./minus.png", name: "minus" },
+    { url: "./barBG.png", name: "barBG" },
     { url: "./Maps/itemBG.png", name: "itemBG" },
 
     // BACKGROUND

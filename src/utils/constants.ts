@@ -3,11 +3,12 @@ import { TextStyle } from "pixi.js";
 /** Flag para determinar si quiero que haya sonido en el juego o no
  * @argument if true then all sounds are shut down from start
  */
-export const DEBUG_SOUND: boolean = false;
-export const DEBUG_SFX: boolean = false;
+export const DEBUG_SOUND: boolean = true;
+export const DEBUG_SFX: boolean = true;
+export const DEBUG_ALL_SOUNDS: boolean = false;
 
 /** Cantidad de flechas iniciales */
-export const INITIALARROWS: number = 10;
+export const INITIAL_ARROWS: number = 10;
 
 /** Escalas para los botones de UI en escena */
 export const BUTTON_SCALE: number = 1;
@@ -55,3 +56,11 @@ export const LETRA5 = new TextStyle({
   fontSize: 120,
   fill: 0x1819,
 });
+
+export function setValue(key: string, value: string): void {
+  localStorage.setItem(key, value)
+}
+
+export function getValue(key: string): any {
+  return localStorage.getItem(key);
+}

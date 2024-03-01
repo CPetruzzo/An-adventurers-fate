@@ -1,25 +1,5 @@
-import { Sprite, Texture } from "pixi.js";
 import { book, menuBag, shield } from "./ButtonParams";
-
-export function createSprite(params: SpriteParams): Sprite {
-    const sprite = new Sprite(Texture.from(params.texture));
-    sprite.position.set(params.position.x, params.position.y);
-    sprite.scale.set(params.scale.x, params.scale.y);
-
-    if (params.anchor) {
-        sprite.anchor.set(params.anchor.x, params.anchor.y);
-    }
-
-    return sprite;
-}
-
-interface SpriteParams {
-    texture: string;
-    position: { x: number; y: number };
-    scale: { x: number; y: number };
-    anchor?: { x: number; y: number };
-    alpha?: number
-}
+import { SpriteParams } from "./FunctionManager";
 
 // SpriteParams para los sprites mencionados en el ejemplo
 
@@ -151,8 +131,9 @@ export const pointOnMap4Params: SpriteParams = {
 
 export const playerParams: SpriteParams = {
     texture: "PlayerMap",
+    anchor: {x: 0.5, y: 0.5},
     scale: { x: 0.45, y: 0.45 },
-    position: { x: 530, y: 80 },
+    position: { x: 780, y: 350 },
 };
 
 export const marcoTopLeftParams: SpriteParams = {

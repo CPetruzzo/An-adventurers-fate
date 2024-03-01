@@ -1,10 +1,10 @@
-import { sound } from "@pixi/sound";
 import { Text, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { IUpdateable } from "../utils/IUpdateable";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
+import { MusicNames, stopSounds } from "../utils/SoundParams";
 
 export class NameScene extends SceneBase implements IUpdateable {
 
@@ -41,11 +41,9 @@ export class NameScene extends SceneBase implements IUpdateable {
     public update(): void {
     }
 
-    onStartClick(): void {
+    private onStartClick(): void {
         console.log("Apreté Config", this);
         SceneManager.changeScene(new MapScene());
-        sound.stop("StartBGM");
+        stopSounds([MusicNames.BEGIN]);
     }
-
-
 }
