@@ -1,36 +1,6 @@
-import { Texture } from "pixi.js";
-import { PointButton } from "../ui/PointButton";
-import { BUTTON_SCALE, MOVEMENTS_SCALE, STAGE_SCALE, START_SCALE, UI_CONFIG, UI_SCALE } from "./constants";
+import { ButtonParams } from "./FunctionManager";
+import { BUTTON_SCALE, MOVEMENTS_SCALE, STAGE_SCALE, START_SCALE, UI_CONFIG } from "./constants";
 
-/** Use a function to create PointButtons with common parameters
- * @param params parameters for that pointerbutton, x, y, scale, texture def, over, down
- * @param _event name of the event, for example, pointer down
- * @param _callback void function that's applyied when the pointerbutton launches it's event
- */
-export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any): PointButton {
-    const button = new PointButton(
-        Texture.from(params.textureNameDef),
-        Texture.from(params.textureOver),
-        Texture.from(params.textureClick)
-    );
-    button.x = params.x;
-    button.y = params.y;
-    button.scale.set(params.scale);
-
-    // Añadir eventos al botón
-    button.on(event, fn, context);
-
-    return button;
-};
-
-export type ButtonParams = {
-    x: number,
-    y: number,
-    scale: number,
-    textureNameDef: string;
-    textureOver: string;
-    textureClick: string;
-};
 
 export const configButtonGame: ButtonParams = {
     x: 650,
@@ -43,20 +13,19 @@ export const configButtonGame: ButtonParams = {
 
 export const buttonsOff: ButtonParams = {
     x: 1070,
-    y: 40,
-    scale: UI_SCALE,
-    textureNameDef: "lineDark28.png",
-    textureOver: "lineLight31.png",
-    textureClick: "lineLight31.png",
+    y: 40,    scale: 0.095,
+    textureNameDef: "plus",
+    textureOver: "plus",
+    textureClick: "plus",
 };
 
 export const buttonsOn: ButtonParams = {
     x: 1070,
     y: 40,
-    scale: UI_SCALE,
-    textureNameDef: "lineDark28.png",
-    textureOver: "lineLight31.png",
-    textureClick: "lineLight31.png",
+    scale: 0.095,
+    textureNameDef: "plus",
+    textureOver: "plus",
+    textureClick: "plus",
 };
 
 export const buttonA: ButtonParams = {
@@ -80,19 +49,19 @@ export const buttonB: ButtonParams = {
 export const pauseOn: ButtonParams = {
     x: 1230,
     y: 40,
-    scale: UI_SCALE,
-    textureNameDef: "lineDark28.png",
-    textureOver: "lineDark28.png",
-    textureClick: "lineDark28.png",
+    scale: 0.1,
+    textureNameDef: "genericButton",
+    textureOver: "genericButton",
+    textureClick: "genericButton",
 };
 
 export const pauseOff: ButtonParams = {
     x: 1230,
     y: 40,
-    scale: UI_SCALE,
-    textureNameDef: "lineDark28.png",
-    textureOver: "lineDark28.png",
-    textureClick: "lineDark28.png",
+    scale: 0.1,
+    textureNameDef: "genericButton",
+    textureOver: "genericButton",
+    textureClick: "genericButton",
 };
 
 export const moveUp: ButtonParams = {

@@ -4,6 +4,7 @@ import { assets } from "../assets";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
+import { TransitionScene } from "../utils/TransitionScene";
 
 export class LoaderScene extends SceneBase {
   public update(): void {}
@@ -65,6 +66,6 @@ export class LoaderScene extends SceneBase {
   }
 
   private whenLoadFinishes() {
-    SceneManager.changeScene(new GameStartScene());
+    SceneManager.changeScene(new GameStartScene(), new TransitionScene(1500, "FADE"));
   }
 }

@@ -9,7 +9,7 @@ import { Easing, Tween } from "tweedle.js";
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
-import { INITIALARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
+import { INITIAL_ARROWS, LETRA1, LETRA1SUBTITLE, setValue } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
 import { Timer } from "../utils/SceneManager";
@@ -40,6 +40,7 @@ export class Player extends PhysicsContainer implements IHitBox {
     public static _speed: number = 5;
     public static _punchDamage: number = 1;
     public static _bowDamage: number = 5;
+    public static height: number;
     public _swordDamage: number = 40;
 
     public levelPoints: LevelPoints;
@@ -74,7 +75,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         super();
 
         this.levelPoints = new LevelPoints(this);
-        this.arrowsAvailable = INITIALARROWS;
+        this.arrowsAvailable = INITIAL_ARROWS;
 
         this.animations = new PlayerAnimations();
 
@@ -416,4 +417,10 @@ export class Player extends PhysicsContainer implements IHitBox {
             }
         });
     }
+
+}
+
+export function setPlayerHeight(height: number): void {
+    setValue("height", height.toString());
+    Player.height = height;
 }

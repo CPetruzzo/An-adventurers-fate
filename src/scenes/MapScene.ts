@@ -8,8 +8,8 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
-import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, createPointButton, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
-import { backShieldParams, bookOpenedParams, cartelParams, createSprite, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG, itemSwordParams } from "../utils/SpriteParams";
+import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
+import { backShieldParams, bookOpenedParams, cartelParams, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG, itemSwordParams } from "../utils/SpriteParams";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
@@ -18,6 +18,7 @@ import { stopAllSounds } from "../utils/SoundParams";
 import { playSFX, playSound, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
+import { createSprite, createPointButton, getPlayerHeight } from "../utils/FunctionManager";
 import { Inventory } from "../games/Inventory";
 
 const RED = 0xAA0000;
@@ -70,6 +71,8 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     constructor() {
         super();
+
+        this.name = "MAPSCENE";
         // this.pivot.set(this.width/2, this.height/2)
 
         this.playerData = Player.getInstance()
@@ -140,6 +143,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         this.itemBow = createSprite(itemBowParams);
         this.itemSword = createSprite(itemSwordParams);
         this.player = createSprite(playerParams);
+        this.player.scale.y = getPlayerHeight() / 100;
         this.marcoTopLeft = createSprite(marcoTopLeftParams);
         this.marcoBottomRight = createSprite(marcoBottomRightParams);
         this.nombre = createSprite(nombreParams);

@@ -4,7 +4,9 @@ import { SceneManager } from "./utils/SceneManager";
 import { StatusBar } from "@capacitor/status-bar";
 import { KeepAwake } from "@capacitor-community/keep-awake";
 import { App } from "@capacitor/app";
-import { pauseSounds, resumeSounds } from "./utils/SoundParams";
+import { pauseSounds, resumeSounds, setVolume } from "./utils/SoundParams";
+import { getValue, setValue } from "./utils/constants";
+import { Player } from "./games/Player";
 
 SceneManager.initialize();
 
@@ -20,6 +22,22 @@ if (navigator.userAgent.includes("Mobile")) {
   isMobileDevice = false;
   console.log("Estás accediendo desde una computadora.");
 }
+
+export let volume = getValue("volume");
+if (volume === null) {
+  volume = 1;
+  setVolume(volume);
+} else {
+  setVolume(volume);
+}
+
+export let level = getValue("level");
+if (level == null) {
+  level = 1;
+}
+setValue("level", level);
+Player.level = level;
+console.log('Player.level', Player.level)
 
 if (Capacitor.isNativePlatform()) {
   StatusBar.hide();

@@ -1,5 +1,3 @@
-// import { sound } from "@pixi/sound";
-// import { sound } from "@pixi/sound";
 import { Graphics, Text, TextStyle, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
@@ -7,7 +5,7 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
-import { playSFX, stopSFX } from "../utils/SoundParams";
+import { SoundNames, playSFX, stopSFX } from "../utils/SoundParams";
 import { sound } from "@pixi/sound";
 
 export class TextScene extends SceneBase {
@@ -144,7 +142,7 @@ export class TextScene extends SceneBase {
   }
 
   private soundWriting(): void {
-    playSFX("handWriting", {});
+    playSFX(SoundNames.WRITE, {});
   }
 
   private onButtonText2(): void {
@@ -161,15 +159,14 @@ export class TextScene extends SceneBase {
       .start()
       .onComplete(() => {
         this.showText();
-      }
-      );
+      });
   }
 
   public update(): void { }
 
   private onButtonClick(): void {
     console.log("Apreté volver", this);
-    stopSFX("handWriting");
+    stopSFX(SoundNames.WRITE);
     SceneManager.changeScene(new GameStartScene());
   }
 
@@ -199,13 +196,12 @@ export class TextScene extends SceneBase {
             .onComplete(() => {
               if (i == texto.length - 1) {
                 new Tween(this.title3).to({ alpha: 0 }, 1500).start();
-                stopSFX("handWriting");
+                stopSFX(SoundNames.WRITE);
               }
             });
-          sound.play("PotionSound1");
+          sound.play(SoundNames.POTION);
         }, delay);
         delay += 50;
-
       }
     }
   }

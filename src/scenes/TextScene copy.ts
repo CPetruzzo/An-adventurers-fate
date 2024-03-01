@@ -7,7 +7,7 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
-import { playSFX, stopSFX } from "../utils/SoundParams";
+import { SoundNames, playSFX, stopSFX } from "../utils/SoundParams";
 
 export class TextScene extends SceneBase {
   private buttonMouse: PointButton;
@@ -128,7 +128,7 @@ export class TextScene extends SceneBase {
   // }
 
   soundWriting() {
-    playSFX("handWriting", {});
+    playSFX(SoundNames.WRITE, {});
   }
 
   onButtonText2() {
@@ -151,7 +151,7 @@ export class TextScene extends SceneBase {
   //BUTTON.TS   HACER FUNCIONAR EL NUEVO BOTÓN
   private onButtonClick(): void {
     console.log("Apreté volver", this);
-    stopSFX("handWriting");
+    stopSFX(SoundNames.WRITE);
     SceneManager.changeScene(new GameStartScene());
   }
 
