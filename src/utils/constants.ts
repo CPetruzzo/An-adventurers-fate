@@ -55,3 +55,6 @@ export const LETRA5 = new TextStyle({
   fontSize: 120,
   fill: 0x1819,
 });
+
+export const MASK_TIME: number = 3000;
+export const MASK_TIME_LINE_BY_LINE: number = 1000;
