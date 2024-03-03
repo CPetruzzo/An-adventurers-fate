@@ -1,11 +1,12 @@
 import { Container } from "pixi.js";
 import { Player } from "../games/Player";
 import { playSound } from "../utils/SoundParams";
+import { getValue } from "../utils/constants";
 
 export class LevelPoints extends Container {
   public static points: number = 0;
   public pointsMultiplier: number = 1.5;
-  public currentLevel: number = 1;
+  public currentLevel: number;
   public static requiredPoints: number;
   private player: Player;
   private static instance: LevelPoints | null = null; // Variable para almacenar la instancia del LevelPoints (patrón Singleton)
@@ -13,7 +14,7 @@ export class LevelPoints extends Container {
   public constructor(player: Player) {
     super();
     this.player = player;
-
+    this.currentLevel = getValue("level");
     this.getCurrentLevel();
     console.log("this.getCurrentLevel()", this.getCurrentLevel());
   }

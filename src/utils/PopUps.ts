@@ -1,6 +1,6 @@
 import {
     // Container, 
-    DisplayObject
+    DisplayObject, Sprite
 } from "pixi.js";
 import { Easing, Tween } from "tweedle.js";
 
@@ -19,13 +19,25 @@ export function createPopUp(
     // objectsToRemove: DisplayObject[][],
     // objectsToAdd: DisplayObject[][],
     context: any,
-    popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }
+    background: Sprite, // Se agrega el fondo como un parámetro
+    popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][]; background: Sprite } }
 ): void {
     closeOpenedPopUps(popups, context);
+
+    // // Crear el fondo no interactivo
+    // const background = Sprite.from("EMPTY_BANNER");
+    background.width = context.width;
+    background.height = context.height;
+    background.interactive = true;
+    background.alpha = 0;
+    context.addChild(background);
+
+
     if (!popups[name]) {
         popups[name] = {
             objectsToAdd: objectsToAdd,
             objectsToRemove: objectsToRemove,
+            background: background // Se guarda el fondo no interactivo en el mapa de popups
         };
     }
 
@@ -82,10 +94,10 @@ export function createPopUp(
 export function closePopUp(
     name: string,
     context: any,
-    popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }
+    popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][]; background: Sprite } }
 ): void {
     if (popups[name]) {
-        const { objectsToAdd, objectsToRemove } = popups[name];
+        const { objectsToAdd, objectsToRemove, background } = popups[name]; // Se obtiene background desde popups[name]
         objectsToAdd.forEach((group) => {
             group.forEach((obj) => {
                 new Tween(obj).from({ alpha: 1 }).to({ alpha: 0 }, 500).start().onComplete(() => {
@@ -101,9 +113,13 @@ export function closePopUp(
             });
         });
 
+        // Eliminar el fondo no interactivo
+        context.removeChild(background); // Se utiliza background desde popups[name]
+
         delete popups[name];
     }
 }
+
 
 export function openedPopUps(popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }): void {
     const openPopUps = Object.keys(popups);
@@ -118,7 +134,7 @@ export function openedPopUps(popups: { [name: string]: { objectsToRemove: Displa
     }
 }
 
-export function closeOpenedPopUps(popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }, context: any): void {
+export function closeOpenedPopUps(popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][], background: Sprite } }, context: any): void {
     const openPopUps = Object.keys(popups);
 
     openPopUps.forEach((name) => {

@@ -8,7 +8,7 @@ import { SceneManager } from "../utils/SceneManager";
 import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
-import { backMenu, book, button1Params, button2Params, buttonCloseParams, closeBook, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
+import { backMenu, book, button1Params, button2Params, closeBook, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
 import { backShieldParams, bookOpenedParams, cartelParams, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG, itemSwordParams } from "../utils/SpriteParams";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
@@ -63,7 +63,7 @@ export class MapScene extends SceneBase implements IUpdateable {
     public buttonsMapUpDown: string[];
     private buttonsCloseShield: string[];
     private buttonsBackMenuClose: string[];
-    private popUps: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } } = {};
+    private popUps: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][]; background: Sprite } } = {};
     public itemSword: Sprite;
     public openBag: Sprite;
     public playerData: Player;
@@ -169,12 +169,11 @@ export class MapScene extends SceneBase implements IUpdateable {
             { ref: 'button2', params: button2Params, onClick: () => this.onMenu() },
             { ref: 'MapUp', params: mapUpParams, onClick: () => this.stopMap() },
             { ref: 'MapDown', params: mapDownParams, onClick: () => this.stopMap() },
-            { ref: 'buttonClose', params: buttonCloseParams, onClick: () => this.onBackMenuClose() },
             { ref: 'shieldClose', params: shieldCloseParams, onClick: () => this.onCloseShieldClick() },
             { ref: 'bagClose', params: shieldCloseParams, onClick: () => this.onMenuBagStopClick() },
         ];
         // ACA SEPARO/DECLARO GRUPOS, DEPENDE COMO QUIERA MANEJARLOS
-        this.buttonsBackMenuClose = ['buttonClose', 'button2', 'button1'];
+        this.buttonsBackMenuClose = [ 'button2', 'button1'];
         this.buttonsCloseBook = ['closeBook'];
         this.buttonsCloseShield = ['shieldClose', 'bagClose'];
         this.buttonsUI = ['book', 'shield', 'menuBag', 'backMenu'];
@@ -265,11 +264,11 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         playSound("shield", { volume: 0.1 })
         if (Level.Complete === 1) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, this.popUps)
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         } else if (Level.Complete === 2) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         } else if (Level.Complete === 3) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, this.popUps)
+            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         }
     }
     private onCloseShieldClick(): void {
@@ -281,8 +280,8 @@ export class MapScene extends SceneBase implements IUpdateable {
         createPopUp("closeMenu", // Nombre del pop-up
             [[this.buttonRefs['backMenu']],], // objetos a remover
             [[this.cartel, this.salir, this.buttonRefs['button1'], this.buttonRefs['button2'],
-            this.salirSi, this.salirNo, this.buttonRefs['buttonClose']]] // objetos a agregar
-            , this, this.popUps)
+            this.salirSi, this.salirNo]] // objetos a agregar
+            , this, Sprite.from("EMPTY_BANNER"), this.popUps)
     }
     private onBackMenuClose(): void {
         closePopUp("closeMenu", this, this.popUps); // Cerramos el pop-up 'closeMenu'
@@ -296,7 +295,7 @@ export class MapScene extends SceneBase implements IUpdateable {
             [[this.bookOpened, this.buttonRefs['closeBook'], this.textoViejo, this.player,
             this.Hp, this.PStrenght, this.BStrenght, this.marcoTopLeft,
             this.marcoBottomRight, this.nombre, this.pie, this.level]]
-            , this, this.popUps);
+            , this, Sprite.from("EMPTY_BANNER"), this.popUps);
     }
     private onBookClose(): void {
         closePopUp("book", this, this.popUps); // Cerramos el pop-up 'book'
@@ -329,7 +328,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         createPopUp("menuBag", // Nombre del pop-up
             [[this.buttonRefs['menuBag']]],
             [[this.openBag, this.buttonRefs['bagClose']]]
-            , this, this.popUps);
+            , this, Sprite.from("EMPTY_BANNER"), this.popUps);
         // to change to: 
         // createPopUp({
         //     name: "menuBag",

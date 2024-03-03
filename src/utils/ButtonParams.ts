@@ -17,6 +17,8 @@ export function createPointButton(params: ButtonParams, event: string | symbol, 
     button.y = params.y;
     button.scale.set(params.scale);
 
+    button.alpha ? params.alpha : 1; 
+
     // Añadir eventos al botón
     button.on(event, fn, context);
 
@@ -30,6 +32,7 @@ export type ButtonParams = {
     textureNameDef: string;
     textureOver: string;
     textureClick: string;
+    alpha?: number
 };
 
 export const configButtonGame: ButtonParams = {
@@ -239,21 +242,21 @@ export const button2: ButtonParams = {
 };
 
 export const button1Params: ButtonParams = {
-    x: 630,
-    y: 420,
-    scale: 0.8,
-    textureNameDef: "MapButtonOff",
-    textureOver: "MapButton",
-    textureClick: "MapButton",
+    x: 625,
+    y: 430,
+    scale: 0.15,
+    textureNameDef: "EMPTY_BUTTON",
+    textureOver: "EMPTY_BUTTON",
+    textureClick: "EMPTY_BUTTON",
 };
 
 export const button2Params: ButtonParams = {
-    x: 630,
+    x: 625,
     y: 350,
-    scale: 0.8,
-    textureNameDef: "MapButtonOff",
-    textureOver: "MapButton",
-    textureClick: "MapButton",
+    scale: 0.15,
+    textureNameDef: "EMPTY_BUTTON",
+    textureOver: "EMPTY_BUTTON",
+    textureClick: "EMPTY_BUTTON",
 };
 
 export const mapUpParams: ButtonParams = {
@@ -275,12 +278,13 @@ export const mapDownParams: ButtonParams = {
 };
 
 export const buttonCloseParams: ButtonParams = {
-    x: 755,
-    y: 225,
-    scale: 0.8,
-    textureNameDef: "ButtonClose",
-    textureOver: "ButtonClose",
-    textureClick: "ButtonClose",
+    x: 625,
+    y: 520,
+    alpha: 0,
+    scale: 0.15,
+    textureNameDef: "EMPTY_BUTTON",
+    textureOver: "EMPTY_BUTTON",
+    textureClick: "EMPTY_BUTTON",
 };
 
 export const shieldCloseParams: ButtonParams = {
@@ -293,28 +297,28 @@ export const shieldCloseParams: ButtonParams = {
 };
 
 export const configParams: ButtonParams = {
-    textureNameDef: "CONFIG.png",
-    textureOver: "CONFIG hundido.png",
-    textureClick: "CONFIG.png",
+    textureNameDef: "EMPTY_BUTTON",
+    textureOver: "EMPTY_BUTTON",
+    textureClick: "EMPTY_BUTTON",
     x: 650,
-    y: 500,
-    scale: 0.5,
+    y: 600,
+    scale: 0.2,
 };
 
 export const startParams: ButtonParams = {
-    textureNameDef: "START.png",
-    textureOver: "START hundido.png",
-    textureClick: "START.png",
-    x: 650,
-    y: 400,
-    scale: 0.5,
+    textureNameDef: "EMPTY_BUTTON",
+    textureOver: "EMPTY_BUTTON",
+    textureClick: "EMPTY_BUTTON",
+    x: 450,
+    y: 600,
+    scale: 0.2,
 };
 
 export const textSceneParams: ButtonParams = {
-    textureNameDef: "ABOUT.png" ,
-    textureOver: "ABOUT hundido.png" ,
-    textureClick: "ABOUT.png"  ,
-    x: 650,
+    textureNameDef: "EMPTY_BUTTON" ,
+    textureOver: "EMPTY_BUTTON" ,
+    textureClick: "EMPTY_BUTTON"  ,
+    x: 850,
     y: 600,
-    scale: 0.5,
+    scale: 0.2,
 };

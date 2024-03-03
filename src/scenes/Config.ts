@@ -9,7 +9,8 @@ import { GameStartScene } from "./GameStartScene";
 import { LETRA1, LETRA1SUBTITLE, LETRA1TITLE } from "../utils/constants";
 import { ConfigInfo } from "../ui/ConfigInfo";
 import { getGlobalVolume } from "../utils/SoundParams";
-import { Player } from "../games/Player";
+// import { Player } from "../games/Player";
+// import { getPlayerHeight } from "../utils/FunctionManager";
 
 export class Config extends SceneBase {
   private buttonMouse: PointButton;
@@ -40,7 +41,7 @@ export class Config extends SceneBase {
     this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
     this.title = new Text("Settings", LETRA1TITLE);
-    this.title.position.set(520, 100);
+    this.title.position.set(50, 50);
 
     this.control1 = new Text("Movement:", LETRA1SUBTITLE);
     this.control1.position.set(150, 320);
@@ -66,45 +67,55 @@ export class Config extends SceneBase {
     this.addChild(
       this.settings,
       this.title,
-      this.control1,
-      this.control2,
-      this.control3,
-      this.control4,
-      this.control5,
-      this.control6,
-      this.control7,
+      // this.control1,
+      // this.control2,
+      // this.control3,
+      // this.control4,
+      // this.control5,
+      // this.control6,
+      // this.control7,
       this.buttonMouse
     );
 
     const volumeInfo = new ConfigInfo({
       name: "Volume",
       min: 0,
-      max: 1,
+      max: 5,
       current: getGlobalVolume(),
       step: 0.1,
     });
-    volumeInfo.position.set(400, 300);
+    volumeInfo.position.set(SceneManager.WIDTH / 2 - volumeInfo.width / 4, 380);
     this.addChild(volumeInfo);
 
-    const playerHP = new ConfigInfo({
-      name: "PlayerHP",
-      min: 100,
-      max: 1000,
-      current: Player._maxHealth,
-      step: 100,
-    });
-    playerHP.position.set(400, 500);
-    this.addChild(playerHP);
+    // const playerHP = new ConfigInfo({
+    //   name: "PlayerHP",
+    //   min: 100,
+    //   max: 1000,
+    //   current: Player._maxHealth,
+    //   step: 100,
+    // });
+    // playerHP.position.set(400, 500);
+    // this.addChild(playerHP);
 
-    const playerATK = new ConfigInfo({
-      name: "PlayerHP",
-      min: 100,
-      max: 1000,
-      current: Player._strength,
-      step: 100,
-    });
-    playerATK.position.set(400, 600);
-    this.addChild(playerATK);
+    // const playerATK = new ConfigInfo({
+    //   name: "playerATK",
+    //   min: 100,
+    //   max: 1000,
+    //   current: Player._strength,
+    //   step: 100,
+    // });
+    // playerATK.position.set(400, 650);
+    // this.addChild(playerATK);
+
+    // const playerHEIGHT = new ConfigInfo({
+    //   name: "playerHEIGHT",
+    //   min: 150,
+    //   max: 250,
+    //   current: getPlayerHeight(),
+    //   step: 50,
+    // });
+    // playerHEIGHT.position.set(400, 350);
+    // this.addChild(playerHEIGHT);
   }
 
   public update(): void {}

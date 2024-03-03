@@ -1,4 +1,3 @@
-import { sound } from "@pixi/sound";
 import { Container, DisplayObject, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
@@ -21,13 +20,14 @@ import { Config } from "./Config";
 import { GameOverScene } from "./GameOverScene";
 import { SceneBase } from "../utils/SceneBase";
 import { Arrow } from "../games/Weapon/Arrow";
-import { buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, createPointButton, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
+import { buttonA, buttonB, buttonsOff, buttonsOn, configButtonGame, moveDown, moveLeft, moveRight, moveUp, pauseOff, pauseOn, start } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1 } from "../utils/constants";
 import { playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { isMobileDevice } from "..";
+import { createPointButton } from "../utils/FunctionManager";
 
 export class GameSceneTwo extends SceneBase implements IUpdateable {
     private player: Player;
@@ -79,6 +79,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         [name: string]: {
             objectsToRemove: DisplayObject[][];
             objectsToAdd: DisplayObject[][];
+            background: Sprite;
         };
     } = {};
     private gotToChest: boolean = false;
@@ -646,7 +647,7 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
         this.pauseScene = new PauseScene();
         const objectsToRemove = [[]];
         const objectsToAdd = [[this.pauseScene, this.pauseOff]];
-        createPopUp("pause", objectsToRemove, objectsToAdd, this, this.popUps);
+        createPopUp("pause", objectsToRemove, objectsToAdd, this, Sprite.from("EMPTY_BANNER"), this.popUps);
         // createPopUp({name:"pause", objectsToRemove: objectsToRemove, objectsToAdd: objectsToAdd, context: this, popups: this.popUps});
         this.isPaused = true;
     }
@@ -741,6 +742,6 @@ export class GameSceneTwo extends SceneBase implements IUpdateable {
     /** Cambio de escena a la escena de Configuración */
     private onConfigClick(): void {
         SceneManager.changeScene(new Config());
-        sound.stop("GameBGM");
+        // sound.stop("GameBGM");
     }
 }

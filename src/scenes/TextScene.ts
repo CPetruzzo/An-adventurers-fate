@@ -83,7 +83,6 @@ export class TextScene extends SceneBase {
     this.title3.position.x = 0;
     this.title3.position.y = this.title2.y + this.title2.height;
 
-
     this.panelTexto = new Graphics();
     this.panelTexto.beginFill(0xff3, 1);
     this.panelTexto.drawRect(
@@ -199,7 +198,7 @@ export class TextScene extends SceneBase {
                 stopSFX(SoundNames.WRITE);
               }
             });
-          sound.play(SoundNames.POTION);
+          sound.play(SoundNames.JUMP, { speed: 2, volume: 0.2});
         }, delay);
         delay += 50;
       }

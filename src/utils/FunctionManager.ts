@@ -1,6 +1,7 @@
-import { Sprite, Texture } from "pixi.js";
+import { Sprite, Text, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { Player } from "../games/Player";
+import { LETRA3 } from "./constants";
 
 /** Use a function to create Sprites with common parameters
  * @param params parameters for that sprite
@@ -30,7 +31,7 @@ export interface SpriteParams {
  * @param _event name of the event, for example, pointer down
  * @param _callback void function that's applyied when the pointerbutton launches it's event
  */
-export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any): PointButton {
+export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any, text?: string): PointButton {
     const button = new PointButton(
         Texture.from(params.textureNameDef),
         Texture.from(params.textureOver),
@@ -39,6 +40,12 @@ export function createPointButton(params: ButtonParams, event: string | symbol, 
     button.x = params.x;
     button.y = params.y;
     button.scale.set(params.scale);
+
+    if (text) {
+        const texto = new Text(text, LETRA3);
+        texto.anchor.set(0.5);
+        button.addChild(texto);
+    }
 
     // Añadir eventos al botón
     button.on(event, fn, context);

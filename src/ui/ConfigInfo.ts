@@ -1,8 +1,9 @@
-import { Container, Graphics, Text } from "pixi.js";
+import { Container, Graphics, Sprite, Text } from "pixi.js";
 import { createText } from "../utils/TextParams";
-import { LETRA1 } from "../utils/constants";
+import { LETRA2, setValue } from "../utils/constants";
 import { getGlobalVolume, setVolume } from "../utils/SoundParams";
-import { Player } from "../games/Player";
+import { Player, setPlayerHeight } from "../games/Player";
+import { createSprite, getPlayerHeight } from "../utils/FunctionManager";
 
 export interface ConfigParams {
   name: string;
@@ -23,8 +24,8 @@ export class ConfigInfo extends Container {
   private minText: Text;
   private maxText: Text;
   public current: number;
-  private plus: Graphics;
-  private minus: Graphics;
+  private plus: Sprite;
+  private minus: Sprite;
 
   constructor(configParam: ConfigParams, _functionToApply?: void) {
     super();
@@ -37,47 +38,42 @@ export class ConfigInfo extends Container {
 
     this.textTitle = createText({
       text: this.paramName,
-      style: LETRA1,
-      position: { x: 200, y: -100 },
+      style: LETRA2,
+      position: { x: 150, y: -200 },
     });
     this.textTitle.anchor.set(0.5);
 
     this.minText = createText({
       text: this.min.toString(),
-      style: LETRA1,
-      position: { x: 0, y: 0 },
+      style: LETRA2,
+      position: { x: -115, y: 15 },
     });
 
     this.maxText = createText({
       text: this.max.toString(),
-      style: LETRA1,
-      position: { x: 400, y: 0 },
+      style: LETRA2,
+      position: { x: 400, y: 15 },
     });
 
-    this.plus = new Graphics();
-    this.plus.beginFill(0x0ff00, 1);
-    this.plus.drawCircle(0, 0, 30);
-    this.plus.endFill();
-    this.plus.position.set(this.maxText.x, this.maxText.y);
-    this.plus.pivot.set(this.plus.width / 2, this.plus.height / 2)
+    this.plus = createSprite({texture: "minus", position: {x: 255, y: 108}, scale: {x: 0.08, y: 0.08}, anchor: {x: 0.5, y: 0.5}}) 
     this.plus.interactive = true;
     this.plus.buttonMode = true;
 
-    this.minus = new Graphics();
-    this.minus.beginFill(0xff0000, 1);
-    this.minus.drawCircle(0, 0, 30);
-    this.minus.endFill();
-    this.minus.pivot.set(this.minus.width / 2, this.minus.height / 2)
-    this.minus.position.set(this.minText.x, this.minText.y);
+    this.minus = createSprite({texture: "minus", position: {x: 35, y: 108}, scale: {x: 0.08, y: 0.08}, anchor: {x: 0.5, y: 0.5}}) 
     this.minus.interactive = true;
     this.minus.buttonMode = true;
 
     this.handle = new Graphics();
     this.handle.beginFill(0xffffff, 1);
-    this.handle.drawRect(-60, -8, 60, 16);
+    this.handle.drawRect(-60, 10, 60, 110);
     this.handle.endFill();
-    this.handle.pivot.set(this.handle.width / 2, this.handle.height / 2)
+    this.handle.pivot.set(this.handle.width / 2, this.handle.height / 2);
     this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
+
+    const barBG = Sprite.from("barBG");
+    barBG.anchor.set(0.24, 0.5);
+    barBG.scale.set(0.5, 0.5);
+    barBG.x = this.width / 2;
 
     this.plus.on("pointerdown", () => {
       if (this.current + this.step <= this.max) {
@@ -94,6 +90,9 @@ export class ConfigInfo extends Container {
           case "PlayerATK":
             Player._strength = this.current;
             break;
+          case "PlayerHEIGHT":
+            this.updatePlayerHeight();
+            break;
           default:
             break;
         }
@@ -109,39 +108,62 @@ export class ConfigInfo extends Container {
         this.updateHandlePosition();
         switch (this.paramName) {
           case "Volume":
-            setVolume(this.current);
+            this.updateVolume();
             break;
-
+          case "PlayerHP":
+            Player._maxHealth = this.current;
+            break;
+          case "PlayerATK":
+            Player._strength = this.current;
+            break;
+          case "PlayerHEIGHT":
+            this.updatePlayerHeight();
+            break;
           default:
             break;
         }
       } else {
-        console.log("Min");
+        console.log("Max");
       }
     });
 
-    this.addChild(this.textTitle, this.minText, this.maxText, this.handle);
+    this.addChild(
+      this.textTitle,
+      this.minText,
+      this.maxText,
+      this.handle,
+      barBG
+    );
     this.addChild(this.plus, this.minus);
   }
 
+  /** moves the slider handler */
   public moveHandle(): void {
     const value = Math.round((this.current / this.max) * 256);
-    this.handle.position.set(value, this.maxText.y);
+    this.handle.position.set(value, this.handle.y + 20);
   }
 
+  /** updates handle position on screen according to moveHandle */
   public updateHandlePosition(): void {
     const value = Math.round((this.current / this.max) * 256);
     this.handle
       .clear()
       .lineStyle(2, 0xffffff)
       .beginFill(value, 1)
-      .drawRect(-60, -8, 60, 16);
+      .drawRect(-60, 10, 60, 110);
     this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
+    console.log("this.handle.y", this.handle.y);
   }
 
+  /** changes volume, updates the saved volume in localstorage and shows current volume level */
   private updateVolume(): void {
     setVolume(this.current);
-    localStorage.setItem("volume", this.current.toString());
-    console.log(getGlobalVolume());
+    setValue("volume", this.current.toString());
+    console.log(getGlobalVolume());;
+  }
+
+  private updatePlayerHeight(): void {
+    setPlayerHeight(this.current);
+    console.log(getPlayerHeight());
   }
 }

@@ -3,6 +3,11 @@ import { SceneBase } from "./SceneBase";
 import { Graphics, Sprite } from "pixi.js";
 import { SceneManager } from "./SceneManager";
 
+export enum TransitionTypes {
+  FADE = "FADE",
+  CURTAIN = "CURTAIN",
+}
+
 export class TransitionScene extends SceneBase {
   private rightSlide: Sprite;
   private leftSlide: Sprite;

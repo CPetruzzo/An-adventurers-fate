@@ -23,10 +23,11 @@ export class PauseScene extends Container {
         // this.BG=new Sprite(Texture.from("PAUSA"));
         const PauseFont = new TextStyle({ fontFamily: "Letra2", fontSize: 50, fill: 0X1819 });
 
-        this.cartel = Sprite.from("Cartel");
+        this.cartel = Sprite.from("EMPTY_BANNER");
         this.cartel.anchor.set(0.5)
         this.cartel.x = SceneManager.WIDTH / 2;
         this.cartel.y = SceneManager.HEIGHT / 2;
+        this.cartel.scale.set(0.7);
 
         this.button1 = createPointButton(button1, "pointerClick", () => this.onCloseClick());
         this.button2 = createPointButton(button2, "pointerClick", () => this.onMenu());
