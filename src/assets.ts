@@ -9,10 +9,16 @@ export const assets = [
     { url: "./boton.png", name: "genericButton" },
     { url: "./plus.png", name: "plus" },
     { url: "./soundButton.png", name: "soundButton" },
+    { url: "./tinySoundButton.png", name: "TINY_SOUND_BUTTON" },
+    { url: "./tinySoundButtonOff.png", name: "TINY_SOUND_BUTTON_OFF" },
     { url: "./soundBtn.png", name: "soundBtn" },
     { url: "./minus.png", name: "minus" },
     { url: "./barBG.png", name: "barBG" },
     { url: "./Maps/itemBG.png", name: "itemBG" },
+    { url: "./emptybutton.png", name: "EMPTY_BUTTON" },
+    { url: "./tinyButton.png", name: "TINY_EMPTY_BUTTON" },
+    { url: "./game-text-explanation.png", name: "EMPTY_BANNER" },
+
 
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
@@ -53,6 +59,7 @@ export const assets = [
 
     // SOUND EFFECTS
     { url: "./sounds/GamePotion.mp3", name: "PotionSound1" },
+    { url: "./speaksound.mp3", name: "Speak" },
     { url: "./sounds/MinecraftChest.mp3", name: "Chest1" },
     { url: "./sounds/bookPage.mp3", name: "SoundBook" },
     { url: "./sounds/Escritura.mp3", name: "handWriting" },
@@ -81,6 +88,8 @@ export const assets = [
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
 
     //MAPS
+    { url: "./StartMenu/castle1.png", name: "Castle1" },
+    { url: "./StartMenu/castle2.png", name: "Castle2" },
     { url: "./Maps/Map1.jpg", name: "Map1" },
     { url: "./Maps/Map2.jpg", name: "Map2" },
     { url: "./Maps/bag.png", name: "Bag" },

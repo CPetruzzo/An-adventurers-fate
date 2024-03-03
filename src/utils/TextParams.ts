@@ -1,5 +1,5 @@
 import { Text, TextStyle } from "pixi.js";
-import { LETRA2 } from "./constants";
+import { LETRA2, LETRA4 } from "./constants";
 import { Player } from "../games/Player";
 
 // Función para obtener el nombre del jugador desde el almacenamiento local
@@ -42,20 +42,20 @@ export const BStrenghtParams: TextParams = {
 
 export const salirParams: TextParams = {
     text: "¿Desea Salir?",
-    style: LETRA2,
-    position: { x: 548, y: 270 },
+    style: LETRA4,
+    position: { x: 455, y: 270 },
 };
 
 export const salirSiParams: TextParams = {
     text: "Si",
-    style: LETRA2,
-    position: { x: 615, y: 334 },
+    style: LETRA4,
+    position: { x: 605, y: 330 },
 };
 
 export const salirNoParams: TextParams = {
     text: "No",
-    style: LETRA2,
-    position: { x: 610, y: 400 },
+    style: LETRA4,
+    position: { x: 600, y: 405 },
 };
 
 export const levelParams: TextParams = {

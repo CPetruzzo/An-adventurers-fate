@@ -11,7 +11,8 @@ export enum SoundNames {
   ITEM = "ItemBGM",
   SHIELD = "shield",
   BACKPACK = "backpack",
-  CHEST = "Chest1"
+  CHEST = "Chest1",
+  SPEAK = "Speak"
 }
 
 export enum MusicNames {

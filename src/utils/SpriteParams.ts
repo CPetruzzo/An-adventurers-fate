@@ -122,9 +122,9 @@ export const bookOpenedParams: SpriteParams = {
 };
 
 export const cartelParams: SpriteParams = {
-    texture: "Cartel",
-    position: { x: 470, y: 200 },
-    scale: { x: 1, y: 1 },
+    texture: "EMPTY_BANNER",
+    position: { x: 370, y: 100 },
+    scale: { x: 0.5, y: 0.5 },
 };
 
 export const pointOnMapParams: SpriteParams = {

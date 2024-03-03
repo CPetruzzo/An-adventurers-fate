@@ -25,9 +25,10 @@ if (navigator.userAgent.includes("Mobile")) {
 
 export let volume = getValue("volume");
 if (volume === null) {
-  volume = 1;
+  volume = 0.1;
   setVolume(volume);
 } else {
+  // volume = 0.1;
   setVolume(volume);
 }
 

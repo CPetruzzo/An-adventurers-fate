@@ -8,7 +8,8 @@ export namespace SceneManager {
   export const HEIGHT = 720;
   export let currentScene: SceneBase;
   let app: Application;
-
+  (globalThis as { __PIXI_APP__?: Application }).__PIXI_APP__;
+  
   export function initialize(): void {
     if (app != undefined) {
       console.error("Don't call initialize twice!");
@@ -24,6 +25,9 @@ export namespace SceneManager {
       width: WIDTH,
       height: HEIGHT,
     });
+
+    // Asignar la aplicación a la variable global indicada por el debugger de Pixi.js
+    (globalThis as any).__PIXI_APP__ = app;
 
     Keyboard.initialize(); /* lo llamo una vez y nunca mas */
     window.addEventListener("resize", () => {

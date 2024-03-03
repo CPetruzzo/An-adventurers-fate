@@ -3,9 +3,9 @@ import { TextStyle } from "pixi.js";
 /** Flag para determinar si quiero que haya sonido en el juego o no
  * @argument if true then all sounds are shut down from start
  */
-export const DEBUG_SOUND: boolean = false;
-export const DEBUG_SFX: boolean = false;
-export const DEBUG_ALL_SOUNDS: boolean = false;
+export const DEBUG_SOUND: boolean = true;
+export const DEBUG_SFX: boolean = true;
+export const DEBUG_ALL_SOUNDS: boolean = true;
 
 /** Cantidad de flechas iniciales */
 export const INITIAL_ARROWS: number = 10;
@@ -40,8 +40,8 @@ export const LETRA2 = new TextStyle({
 });
 export const LETRA3 = new TextStyle({
   fontFamily: "Letra3",
-  fontSize: 90,
-  fill: 0x1819,
+  fontSize: 120,
+  fill: 0xFFFFFF,
   lineJoin: "round",
   dropShadow: true,
   dropShadowAlpha: 0.6,
@@ -67,3 +67,23 @@ export function setValue(key: string, value: string): void {
 export function getValue(key: string): any {
   return localStorage.getItem(key);
 }
+
+// startscene bg
+export const timeBGUPDOWN: number = 15000;
+export const yBGUPDOWN: number = 100;
+
+export const TRANSITION_TIME: number = 500;
+
+export const LETRA4 = new TextStyle({
+  fontFamily: "Letra3",
+  fontSize: 30,
+  fill: 0xFFFFFF,
+  lineJoin: "round",
+  dropShadow: true,
+  dropShadowAlpha: 0.6,
+  dropShadowBlur: 3,
+  dropShadowDistance: 10,
+  letterSpacing: 12,
+  stroke: "#0008ff",
+  strokeThickness: 3,
+});
