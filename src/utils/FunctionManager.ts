@@ -68,3 +68,12 @@ export function getPlayerHeight(): number {
     }
     return Player.height;
 }
+
+export function setValue(key: string, value: string): void {
+    localStorage.setItem(key, value)
+  }
+  
+  export function getValue(key: string): any {
+    return localStorage.getItem(key);
+  }
+  

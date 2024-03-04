@@ -5,8 +5,9 @@ import { StatusBar } from "@capacitor/status-bar";
 import { KeepAwake } from "@capacitor-community/keep-awake";
 import { App } from "@capacitor/app";
 import { pauseSounds, resumeSounds, setVolume } from "./utils/SoundParams";
-import { getValue, setValue } from "./utils/constants";
+import { GLOBAL_VOLUME } from "./utils/constants";
 import { Player } from "./games/Player";
+import { getValue, setValue } from "./utils/FunctionManager";
 
 SceneManager.initialize();
 
@@ -25,10 +26,9 @@ if (navigator.userAgent.includes("Mobile")) {
 
 export let volume = getValue("volume");
 if (volume === null) {
-  volume = 0.1;
+  volume = GLOBAL_VOLUME;
   setVolume(volume);
 } else {
-  // volume = 0.1;
   setVolume(volume);
 }
 

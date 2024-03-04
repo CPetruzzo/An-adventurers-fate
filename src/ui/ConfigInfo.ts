@@ -1,9 +1,14 @@
-import { Container, Graphics, Sprite, Text } from "pixi.js";
+import {
+  Container, Graphics,
+  //  NineSlicePlane,
+  Sprite, Text,
+  //  Texture 
+} from "pixi.js";
 import { createText } from "../utils/TextParams";
-import { LETRA2, setValue } from "../utils/constants";
+import { LETRA4 } from "../utils/constants";
 import { getGlobalVolume, setVolume } from "../utils/SoundParams";
 import { Player, setPlayerHeight } from "../games/Player";
-import { createSprite, getPlayerHeight } from "../utils/FunctionManager";
+import { createSprite, getPlayerHeight, setValue } from "../utils/FunctionManager";
 
 export interface ConfigParams {
   name: string;
@@ -38,28 +43,28 @@ export class ConfigInfo extends Container {
 
     this.textTitle = createText({
       text: this.paramName,
-      style: LETRA2,
+      style: LETRA4,
       position: { x: 150, y: -200 },
     });
     this.textTitle.anchor.set(0.5);
 
     this.minText = createText({
       text: this.min.toString(),
-      style: LETRA2,
+      style: LETRA4,
       position: { x: -115, y: 15 },
     });
 
     this.maxText = createText({
       text: this.max.toString(),
-      style: LETRA2,
+      style: LETRA4,
       position: { x: 400, y: 15 },
     });
 
-    this.plus = createSprite({texture: "minus", position: {x: 255, y: 108}, scale: {x: 0.08, y: 0.08}, anchor: {x: 0.5, y: 0.5}}) 
+    this.plus = createSprite({ texture: "minus", position: { x: 255, y: 108 }, scale: { x: 0.08, y: 0.08 }, anchor: { x: 0.5, y: 0.5 } })
     this.plus.interactive = true;
     this.plus.buttonMode = true;
 
-    this.minus = createSprite({texture: "minus", position: {x: 35, y: 108}, scale: {x: 0.08, y: 0.08}, anchor: {x: 0.5, y: 0.5}}) 
+    this.minus = createSprite({ texture: "minus", position: { x: 35, y: 108 }, scale: { x: 0.08, y: 0.08 }, anchor: { x: 0.5, y: 0.5 } })
     this.minus.interactive = true;
     this.minus.buttonMode = true;
 
@@ -70,10 +75,21 @@ export class ConfigInfo extends Container {
     this.handle.pivot.set(this.handle.width / 2, this.handle.height / 2);
     this.handle.position.set(this.current * (400 / (this.max - this.min)), 0);
 
-    const barBG = Sprite.from("barBG");
-    barBG.anchor.set(0.24, 0.5);
-    barBG.scale.set(0.5, 0.5);
-    barBG.x = this.width / 2;
+    // const barBG = new NineSlicePlane(
+    //   Texture.from("barBG"),
+    //   1024 * 0.4 * 0.1,
+    //   1024 * 0.4 * 0.3,
+    //   1024 * 0.4 * 0.1,
+    //   1024 * 0.4 * 0.3,
+    // );
+
+    // console.log('barBG', barBG.width, barBG.height)
+    // barBG.width = 1024 * 2 * 0.4;
+    // barBG.height = 1024 * 1.5* 0.4;
+
+    // barBG.pivot.set(barBG.width / 2, barBG.height / 2)
+    // barBG.x = 200;
+    // barBG.y = 0;
 
     this.plus.on("pointerdown", () => {
       if (this.current + this.step <= this.max) {
@@ -132,7 +148,7 @@ export class ConfigInfo extends Container {
       this.minText,
       this.maxText,
       this.handle,
-      barBG
+      // barBG
     );
     this.addChild(this.plus, this.minus);
   }

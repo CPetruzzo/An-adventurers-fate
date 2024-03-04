@@ -31,7 +31,6 @@ import {
   buttonB,
   buttonsOff,
   buttonsOn,
-  createPointButton,
   moveDown,
   moveLeft,
   moveRight,
@@ -41,12 +40,13 @@ import {
   start,
 } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
-import { LETRA1 } from "../utils/constants";
+import { LETRA1, LETRA4 } from "../utils/constants";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
-// import { DialogBox } from "../utils/DialogBox";
+import { createPointButton } from "../utils/FunctionManager";
+import { DialogBox } from "../utils/DialogBox";
 
 export class GameScene extends SceneBase implements IUpdateable {
   private player: Player;
@@ -73,7 +73,7 @@ export class GameScene extends SceneBase implements IUpdateable {
   private potions: Potion[];
 
   private isPaused: boolean = false;
-  private causingRangeDamage: boolean = false;
+  public causingRangeDamage: boolean = false;
 
   private arek: Arek;
   private melee: Melee;
@@ -96,14 +96,12 @@ export class GameScene extends SceneBase implements IUpdateable {
     [name: string]: {
       objectsToRemove: DisplayObject[][];
       objectsToAdd: DisplayObject[][];
+      background: Sprite;
     };
   } = {};
   private gotToChest: boolean = false;
-
-  // private aboutMe: Text;
-  // private aboutMeText: Text;
-  // private aboutMe2: Text;
-  // private aboutMeText2: Text;
+  private dialogBox: DialogBox = new DialogBox(SceneManager.WIDTH / 2, SceneManager.HEIGHT - 150, SceneManager.WIDTH, 300);
+  public isEKeyPressed: boolean = false;
 
   constructor() {
     super();
@@ -398,11 +396,11 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.moveRight.on("pointerClick", this.Stop, this);
 
     this.buttonSound = new ToggleButton(
-      Texture.from("lineDark12.png"),
-      Texture.from("lineDark14.png")
+      Texture.from("TINY_SOUND_BUTTON"),
+      Texture.from("TINY_SOUND_BUTTON_OFF")
     );
-    this.buttonSound.height = 70;
-    this.buttonSound.width = 70;
+    this.buttonSound.scale.set(0.087);
+
     this.buttonSound.x = 1150;
     this.buttonSound.y = 40;
     this.buttonSound.on(ToggleButton.TOGGLE_EVENT, (newState) => {
@@ -473,6 +471,8 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     this.win = new WinScene();
 
+    this.sortableChildren = true;
+    this.dialogBox.zIndex = 1;
     this.addChild(
       this.cartel,
       this.start,
@@ -484,7 +484,8 @@ export class GameScene extends SceneBase implements IUpdateable {
       this.moveLeft,
       this.moveRight,
       this.pauseOn,
-      this.buttonsOn
+      this.buttonsOn,
+      this.dialogBox
     );
 
     if (!isMobileDevice) {
@@ -543,18 +544,6 @@ export class GameScene extends SceneBase implements IUpdateable {
       this.aljava.anchor.set(0.5);
       this.addChild(this.aljava);
     }
-
-    // // Crear una instancia de DialogBox
-    // const dialogBox = new DialogBox(100, 100, 300, 100);
-
-    // // Agregar la instancia a la escena
-    // this.addChild(dialogBox);
-    // dialogBox.position.set(500,500)
-
-    // // Establecer el texto del diálogo
-    // dialogBox.setText("Hola, ¿cómo estás?");
-    // console.log('\"Hola, ¿cómo estás?\"', "Hola, ¿cómo estás?")
-
   }
 
   // ACTUALIZACION PARA DARLE SU FISICA Y SU MOVIMIENTO
@@ -576,7 +565,6 @@ export class GameScene extends SceneBase implements IUpdateable {
       this.player.initKeyboardEvents(false);
 
       SceneManager.changeScene(new WinScene());
-      // Ejemplo de uso
 
 
       stopSounds(["GameBGM"]);
@@ -632,7 +620,10 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.world.x =
       -this.player.x * this.worldTransform.a + SceneManager.WIDTH / 3;
 
-    // Chequeo de cada una de las situaciones posibles en el update
+    if (!this.dialogBox.mostrarEscrito) {
+      this.checkDialog();
+    }
+
     this.enemyCloseToPlayer();
     this.checkDrinkPotion();
     this.hitWithMelee();
@@ -641,6 +632,14 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.arrowsHit();
     this.endStage();
     this.myOwnHp();
+  }
+
+  private checkDialog(): void {
+    this.dialogBox.mostrarEscrito = true;
+    Keyboard.down.on("KeyE", () => {
+      this.dialogBox.setStyle(LETRA4);
+      this.dialogBox.setText("No hay nada que hacer aquí, debo continuar.", 100);
+    }, this);
   }
 
   /** Checks hp situation and changes hpbar color */
@@ -658,7 +657,7 @@ export class GameScene extends SceneBase implements IUpdateable {
   }
 
   /** Daño de rango medio */
-  private rangeHit(): void {
+  public rangeHit(): void {
     const pelea4 = checkCollision(this.range, this.arek);
     if (pelea4 != null) {
       if (!this.player.canBow || Keyboard.state.get("KeyK")) {
@@ -751,7 +750,7 @@ export class GameScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(() => {
               // this.arek.activate(this.onPause());
-              this.world.removeChild(this.arek)
+              this.world.removeChild(this.arek);
             });
         }
       }
@@ -861,7 +860,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.pauseScene = new PauseScene();
     const objectsToRemove = [[]];
     const objectsToAdd = [[this.pauseScene, this.pauseOff]];
-    createPopUp("pause", objectsToRemove, objectsToAdd, this, this.popUps);
+    createPopUp("pause", objectsToRemove, objectsToAdd, this, Sprite.from("EMPTY_BANNER"), this.popUps);
     this.isPaused = true;
   }
 

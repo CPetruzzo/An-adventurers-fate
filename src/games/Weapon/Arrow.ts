@@ -55,20 +55,23 @@ export class Arrow extends PhysicsContainer implements IHitBox {
 
     /** PARA SEPARAR ENEMIGOS DE PLATAFORMAS Y PODER GOLPEARLOS  */
     public arrowCollision(overlap: Rectangle, enemy: ObservablePoint<any>): void {
-        if (overlap.width < overlap.height) {
-            if (this.x < enemy.x) {
-                this.x -= overlap.width;
-            } else if (this.x > enemy.x) {
-                this.x += overlap.width;
-            }
-        } else {
-            if (this.y > enemy.y) {
-                this.y += overlap.height;
-                this.speed.y = 0;
-            } else if (this.y < enemy.y) {
-                this.y -= overlap.height;
-                this.speed.y = 0;
+        if (enemy && overlap) {
+            if (overlap.width < overlap.height) {
+                if (this.x < enemy.x) {
+                    this.x -= overlap.width;
+                } else if (this.x >= enemy.x) {
+                    this.x += overlap.width;
+                }
+            } else {
+                if (this.y >= enemy.y) {
+                    this.y += overlap.height;
+                    this.speed.y = 0;
+                } else if (this.y < enemy.y) {
+                    this.y -= overlap.height;
+                    this.speed.y = 0;
+                }
             }
         }
     }
+    
 }

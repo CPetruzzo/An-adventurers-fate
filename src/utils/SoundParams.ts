@@ -32,6 +32,7 @@ export interface SoundParams {
   name?: string; // Name of the audio file to be played
   volume?: number;
   loop?: boolean;
+  speed?: number;
 }
 
 export function playSound(soundName: string, soundParams: SoundParams): void {

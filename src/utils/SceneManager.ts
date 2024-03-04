@@ -21,7 +21,7 @@ export namespace SceneManager {
       // resolution: window.devicePixelRatio || 1,
       resolution: 1,
       autoDensity: true,
-      backgroundColor: 0x6495ed,
+      backgroundColor: 0x000000,
       width: WIDTH,
       height: HEIGHT,
     });

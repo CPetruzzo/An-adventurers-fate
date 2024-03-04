@@ -7,7 +7,6 @@ import {
   configParams,
   textSceneParams,
 } from "../utils/ButtonParams";
-// import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import {
@@ -121,23 +120,10 @@ export class GameStartScene extends SceneBase {
       .to({ x: 0, y: 0 }, timeBGUPDOWN)
       .start()
       .onComplete(this.bGdown.bind(this));
-
-    // this.initKeyboardEvents(true);
-
-
   }
 
   public update(): void {
     this.count += 0.005;
-
-    // if (this.BG.filters != null) {
-    //   const blurAmount = Math.cos(this.count);
-    //   const blurScale = 1 - Math.abs(blurAmount); // Escala lineal invertida
-
-    //   // @ts-ignore
-    //   this.BG.filters[0].blur = blurScale * 2;
-    //   console.log('blurScale', blurScale)
-    // }
 
     if (this.titulo.filters != null) {
       const blurAmount = Math.cos(this.count);
@@ -145,97 +131,25 @@ export class GameStartScene extends SceneBase {
       // @ts-ignore
       this.titulo.filters[0].blur = blurScale * 30;
 
-      // this.titulo.filters[0].uniforms.uSeed += Math.random() * -0.0001;
     }
-    // switch (this.buttons[this.currentButton].name) {
-    //   case "start":
-    //     this.start.spr.tint = 0x00ffff;
-    //     this.config.spr.tint = 0xffffff;
-    //     this.textscene.spr.tint = 0xffffff;
-    //     break;
-    //   case "settings":
-    //     this.start.spr.tint = 0xffffff;
-    //     this.config.spr.tint = 0x00ffff;
-    //     this.textscene.spr.tint = 0xffffff;
-    //     break;
-    //   case "about":
-    //     this.start.spr.tint = 0xffffff;
-    //     this.config.spr.tint = 0xffffff;
-    //     this.textscene.spr.tint = 0x00ffff;
-    //     break;
-    //   default:
-    //     this.start.spr.tint = 0x00ffff;
-    //     this.config.spr.tint = 0xffffff;
-    //     this.textscene.spr.tint = 0xffffff;
-    //     break;
-    // }
   }
 
   public override destroy(
     options: boolean | IDestroyOptions | undefined
   ): void {
     super.destroy(options);
-    // this.initKeyboardEvents(false);
   }
-
-  // private initKeyboardEvents(state: boolean): void {
-  //   if (state) {
-  //     // Asignación de eventos de teclado
-  //     Keyboard.down.on("ArrowDown", () => {
-  //       if (this.currentButton < this.buttons.length - 1) {
-  //         this.currentButton++;
-  //       } else {
-  //         this.currentButton = 0;
-  //       }
-  //     });
-
-  //     Keyboard.down.on("ArrowUp", () => {
-  //       if (this.currentButton > 0) {
-  //         this.currentButton--;
-  //       } else {
-  //         this.currentButton = this.buttons.length - 1;
-  //       }
-  //     });
-
-  //     Keyboard.down.on("Enter", () => {
-  //       switch (this.buttons[this.currentButton].name) {
-  //         case "start":
-  //           this.onStartClick();
-  //           break;
-  //         case "settings":
-  //           this.onConfigClick();
-  //           break;
-  //         case "about":
-  //           this.onTextClick();
-  //           break;
-  //       }
-  //     });
-  //   } else {
-  //     Keyboard.down.off("ArrowDown", () => {
-  //       console.log(SceneManager.currentScene);
-  //       this.doNothing();
-  //     });
-
-  //     Keyboard.down.off("ArrowUp", () => {
-  //       this.doNothing();
-  //     });
-
-  //     Keyboard.down.off("Enter", () => {
-  //       this.doNothing();
-  //     });
-  //   }
-  // }
 
   private onTextClick(): void {
     console.log("Apreté Config", this);
     stopAllSounds();
-    SceneManager.changeScene(new TextScene());
+    SceneManager.changeScene(new TextScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     console.log(SceneManager.currentScene.name);
   }
 
   private onConfigClick(): void {
     stopAllSounds();
-    SceneManager.changeScene(new Config());
+    SceneManager.changeScene(new Config(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     console.log(SceneManager.currentScene.name);
   }
 
@@ -244,10 +158,6 @@ export class GameStartScene extends SceneBase {
     SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     console.log(SceneManager.currentScene.name);
   }
-
-  // private doNothing(): void {
-  //   console.log("i'm not doing anything until you get back to startmenu");
-  // }
 
   private bGdown(): void {
     new Tween(this.BG)

@@ -9,11 +9,12 @@ import { Easing, Tween } from "tweedle.js";
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
-import { INITIAL_ARROWS, LETRA1, LETRA1SUBTITLE, setValue } from "../utils/constants";
+import { INITIAL_ARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
 import { Timer } from "../utils/SceneManager";
 import { PlayerAnimations } from "./PlayerAnimations";
+import { setValue } from "../utils/FunctionManager";
 
 export class Player extends PhysicsContainer implements IHitBox {
     private static readonly GRAVITY = 1000;

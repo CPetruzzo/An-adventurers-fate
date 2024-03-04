@@ -1,7 +1,7 @@
 import { Container } from "pixi.js";
 import { Player } from "../games/Player";
 import { playSound } from "../utils/SoundParams";
-import { getValue } from "../utils/constants";
+import { getValue } from "../utils/FunctionManager";
 
 export class LevelPoints extends Container {
   public static points: number = 0;

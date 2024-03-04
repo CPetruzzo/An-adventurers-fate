@@ -1,6 +1,7 @@
 import { Texture } from "pixi.js";
 import { BUTTON_SCALE, MOVEMENTS_SCALE, STAGE_SCALE, START_SCALE, UI_CONFIG } from "./constants";
 import { PointButton } from "../ui/PointButton";
+import { SceneManager } from "./SceneManager";
 
 /** Use a function to create PointButtons with common parameters
  * @param params parameters for that pointerbutton, x, y, scale, texture def, over, down
@@ -179,7 +180,7 @@ export const stageFour: ButtonParams = {
 export const book: ButtonParams = {
     x: 380,
     y: 650,
-    scale: 0.3,
+    scale: 0.18,
     textureNameDef: "BookOff",
     textureOver: "Book",
     textureClick: "Book",
@@ -188,7 +189,7 @@ export const book: ButtonParams = {
 export const shield: ButtonParams = {
     x: 240,
     y: 640,
-    scale: 0.25,
+    scale: 0.15,
     textureNameDef: "ShieldOff",
     textureOver: "Shield",
     textureClick: "Shield",
@@ -197,7 +198,7 @@ export const shield: ButtonParams = {
 export const menuBag: ButtonParams = {
     x: 100,
     y: 650,
-    scale: 0.3,
+    scale: 0.18,
     textureNameDef: "BagOff",
     textureOver: "Bag",
     textureClick: "Bag",
@@ -206,19 +207,19 @@ export const menuBag: ButtonParams = {
 export const closeBook: ButtonParams = {
     x: 1020,
     y: 150,
-    scale: 1,
-    textureNameDef: "lineDark30.png",
-    textureOver: "lineDark30.png",
-    textureClick: "lineDark30.png",
+    scale: 0.08,
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const backMenu: ButtonParams = {
-    x: 1170,
-    y: 50,
-    scale: 0.8,
-    textureNameDef: "backToMenu",
-    textureOver: "backToMenu",
-    textureClick: "backToMenu",
+    x: SceneManager.WIDTH - 45,
+    y: 45,
+    scale: 0.09,
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 // Agrega aquí otros ButtonParams para los botones restantes...
@@ -290,10 +291,10 @@ export const buttonCloseParams: ButtonParams = {
 export const shieldCloseParams: ButtonParams = {
     x: 880,
     y: 135,
-    scale: 0.8,
-    textureNameDef: "lineDark30.png",
-    textureOver: "lineDark30.png",
-    textureClick: "lineDark30.png",
+    scale: 0.08,
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const configParams: ButtonParams = {

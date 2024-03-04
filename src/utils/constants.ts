@@ -3,9 +3,10 @@ import { TextStyle } from "pixi.js";
 /** Flag para determinar si quiero que haya sonido en el juego o no
  * @argument if true then all sounds are shut down from start
  */
-export const DEBUG_SOUND: boolean = true;
-export const DEBUG_SFX: boolean = true;
-export const DEBUG_ALL_SOUNDS: boolean = true;
+export const DEBUG_SOUND: boolean = false;
+export const DEBUG_SFX: boolean = false;
+export const DEBUG_ALL_SOUNDS: boolean = false;
+export const GLOBAL_VOLUME: number = 0.3;
 
 /** Cantidad de flechas iniciales */
 export const INITIAL_ARROWS: number = 10;
@@ -18,6 +19,20 @@ export const UI_SCALE = 1.45;
 export const UI_CONFIG = 0.5;
 export const STAGE_SCALE = 0.8;
 
+export const MASK_TIME: number = 3000;
+export const MASK_TIME_LINE_BY_LINE: number = 1000;
+
+// startscene bg
+export const timeBGUPDOWN: number = 15000;
+export const yBGUPDOWN: number = 100;
+
+// transitions speed
+export const TRANSITION_TIME: number = 500;
+
+// dialogbox alpha
+export const DIALOG_ALPHA: number = 0.8;
+
+// FONTS
 export const LETRA1 = new TextStyle({
   fontFamily: "Letra1",
   fontSize: 25,
@@ -57,23 +72,6 @@ export const LETRA5 = new TextStyle({
   fill: 0x1819,
 });
 
-export const MASK_TIME: number = 3000;
-export const MASK_TIME_LINE_BY_LINE: number = 1000;
-
-export function setValue(key: string, value: string): void {
-  localStorage.setItem(key, value)
-}
-
-export function getValue(key: string): any {
-  return localStorage.getItem(key);
-}
-
-// startscene bg
-export const timeBGUPDOWN: number = 15000;
-export const yBGUPDOWN: number = 100;
-
-export const TRANSITION_TIME: number = 500;
-
 export const LETRA4 = new TextStyle({
   fontFamily: "Letra3",
   fontSize: 30,
@@ -86,4 +84,6 @@ export const LETRA4 = new TextStyle({
   letterSpacing: 12,
   stroke: "#0008ff",
   strokeThickness: 3,
+  wordWrap: true,
+  wordWrapWidth: 700,
 });

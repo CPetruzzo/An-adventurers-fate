@@ -27,6 +27,7 @@ export const assets = [
     { url: "./StageOne/B4.png", name: "B4" },
     { url: "./StageOne/B5.png", name: "B5" },
     { url: "./StartMenu/SETTINGS.png", name: "B6" },
+    { url: "./config-background.png", name: "CONFIG_BG" },
 
     { url: "./StageTwo/B1.png", name: "B7" },
     { url: "./StageTwo/B2.png", name: "B8" },

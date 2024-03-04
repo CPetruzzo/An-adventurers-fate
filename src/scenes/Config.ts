@@ -6,7 +6,7 @@ import { PointButton } from "../ui/PointButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
-import { LETRA1, LETRA1SUBTITLE, LETRA1TITLE } from "../utils/constants";
+import { LETRA1, LETRA3, LETRA4 } from "../utils/constants";
 import { ConfigInfo } from "../ui/ConfigInfo";
 import { getGlobalVolume } from "../utils/SoundParams";
 // import { Player } from "../games/Player";
@@ -27,23 +27,28 @@ export class Config extends SceneBase {
 
   constructor() {
     super();
-    this.settings = Sprite.from("B6");
+    
+    this.settings = Sprite.from("CONFIG_BG");
+    this.settings.scale.set(1.3);
+    this.settings.position.set(this.settings.width / 2, this.settings.height / 2 + 60);
+    this.settings.anchor.set(0.5);
 
     this.buttonMouse = new PointButton(
-      Texture.from("BACK.png"),
-      Texture.from("BACK hundido.png"),
-      Texture.from("BACK.png")
+      Texture.from("EMPTY_BUTTON"),
+      Texture.from("EMPTY_BUTTON"),
+      Texture.from("EMPTY_BUTTON")
     );
     this.buttonMouse.x = 650;
-    this.buttonMouse.y = 670;
-    this.buttonMouse.scale.x = 0.5;
-    this.buttonMouse.scale.y = 0.5;
+    this.buttonMouse.y = 600  ;
+    this.buttonMouse.scale.x = 0.2;
+    this.buttonMouse.scale.y = 0.2;
     this.buttonMouse.on("pointerClick", this.onButtonClick, this);
 
-    this.title = new Text("Settings", LETRA1TITLE);
+    this.title = new Text("Settings", LETRA3);
     this.title.position.set(50, 50);
+    this.title.scale.set(0.5);
 
-    this.control1 = new Text("Movement:", LETRA1SUBTITLE);
+    this.control1 = new Text("Movement:", LETRA4);
     this.control1.position.set(150, 320);
 
     this.control2 = new Text("Jump: KeyW / click Main hability", LETRA1);
@@ -80,7 +85,7 @@ export class Config extends SceneBase {
     const volumeInfo = new ConfigInfo({
       name: "Volume",
       min: 0,
-      max: 5,
+      max: 1,
       current: getGlobalVolume(),
       step: 0.1,
     });
@@ -118,7 +123,7 @@ export class Config extends SceneBase {
     // this.addChild(playerHEIGHT);
   }
 
-  public update(): void {}
+  public update(): void { }
 
   //BUTTON.TS            HACER FUNCIONAR EL NUEVO BOTÓN
   private onButtonClick(): void {

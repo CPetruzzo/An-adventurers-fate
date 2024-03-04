@@ -26,25 +26,25 @@ export interface SpriteParams {
 // SpriteParams para los sprites mencionados en el ejemplo
 
 export const bagBG: SpriteParams = {
-    texture: "itemBG",
+    texture: "TINY_EMPTY_BUTTON",
     position: { x: menuBag.x, y: menuBag.y + 5 },
-    scale: { x: 0.17, y: 0.17 },
+    scale: { x: 0.15, y: 0.15 },
     alpha: 0.5,
     anchor: { x: 0.5, y: 0.5 }
 };
 
 export const shieldBG: SpriteParams = {
-    texture: "itemBG",
+    texture: "TINY_EMPTY_BUTTON",
     position: { x: shield.x, y: shield.y + 15 },
-    scale: { x: 0.17, y: 0.17 },
+    scale: { x: 0.15, y: 0.15 },
     alpha: 0.5,
     anchor: { x: 0.5, y: 0.5 }
 };
 
 export const bookBG: SpriteParams = {
-    texture: "itemBG",
+    texture: "TINY_EMPTY_BUTTON",
     position: { x: book.x, y: book.y + 5 },
-    scale: { x: 0.17, y: 0.17 },
+    scale: { x: 0.15, y: 0.15 },
     alpha: 0.5,
     anchor: { x: 0.5, y: 0.5 }
 };
