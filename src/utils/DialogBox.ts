@@ -1,14 +1,13 @@
-// import { sound } from "@pixi/sound";
 import { Text, TextStyle, Container, NineSlicePlane, Texture } from "pixi.js";
-import { Tween } from "tweedle.js";
 import { stopSFX, SoundNames } from "./SoundParams";
-import { DIALOG_ALPHA } from "./constants";
+import { DIALOG_ALPHA, TEXT_TIME_LETTER_BY_LETTER } from "./constants";
+import { Timer } from "./SceneManager";
 
 export class DialogBox extends Container {
   private text: Text;
   private style: TextStyle;
   private background: NineSlicePlane;
-  public mostrarEscrito: boolean = false;
+  public hiding: boolean = false;
 
   constructor(x: number, y: number, width: number, height: number, style?: TextStyle) {
     super();
@@ -20,7 +19,8 @@ export class DialogBox extends Container {
       fontSize: 16,
       fill: "white",
       wordWrap: true,
-      wordWrapWidth: width - 20 // Ancho del cuadro menos el padding
+      wordWrapWidth: width - 20, // Ancho del cuadro menos el padding
+      align: "left"
     });
 
     this.background = new NineSlicePlane(
@@ -37,11 +37,17 @@ export class DialogBox extends Container {
     this.addChild(this.background);
 
     this.text = new Text("", this.style);
-    this.text.position.set(10, 10); // Padding
-    this.text.anchor.set(0.5);
-    this.addChild(this.text);
+    this.text.position.set(this.background.width, this.background.height / 3);
+    this.background.addChild(this.text);
 
-    this.hide();
+    if (this.text.style.wordWrapWidth) {
+      this.text.x -= 7 * this.text.style.wordWrapWidth / 8;
+    } else {
+      const wordWrapWidthValue = 300;
+      this.text.x -= 7 * wordWrapWidthValue / 8;
+    }
+
+    this.hide(true);
   }
 
   public setText(text: string, _textSpeed?: number): void {
@@ -59,51 +65,54 @@ export class DialogBox extends Container {
   }
 
   private writeText(text: string, _textSpeed?: number): void {
-    this.text.text = text;
-    const subtexto = this.text.text.split('');
-
-    if (this.mostrarEscrito) {
-      this.show();
-      let delay = _textSpeed ? _textSpeed : 200;
-
-      for (let i = 0; i < subtexto.length; i++) {
-        setTimeout(() => {
-          new Tween({})
-            .to({}, delay)
-            .onUpdate(() => {
-              this.showText();
-              const partialText = subtexto.slice(0, i + 1).join('');
-              this.text.text = partialText;
-            })
-            .start()
-            .onComplete(() => {
-              if (i == this.text.text.length - 1) {
-                this.mostrarEscrito = false;
-                if (!this.mostrarEscrito) {
-                  this.hide(); // Oculta el texto cuando termina de escribirse
-                }
-                stopSFX(SoundNames.JUMP);
-              }
-            });
-          // sound.play(SoundNames.JUMP, { speed: 2, volume: 0.1 });
-        }, delay);
-        delay += 50;
-      }
+    if (this.hiding) {
+      return; // Si ya se está ocultando el diálogo, no inicies una nueva escritura
     }
-  }
 
-  private showText(): void {
-    this.text.visible = true;
-    this.text.alpha = DIALOG_ALPHA;
+    this.show(); // Mostrar el cuadro de diálogo antes de escribir el texto
+    this.hiding = true;
+
+    const subtexto = text.split('');
+    let partialText = '';
+
+    let delay = _textSpeed ? _textSpeed : 100;
+    let totalDelay = 0;
+
+    for (let i = 0; i < subtexto.length; i++) {
+      setTimeout(() => {
+        this.showText();
+        partialText += subtexto[i];
+        this.text.text = partialText;
+        
+        if (i === subtexto.length - 1) {
+          stopSFX(SoundNames.JUMP);
+          this.hide();
+        }
+      }, totalDelay);
+
+      totalDelay += delay;
+    }
   }
 
   public show(): void {
     this.background.alpha = DIALOG_ALPHA;
   }
 
-  public hide(): void {
-    this.background.alpha = 0;
-    this.text.alpha = 0;
-    console.log('this.text.alpha', this.text.alpha)
+  public showText(): void {
+    this.text.alpha = DIALOG_ALPHA;
+  }
+
+  public hide(now?: boolean): void {
+    if (!now) {
+      Timer(TEXT_TIME_LETTER_BY_LETTER, () => {
+        this.background.alpha = 0;
+        this.text.alpha = 0;
+        this.hiding = false;
+      });
+    } else {
+      this.background.alpha = 0;
+      this.text.alpha = 0;
+      this.hiding = false;
+    }
   }
 }

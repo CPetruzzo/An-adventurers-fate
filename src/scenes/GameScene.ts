@@ -40,7 +40,7 @@ import {
   start,
 } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
-import { LETRA1, LETRA4 } from "../utils/constants";
+import { LETRA1, LETRA4, TEXT_TIME_LETTER_BY_LETTER } from "../utils/constants";
 import { closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
@@ -620,7 +620,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.world.x =
       -this.player.x * this.worldTransform.a + SceneManager.WIDTH / 3;
 
-    if (!this.dialogBox.mostrarEscrito) {
+    if (!this.dialogBox.hiding) {
       this.checkDialog();
     }
 
@@ -635,10 +635,9 @@ export class GameScene extends SceneBase implements IUpdateable {
   }
 
   private checkDialog(): void {
-    this.dialogBox.mostrarEscrito = true;
     Keyboard.down.on("KeyE", () => {
       this.dialogBox.setStyle(LETRA4);
-      this.dialogBox.setText("No hay nada que hacer aquí, debo continuar.", 100);
+      this.dialogBox.setText("No hay nada que hacer aquí, debo continuar.", TEXT_TIME_LETTER_BY_LETTER);
     }, this);
   }
 

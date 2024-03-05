@@ -31,6 +31,7 @@ export const TRANSITION_TIME: number = 500;
 
 // dialogbox alpha
 export const DIALOG_ALPHA: number = 0.8;
+export const TEXT_TIME_LETTER_BY_LETTER: number = 100;
 
 // FONTS
 export const LETRA1 = new TextStyle({
