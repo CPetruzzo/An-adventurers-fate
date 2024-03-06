@@ -2,11 +2,12 @@ import { sound } from "@pixi/sound";
 import { AnimatedSprite, Container, Sprite, Texture } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
-import { SceneManager } from "../utils/SceneManager";
+import { SceneManager, Timer } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
-import { playSound, stopSounds } from "../utils/SoundParams";
+import { SoundNames, playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
-import { Inventory, Weapon } from "../games/Inventory";
+import { Inventory, InventoryItem, Weapon } from "../games/Inventory";
+import { SpecialItem } from "../games/Items/SpecialItem";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -81,7 +82,7 @@ export class WinScene extends Container {
         this.removeChild(this.box);
         this.addChild(this.openingBox);
         this.openingBox.play();
-        playSound("Chest1", {});
+        playSound(SoundNames.CHEST, {});
         new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
     }
 
@@ -90,8 +91,8 @@ export class WinScene extends Container {
         this.addChild(this.award);
         this.award.visible = true;
 
-        stopSounds(["Chest1"]);
-        playSound("ItemBGM", { volume: 0.2 })
+        stopSounds([SoundNames.CHEST]);
+        playSound(SoundNames.ITEM, { volume: 0.2 })
 
         new Tween(this.award)
             .to({ x: 400, y: 130, alpha: 1 }, 2000)
@@ -101,13 +102,27 @@ export class WinScene extends Container {
 
     /** Timer */
     private Waiting(): void {
-        // Agregar una espada al inventario desde una escena
-        const sword = new Weapon("Sword", "A sharp blade", 1, 10);
-        console.log('sword', sword)
-        Inventory.getInstance().addItem(sword);
+        let item: InventoryItem;
         console.log("waiting");
-        new Tween(this.award).to({}, 2000).start().onComplete(this.NextStage.bind(this));
+        switch (Level.CurrentLevel) {
+            case 1:
+                // Agregar una espada al inventario desde una escena
+                item = new Weapon("Sword", "A sharp blade", 1, 10);
+                console.log('item', item);
+                break;
+            case 2:
+                item = new SpecialItem(1);
+                console.log('item', item);
+                break;
+            default:
+                item = new SpecialItem(1);
+                console.log('item', item);
+                break;
+        }
+        Inventory.getInstance().addItem(item);
+        Timer(2000, this.NextStage.bind(this));
     }
+
 
     /** Función que pasa al turno siguiente */
     public NextStage(): void {
