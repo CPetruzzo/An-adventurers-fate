@@ -10,7 +10,7 @@ import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
 import { backMenu, book, button1Params, button2Params, closeBook, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
 import { backShieldParams, bookOpenedParams, cartelParams, itemBowParams, itemWeapon1Params, itemWeapon2Params, itemWeapon3Params, itemWeapon4Params, mapParams, marcoBottomRightParams, marcoTopLeftParams, nombreParams, pieParams, playerParams, pointOnMap2Params, pointOnMap3Params, pointOnMap4Params, pointOnMapParams as pointOnMap1Params, bagBG, bookBG, shieldBG, itemSwordParams } from "../utils/SpriteParams";
-import { closePopUp, createPopUp } from "../utils/PopUps";
+import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
 import { GameSceneTwo } from "./GameSceneTwo";
@@ -264,33 +264,33 @@ export class MapScene extends SceneBase implements IUpdateable {
 
         playSound("shield", { volume: 0.1 })
         if (Level.Complete === 1) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
+            createPopUp(PopUpsNames.SHIELD, [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         } else if (Level.Complete === 2) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
+            createPopUp(PopUpsNames.SHIELD, [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         } else if (Level.Complete === 3) {
-            createPopUp("shield", [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
+            createPopUp(PopUpsNames.SHIELD, [[this.buttonRefs['shield']]], [[this.backShield, this.buttonRefs['shieldClose'], this.itemWeapon4, this.itemWeapon3, this.itemWeapon2, this.itemWeapon1, this.itemBow, this.itemSword]], this, Sprite.from("EMPTY_BANNER"), this.popUps)
         }
     }
     private onCloseShieldClick(): void {
-        closePopUp("shield", this, this.popUps); // Cerramos el pop-up 'shield'
+        closePopUp(PopUpsNames.SHIELD, this, this.popUps); // Cerramos el pop-up 'shield'
     }
 
     // Ejemplo de uso en tus funciones
     private onBackMenu(): void {
-        createPopUp("closeMenu", // Nombre del pop-up
+        createPopUp(PopUpsNames.BACKTOMENU, // Nombre del pop-up
             [[this.buttonRefs['backMenu']],], // objetos a remover
             [[this.cartel, this.salir, this.buttonRefs['button1'], this.buttonRefs['button2'],
             this.salirSi, this.salirNo]] // objetos a agregar
             , this, Sprite.from("EMPTY_BANNER"), this.popUps)
     }
     private onBackMenuClose(): void {
-        closePopUp("closeMenu", this, this.popUps); // Cerramos el pop-up 'closeMenu'
+        closePopUp(PopUpsNames.BACKTOMENU, this, this.popUps); // Cerramos el pop-up 'closeMenu'
     }
 
     // Ejemplo de uso en tus funciones
     private onBook(): void {
         this.bookSound();
-        createPopUp("book", // Nombre del pop-up
+        createPopUp(PopUpsNames.BOOK, // Nombre del pop-up
             [[this.buttonRefs['book']]],
             [[this.bookOpened, this.buttonRefs['closeBook'], this.textoViejo, this.player,
             this.Hp, this.PStrenght, this.BStrenght, this.marcoTopLeft,
@@ -298,7 +298,7 @@ export class MapScene extends SceneBase implements IUpdateable {
             , this, Sprite.from("EMPTY_BANNER"), this.popUps);
     }
     private onBookClose(): void {
-        closePopUp("book", this, this.popUps); // Cerramos el pop-up 'book'
+        closePopUp(PopUpsNames.BOOK, this, this.popUps); // Cerramos el pop-up 'book'
     }
 
     // Ejemplo de uso en tus funciones
@@ -325,13 +325,13 @@ export class MapScene extends SceneBase implements IUpdateable {
     private onMenuBagClick(): void {
         playSound("backpack", { volume: 1.5 })
         new Tween(this.buttonRefs['menuBag']).to({}, 1500).start().onComplete(this.stopMenuSound.bind(this));
-        createPopUp("menuBag", // Nombre del pop-up
+        createPopUp(PopUpsNames.BAG, // Nombre del pop-up
             [[this.buttonRefs['menuBag']]],
             [[this.openBag, this.buttonRefs['bagClose']]]
             , this, Sprite.from("EMPTY_BANNER"), this.popUps);
         // to change to: 
         // createPopUp({
-        //     name: "menuBag",
+        //     name: PopUpsNames.BAG,
         //     objectsToRemove: [[this.buttonRefs['menuBag']]],
         //     objectsToAdd: [[this.openBag, this.buttonRefs['bagClose']]],
         //     context: this, popups: this.popUps
@@ -340,7 +340,7 @@ export class MapScene extends SceneBase implements IUpdateable {
     }
 
     private onMenuBagStopClick(): void {
-        closePopUp("menuBag", this, this.popUps); // Cerramos el pop-up 'book'
+        closePopUp(PopUpsNames.BAG, this, this.popUps); // Cerramos el pop-up 'book'
     }
 
     private stopMenuSound(): void {

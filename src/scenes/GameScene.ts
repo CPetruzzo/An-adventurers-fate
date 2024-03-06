@@ -41,7 +41,7 @@ import {
 } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { LETRA1, LETRA4, TEXT_TIME_LETTER_BY_LETTER } from "../utils/constants";
-import { closePopUp, createPopUp } from "../utils/PopUps";
+import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
@@ -859,14 +859,14 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.pauseScene = new PauseScene();
     const objectsToRemove = [[]];
     const objectsToAdd = [[this.pauseScene, this.pauseOff]];
-    createPopUp("pause", objectsToRemove, objectsToAdd, this, Sprite.from("EMPTY_BANNER"), this.popUps);
+    createPopUp(PopUpsNames.PAUSE, objectsToRemove, objectsToAdd, this, Sprite.from("EMPTY_BANNER"), this.popUps);
     this.isPaused = true;
   }
 
   /** Función para salir de pausa */
   private offPause(): void {
     this.isPaused = false;
-    closePopUp("pause", this, this.popUps);
+    closePopUp(PopUpsNames.PAUSE, this, this.popUps);
   }
 
   // BOTONES ON - OFF

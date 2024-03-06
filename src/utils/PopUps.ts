@@ -12,6 +12,14 @@ export interface PopUpParams {
     popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }
 }
 
+export enum PopUpsNames {
+    PAUSE = "PAUSE",
+    SHIELD = "SHIELD",
+    BAG = "BAG",
+    BOOK = "BOOK",
+    BACKTOMENU = "BACKTOMENU",
+}
+
 export function createPopUp(
     name: string,
     objectsToRemove: any[][],
