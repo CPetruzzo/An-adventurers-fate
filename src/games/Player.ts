@@ -9,7 +9,7 @@ import { Easing, Tween } from "tweedle.js";
 import { Keyboard } from "../utils/Keyboard";
 import { IHitBox } from "./IHitBox";
 import { PhysicsContainer } from "./PhysicsContainer";
-import { INITIAL_ARROWS, LETRA1, LETRA1SUBTITLE } from "../utils/constants";
+import { INITIAL_ARROWS, JUMP_FACTOR, LETRA1, LETRA1SUBTITLE, PLAYER_SCALE } from "../utils/constants";
 import { LevelPoints } from "../Logic/LevelPoints";
 import { playSFX, stopAllSFX, stopSFX, stopSounds } from "../utils/SoundParams";
 import { Timer } from "../utils/SceneManager";
@@ -17,8 +17,8 @@ import { PlayerAnimations } from "./PlayerAnimations";
 import { setValue } from "../utils/FunctionManager";
 
 export class Player extends PhysicsContainer implements IHitBox {
-    private static readonly GRAVITY = 1000;
-    private static readonly MOVE_SPEED = 350;
+    private static readonly GRAVITY = 3000;
+    private static readonly MOVE_SPEED = 500;
     private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
     private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
 
@@ -44,11 +44,13 @@ export class Player extends PhysicsContainer implements IHitBox {
     public static height: number;
     public _swordDamage: number = 40;
 
+
     public levelPoints: LevelPoints;
     private static _instance: Player | null = null;
     public runningPostJump: boolean | undefined = false;
 
     public animations: PlayerAnimations;
+    public standing: boolean = false;
 
     public static getInstance(): Player {
         if (!Player._instance) {
@@ -162,7 +164,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     //  MOVIMIENTOS
     public override update(deltaMS: number): void {
-        super.update(deltaMS / 1000);
+        super.update(deltaMS / 100);
         this.animations.update(deltaMS / (1000 / 60));
     }
 
@@ -171,7 +173,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         if (this.canJump) {
             stopSFX("running");
             playSFX("jumper", { loop: false, volume: 0.05 });
-            this.speed.y = -(Player.GRAVITY * 0.7);
+            this.speed.y = -(Player.GRAVITY * JUMP_FACTOR);
             this.animations.jump();
             new Tween(this.animations)
                 .to({}, 1450)
@@ -210,7 +212,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSFX("running");
         playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = -Player.MOVE_SPEED;
-        this.scale.set(-2, 2);
+        this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
         this.animations.run();
     }
 
@@ -218,7 +220,7 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSFX("running");
         playSFX("running", { loop: true, volume: 0.05 });
         this.speed.x = Player.MOVE_SPEED;
-        this.scale.set(2, 2);
+        this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
         this.animations.run();
     }
 
@@ -329,14 +331,14 @@ export class Player extends PhysicsContainer implements IHitBox {
     private stopRunLeft(): void {
         stopSounds(["running"]);
         this.speed.x = 0;
-        this.scale.set(-2, 2);
+        this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
         this.animations.idle();
     }
 
     private stopRunRight(): void {
         stopSounds(["running"]);
         this.speed.x = 0;
-        this.scale.set(2, 2);
+        this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
         this.animations.idle();
         stopSFX("running");
     }
@@ -358,19 +360,26 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     //PARA SEPARAR JUGADORES DE SUS PLATAFORMAS
     public separate(overlap: Rectangle, platform: ObservablePoint<any>) {
+        const fromBelow = this.y > platform.y;
         if (overlap.width < overlap.height) {
-            if (this.x < platform.x) {
-                this.x -= overlap.width;
-            } else if (this.x > platform.x) {
-                this.x += overlap.width;
-            }
+            // if (!fromBelow) {
+                if (this.x < platform.x) {
+                    this.x -= overlap.width;
+                } else if (this.x > platform.x) {
+                    this.x += overlap.width;
+                }
+            // }
         } else {
-            if (this.y > platform.y) {
+            if (fromBelow) {
+                this.standing = false;
+                // uncomment this if you want to hit ceilings from under them
                 this.y += overlap.height;
                 this.speed.y = 0;
             } else if (this.y < platform.y) {
                 this.y -= overlap.height;
-                this.speed.y = 0;
+                if (this.canJump) {
+                    this.speed.y = 0;
+                }
                 this.canJump = true;
             }
         }

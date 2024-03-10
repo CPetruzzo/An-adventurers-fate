@@ -563,10 +563,7 @@ export class GameScene extends SceneBase implements IUpdateable {
 
     if (this.nextStage) {
       this.player.initKeyboardEvents(false);
-
       SceneManager.changeScene(new WinScene());
-
-
       stopSounds(["GameBGM"]);
     }
 
@@ -620,9 +617,9 @@ export class GameScene extends SceneBase implements IUpdateable {
     this.world.x =
       -this.player.x * this.worldTransform.a + SceneManager.WIDTH / 3;
 
-    if (!this.dialogBox.hiding) {
-      this.checkDialog();
-    }
+      if (!this.dialogBox.hiding) {
+        this.checkDialog();
+      }
 
     this.enemyCloseToPlayer();
     this.checkDrinkPotion();

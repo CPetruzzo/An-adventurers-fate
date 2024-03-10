@@ -3,12 +3,12 @@ import { Graphics, Loader, Sprite } from "pixi.js";
 import { assets } from "../assets";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
-import { GameStartScene } from "./GameStartScene";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { TRANSITION_TIME } from "../utils/constants";
+import { GameStartScene } from "./GameStartScene";
 
 export class LoaderScene extends SceneBase {
-  public update(): void {}
+  public update(): void { }
 
   private loadbar: Graphics;
 

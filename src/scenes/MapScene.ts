@@ -5,7 +5,6 @@ import { IUpdateable } from "../utils/IUpdateable";
 import { Keyboard } from "../utils/Keyboard";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
-import { GameScene } from "./GameScene";
 import { GameStartScene } from "./GameStartScene";
 import { LETRA2 } from "../utils/constants";
 import { backMenu, book, button1Params, button2Params, closeBook, mapDownParams, mapUpParams, menuBag, shield, shieldCloseParams, stageFour, stageOne, stageThree, stageTwo } from "../utils/ButtonParams";
@@ -13,13 +12,15 @@ import { backShieldParams, bookOpenedParams, cartelParams, itemBowParams, itemWe
 import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
 import { createText, getPlayerName, salirNoParams, salirParams, salirSiParams } from "../utils/TextParams";
 import { Level } from "../utils/Level";
-import { GameSceneTwo } from "./GameSceneTwo";
 import { stopAllSounds } from "../utils/SoundParams";
 import { playSFX, playSound, stopSounds } from "../utils/SoundParams";
 import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
 import { createSprite, createPointButton, getPlayerHeight } from "../utils/FunctionManager";
 import { Inventory } from "../games/Inventory";
+import { LDTKScene } from "./LDTKScene";
+import { LDTKScene2 } from "./LDTKScene2";
+import { LDTKScene3 } from "./LDTKScene3";
 
 const RED = 0xAA0000;
 
@@ -425,22 +426,22 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onStageOneClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new GameScene());
+        SceneManager.changeScene(new LDTKScene());
     }
 
     private onStageTwoClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new GameSceneTwo());
+        SceneManager.changeScene(new LDTKScene2());
     }
 
     private onStageThreeClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new GameScene());
+        SceneManager.changeScene(new LDTKScene3());
     }
 
     private onStageFourClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new GameScene());
+        SceneManager.changeScene(new LDTKScene());
     }
 
     private onMenu(): void {

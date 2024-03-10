@@ -121,4 +121,13 @@ export const assets = [
     { url: "./openBag.png", name: "openBag" },
     { url: "./scroll.png", name: "scroll" },
     
+
+    // LDTK
+    { url: "./LDTKassets/Props-Rocks.png", name: "Rocks" },
+    { url: "./LDTKassets/Tiles.png", name: "Tiles" },
+    { url: "./LDTKassets/Tree-Assets.png", name: "Trees" },
+    { url: "./LDTKassets/Level_0.png", name: "Level_0" },
+    { url: "./LDTKassets/Level_1.png", name: "Level_1" },
+    { url: "./LDTKassets/Level_2.png", name: "Level_2" },
+
 ]

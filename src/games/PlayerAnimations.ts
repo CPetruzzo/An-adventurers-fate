@@ -1,5 +1,6 @@
 import { Tween } from "tweedle.js";
 import { StateAnimation } from "../utils/StateAnimation";
+import { ANIM_SPEED, PLAYER_SCALE } from "../utils/constants";
 
 export class PlayerAnimations extends StateAnimation {
     private static readonly JUMP_ANIMATION_TIME = 1450;
@@ -10,7 +11,7 @@ export class PlayerAnimations extends StateAnimation {
     constructor() {
         
         super();
-        this.scale.set(2);
+        this.scale.set(PLAYER_SCALE);
         this.pivot.set(0.55, 17);
 
         this.addState(
@@ -23,7 +24,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-run2-04.png",
                 "adventurer-run2-05.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -64,7 +65,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-punch-04.png",
                 "adventurer-punch-05.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -78,7 +79,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-run-punch-05.png",
                 "adventurer-run-punch-06.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState("idle", ["adventurer-walk-00.png"], 0.05, true);
@@ -92,7 +93,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-crouch-walk-04.png",
                 "adventurer-crouch-walk-05.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -103,7 +104,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-drop-kick-02.png",
                 "adventurer-drop-kick-03.png",
             ],
-            0.025,
+            0.02,
             false
         );
         this.addState(
@@ -119,7 +120,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-bow-07.png",
                 "adventurer-bow-08.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -132,13 +133,13 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-bow-04.png",
                 "adventurer-bow-05.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
             "chargedbow",
             ["adventurer-bow-04.png", "adventurer-bow-05.png"],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -148,7 +149,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-bow-07.png",
                 "adventurer-bow-08.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
         this.addState(
@@ -161,7 +162,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-bow-jump-04.png",
                 "adventurer-bow-jump-05.png",
             ],
-            0.1,
+            ANIM_SPEED,
             true
         );
     }

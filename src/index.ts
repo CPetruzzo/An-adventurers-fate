@@ -1,5 +1,5 @@
 import { Capacitor } from "@capacitor/core";
-import { LoaderScene } from "./scenes/LoaderScene";
+// import { LoaderScene } from "./scenes/LoaderScene";
 import { SceneManager } from "./utils/SceneManager";
 import { StatusBar } from "@capacitor/status-bar";
 import { KeepAwake } from "@capacitor-community/keep-awake";
@@ -8,6 +8,7 @@ import { pauseSounds, resumeSounds, setVolume } from "./utils/SoundParams";
 import { GLOBAL_VOLUME } from "./utils/constants";
 import { Player } from "./games/Player";
 import { getValue, setValue } from "./utils/FunctionManager";
+import { LoaderScene } from "./scenes/LoaderScene";
 
 SceneManager.initialize();
 

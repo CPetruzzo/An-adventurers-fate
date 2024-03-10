@@ -17,7 +17,7 @@ export class TransitionScene extends SceneBase {
     super();
 
     this.blackScreen = new Graphics();
-    this.blackScreen.beginFill(0xffffff, 1);
+    this.blackScreen.beginFill(0x000000, 1);
     this.blackScreen.drawRect(0, 0, SceneManager.WIDTH, SceneManager.HEIGHT);
     this.blackScreen.endFill();
     this.addChild(this.blackScreen);

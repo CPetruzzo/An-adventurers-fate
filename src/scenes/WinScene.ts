@@ -8,6 +8,8 @@ import { SoundNames, playSound, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { Inventory, InventoryItem, Weapon } from "../games/Inventory";
 import { SpecialItem } from "../games/Items/SpecialItem";
+import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
+import { TRANSITION_TIME } from "../utils/constants";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -18,6 +20,14 @@ export class WinScene extends Container {
 
     constructor() {
         super();
+        console.log("lalala", Level.Complete)
+
+        const background = Sprite.from("EMPTY_BANNER");
+        background.anchor.set(0.5);
+        background.position.set(background.width * 0.63, background.height * 0.4)
+        const screenRelation = SceneManager.WIDTH / background.width;
+        background.scale.set(screenRelation);
+        this.addChild(background);
 
         // IMAGEN DE LA CAJA SIN MOVERSE HECHA BOTON PARA QUE SE ABRA
         this.box = new PointButton(
@@ -40,7 +50,7 @@ export class WinScene extends Container {
         );
         this.openingBox.loop = false;
         this.openingBox.visible = true;
-        this.openingBox.animationSpeed = 0.007;
+        this.openingBox.animationSpeed = 0.1;
         this.openingBox.position.set(400, 130);
 
         // IMAGEN DEL PREMIO
@@ -52,6 +62,13 @@ export class WinScene extends Container {
                 this.award.alpha = 0;
                 break;
             case 2:
+                this.award = new Sprite(Texture.from("scroll"));
+                this.award.position.set(500, 230);
+                this.award.rotation = Math.PI / 2;
+                this.award.scale.set(0.7);
+                this.award.alpha = 0;
+                break;
+            case 3:
                 this.award = new Sprite(Texture.from("scroll"));
                 this.award.position.set(500, 230);
                 this.award.rotation = Math.PI / 2;
@@ -73,7 +90,7 @@ export class WinScene extends Container {
     }
 
     /** Flag que activa la caja */
-    public Box() {
+    public flagBox() {
         this.winStage = true;
     }
 
@@ -83,11 +100,11 @@ export class WinScene extends Container {
         this.addChild(this.openingBox);
         this.openingBox.play();
         playSound(SoundNames.CHEST, {});
-        new Tween(this.openingBox).to({}, 1000).start().onComplete(this.Award.bind(this));
+        new Tween(this.openingBox).to({}, 1000).start().onComplete(this.getAward.bind(this));
     }
 
     /** Función que hace salir la espada (premio) */
-    private Award(): void {
+    private getAward(): void {
         this.addChild(this.award);
         this.award.visible = true;
 
@@ -114,21 +131,25 @@ export class WinScene extends Container {
                 item = new SpecialItem(1);
                 console.log('item', item);
                 break;
+            case 3:
+                item = new SpecialItem(1);
+                console.log('item', item);
+                break;
             default:
                 item = new SpecialItem(1);
                 console.log('item', item);
                 break;
         }
         Inventory.getInstance().addItem(item);
-        Timer(2000, this.NextStage.bind(this));
+        Timer(2000, this.nextStage.bind(this));
     }
 
 
     /** Función que pasa al turno siguiente */
-    public NextStage(): void {
+    public nextStage(): void {
         sound.stop("GameBGM");
         sound.stop("ItemBGM");
-        SceneManager.changeScene(new MapScene());
+        SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     }
 }
 
