@@ -8,7 +8,7 @@ import {
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
-import { checkCollision } from "../games/IHitBox";
+import { Slope, checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
@@ -38,7 +38,7 @@ import {
     start,
 } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
-import { LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER, TRANSITION_TIME } from "../utils/constants";
+import { CURRENT_LEVEL, LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER, TRANSITION_TIME } from "../utils/constants";
 import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
@@ -47,8 +47,9 @@ import { createPointButton } from "../utils/FunctionManager";
 import { DialogBox } from "../utils/DialogBox";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { WinScene } from "./WinScene";
+import { Water } from "../games/Water";
 
-export class LDTKScene extends SceneBase implements IUpdateable{
+export class LDTKScene extends SceneBase implements IUpdateable {
     private world: Container;
     private player: Player;
     private levelSprite: Sprite;
@@ -56,6 +57,8 @@ export class LDTKScene extends SceneBase implements IUpdateable{
     public potions: Potion[] = [];
     public gameOver: boolean = false;
     private isPaused: boolean = false;
+
+    private waters: Water[] = [];
 
     private arek: Arek;
     private melee: Melee;
@@ -99,9 +102,13 @@ export class LDTKScene extends SceneBase implements IUpdateable{
     private barra: GenericPanel;
     public pauseScene!: PauseScene;
     public causingRangeDamage: boolean = false;
+    private slopes: Slope[];
+    private terrain: string = "GROUND";
 
     constructor() {
         super();
+
+        playSound("GameBGM", { loop: true, volume: 0.05 });
 
         this.world = new Container();
         this.addChild(this.world);
@@ -116,7 +123,7 @@ export class LDTKScene extends SceneBase implements IUpdateable{
         this.player.position.set(600, 600);
         this.world.addChild(this.player);
 
-        Level.CurrentLevel = 1;
+        Level.CurrentLevel = CURRENT_LEVEL;
         console.log("Current Level: ", Player.getLevel());
         console.log(
             "this.playerBardo.levelPoints.requiredPoints",
@@ -140,6 +147,58 @@ export class LDTKScene extends SceneBase implements IUpdateable{
             .onComplete(this.arekToRight.bind(this));
         this.addChild(this.world);
 
+        // WATER
+        const waterData = [
+
+            // 1
+            {
+                type: "Tile",
+                width: 15,
+                height: 20,
+                posX: 3800,
+                posY: 100,
+                sizeX: 4200,
+                sizeY: 680,
+            },
+            // 0
+            {
+                type: "Tile",
+                width: 15,
+                height: 20,
+                posX: 1000,
+                posY: 100,
+                sizeX: 1600,
+                sizeY: 680,
+            },
+        ];
+        for (let data of waterData) {
+            let water = new Water(
+                data.type,
+                data.width,
+                data.height,
+                data.width,
+                data.height,
+                data.posX,
+                data.posY
+            );
+            // Set its position
+            water.position.x = data.sizeX;
+            water.position.y = data.sizeY;
+
+            water.name = `water${this.waters.length}`;
+            console.log('water.name', water.name);
+            this.world.addChild(water);
+            this.waters.push(water);
+        }
+
+        this.slopes = [];
+
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, 22);             
+            slope.position.set(3250 + i * 30, 625 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
 
         // An array of platform data
         const platformData = [
@@ -515,9 +574,9 @@ export class LDTKScene extends SceneBase implements IUpdateable{
             SceneManager.changeScene(new WinScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
             stopSounds(["GameBGM"]);
         }
-
+        
         if (!this.gotToChest) {
-            this.player.update(_deltaFrame);
+            this.player.update(_deltaFrame, this.terrain);
         } else {
             this.player.initKeyboardEvents(false);
         }
@@ -542,19 +601,42 @@ export class LDTKScene extends SceneBase implements IUpdateable{
         }
 
         // LIMITE INFERIOR
-        if (this.player.y > SceneManager.HEIGHT - 100) {
-            this.player.y = SceneManager.HEIGHT - 100;
+        if (this.player.y > SceneManager.HEIGHT) {
+            this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
-            console.log("drowning");
-            this.player.animations.playState("hurted")
-            // this.gameOver = true;
         }
 
+        for (let water of this.waters) {
+            const overlap = checkCollision(this.player, water);
+            if (overlap != null) {
+                this.player.getPlayerHurt(0.1);
+                this.changePlayerHP();
+
+                if (Player._hp <= 0) {
+                    SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+                }
+                
+                this.player.swimming = true;
+                this.terrain = "WATER";
+                break;
+            } else {
+                this.player.swimming = false;
+                this.terrain = "GROUND";
+            }
+        }
         // LA COLISION PARA QUE TENGA SU FISICA Y NO CAIGA A TRAVES DE LAS PLATAFORMAS
         for (let platform of this.platforms) {
             const overlap = checkCollision(this.player, platform);
             if (overlap != null) {
                 this.player.separate(overlap, platform.position);
+            }
+        }
+
+        for (let slope of this.slopes) {
+            // En el código de detección de colisiones del jugador
+            const overlap = checkCollision(this.player, slope);
+            if (overlap != null) {
+                this.player.slope(overlap, slope.position, slope.height)
             }
         }
 

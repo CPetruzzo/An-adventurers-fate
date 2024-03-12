@@ -1,7 +1,7 @@
 import { Container, Graphics, NineSlicePlane, Rectangle, Texture, TextureSource } from "pixi.js";
 import { IHitBox } from "./IHitBox";
 
-export class Platform extends Container implements IHitBox {
+export class Water extends Container implements IHitBox {
 
     public shape: TextureSource;
     private tile: NineSlicePlane;
@@ -35,7 +35,7 @@ export class Platform extends Container implements IHitBox {
         // this.addChild(this.tile);
 
         this.hitbox = new Graphics();
-        this.hitbox.beginFill(0x00FF00, 0.3);
+        this.hitbox.beginFill(0x00ffff, 0.3);
         this.hitbox.drawRect(-(width / 2), -(height / 2), width, height);
         this.hitbox.endFill();
         this.addChild(this.hitbox);

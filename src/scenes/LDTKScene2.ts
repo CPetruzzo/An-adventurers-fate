@@ -8,7 +8,7 @@ import {
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
-import { checkCollision } from "../games/IHitBox";
+import { Slope, checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
@@ -47,6 +47,7 @@ import { isMobileDevice } from "..";
 import { createPointButton } from "../utils/FunctionManager";
 import { DialogBox } from "../utils/DialogBox";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
+import { Water } from "../games/Water";
 
 export class LDTKScene2 extends SceneBase implements IUpdateable {
     private world: Container;
@@ -56,6 +57,8 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
     public potions: Potion[] = [];
     public gameOver: boolean = false;
     private isPaused: boolean = false;
+    private waters: Water[] = [];
+
 
     private arek: Arek;
     private melee: Melee;
@@ -99,9 +102,14 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
     private barra: GenericPanel;
     public pauseScene!: PauseScene;
     public causingRangeDamage: boolean = false;
+    private slopes: Slope[];
+    private terrain: string = "GROUND";
+
 
     constructor() {
         super();
+
+        playSound("GameBGM", { loop: true, volume: 0.05 });
 
         this.world = new Container();
         this.addChild(this.world);
@@ -140,6 +148,65 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
             .onComplete(this.arekToRight.bind(this));
         this.addChild(this.world);
 
+        this.slopes = [];
+
+        for (let i = 0; i < 2; i++) {
+            const slope = new Slope(200, 50, -12);             
+            slope.position.set(1100 + i * 30, 620 + i * 30)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 1; i++) {
+            const slope = new Slope(150, 30, -35);             
+            slope.position.set(2250 + i * 30, 570 + i * 30)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+         // WATER
+         const waterData = [
+
+            // 1
+            {
+                type: "Tile",
+                width: 15,
+                height: 20,
+                posX: 500,
+                posY: 370,
+                sizeX: 2650,
+                sizeY: 680,
+            },
+            // 0
+            {
+                type: "Tile",
+                width: 15,
+                height: 20,
+                posX: 1500,
+                posY: 80,
+                sizeX: 4000,
+                sizeY: 690,
+            },
+        ];
+        for (let data of waterData) {
+            let water = new Water(
+                data.type,
+                data.width,
+                data.height,
+                data.width,
+                data.height,
+                data.posX,
+                data.posY
+            );
+            // Set its position
+            water.position.x = data.sizeX;
+            water.position.y = data.sizeY;
+
+            water.name = `water${this.waters.length}`;
+            console.log('water.name', water.name);
+            this.world.addChild(water);
+            this.waters.push(water);
+        }
 
         // An array of platform data
         const platformData = [
@@ -537,15 +604,15 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
             SceneManager.changeScene(new WinScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
             stopSounds(["GameBGM"]);
         }
-
+        
         if (!this.gotToChest) {
-            this.player.update(_deltaFrame);
+            this.player.update(_deltaFrame, this.terrain);
         } else {
             this.player.initKeyboardEvents(false);
         }
         this.HPbar.update(_deltaFrame);
         this.HPbar2.update(_deltaFrame);
-        
+
         const offset = SceneManager.WIDTH / 3;
         const rightLimit = this.player.x + 2 * offset > this.levelSprite.width;
         const leftLimit = this.player.x - offset < 0;
@@ -567,20 +634,39 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
-            if (!this.player.hurted) {
-                console.log("drowning");
-                this.player.hurted = true;
-                this.player.animations.playState("hurted");
-
-                // this.gameOver = true;
-            }
         }
 
+        for (let water of this.waters) {
+            const overlap = checkCollision(this.player, water);
+            if (overlap != null) {
+                this.player.getPlayerHurt(0.1);
+                this.changePlayerHP();
+
+                if (Player._hp <= 0) {
+                    SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+                }
+                
+                this.player.swimming = true;
+                this.terrain = "WATER";
+                break;
+            } else {
+                this.player.swimming = false;
+                this.terrain = "GROUND";
+            }
+        }
         // LA COLISION PARA QUE TENGA SU FISICA Y NO CAIGA A TRAVES DE LAS PLATAFORMAS
         for (let platform of this.platforms) {
             const overlap = checkCollision(this.player, platform);
             if (overlap != null) {
                 this.player.separate(overlap, platform.position);
+            }
+        }
+
+        for (let slope of this.slopes) {
+            // En el código de detección de colisiones del jugador
+            const overlap = checkCollision(this.player, slope);
+            if (overlap != null) {
+                this.player.slope(overlap, slope.position, slope.height)
             }
         }
 

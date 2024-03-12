@@ -18,6 +18,7 @@ export const assets = [
     { url: "./emptybutton.png", name: "EMPTY_BUTTON" },
     { url: "./tinyButton.png", name: "TINY_EMPTY_BUTTON" },
     { url: "./game-text-explanation.png", name: "EMPTY_BANNER" },
+    { url: "./StartMenu/assetloadbar1.png", name: "LOAD_BAR" },
 
 
     // BACKGROUND
@@ -47,6 +48,36 @@ export const assets = [
     { url: "./spritesheet (6).json", name: "Player" },
     { url: "./spritesheet (10).json", name: "PlayerBow" },
     { url: "./arrow.png", name: "Arrow" },
+    { url: "./Player/adventurer-idle-00-1.3.png", name: "idle1" },
+    { url: "./Player/adventurer-idle-01-1.3.png", name: "idle2" },
+    { url: "./Player/adventurer-idle-02-1.3.png", name: "idle3" },
+    { url: "./Player/adventurer-idle-03-1.3.png", name: "idle4" },
+
+    { url: "./Player/adventurer-run-00-1.3.png", name: "run1" },
+    { url: "./Player/adventurer-run-01-1.3.png", name: "run2" },
+    { url: "./Player/adventurer-run-02-1.3.png", name: "run3" },
+    { url: "./Player/adventurer-run-03-1.3.png", name: "run4" },
+    { url: "./Player/adventurer-run-04-1.3.png", name: "run5" },
+    { url: "./Player/adventurer-run-05-1.3.png", name: "run6" },
+
+    { url: "./Player/adventurer-swim-00-1.3.png", name: "swim1" },
+    { url: "./Player/adventurer-swim-01-1.3.png", name: "swim2" },
+    { url: "./Player/adventurer-swim-02-1.3.png", name: "swim3" },
+    { url: "./Player/adventurer-swim-03-1.3.png", name: "swim4" },
+
+    { url: "./Player/adventurer-water-tread-00-1.3.png", name: "idleswim1" },
+    { url: "./Player/adventurer-water-tread-01-1.3.png", name: "idleswim2" },
+    { url: "./Player/adventurer-water-tread-02-1.3.png", name: "idleswim3" },
+    { url: "./Player/adventurer-water-tread-03-1.3.png", name: "idleswim4" },
+    { url: "./Player/adventurer-water-tread-04-1.3.png", name: "idleswim5" },
+    { url: "./Player/adventurer-water-tread-05-1.3.png", name: "idleswim6" },
+
+    
+    
+    
+    
+    
+    
 
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },

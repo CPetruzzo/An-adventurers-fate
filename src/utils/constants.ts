@@ -90,9 +90,9 @@ export const LETRA4 = new TextStyle({
 });
 
 // change this to change level from ldtk
-export const CURRENT_LEVEL: number = 0;
+export const CURRENT_LEVEL: number = 3;
 export const PLAYER_WALK_SPEED: number = 0.05;
 export const LEVEL_SCALE: number = 3.5;
 export const PLAYER_SCALE: number = 2;
-export const ANIM_SPEED: number = 0.18;
+export const ANIM_SPEED: number = 0.15;
 export const JUMP_FACTOR: number = 0.45;

@@ -39,19 +39,22 @@ import {
     start,
 } from "../utils/ButtonParams";
 import { LevelPoints } from "../Logic/LevelPoints";
-import { LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER } from "../utils/constants";
+import { LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER, TRANSITION_TIME } from "../utils/constants";
 import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
 import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
 import { createPointButton } from "../utils/FunctionManager";
 import { DialogBox } from "../utils/DialogBox";
+import { Water } from "../games/Water";
+import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 
 export class LDTKScene3 extends SceneBase implements IUpdateable {
     private world: Container;
     private player: Player;
     private levelSprite: Sprite;
     private platforms: Platform[] = [];
+    private waters: Water[] = [];
     public potions: Potion[] = [];
     public gameOver: boolean = false;
     private isPaused: boolean = false;
@@ -103,6 +106,8 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
     constructor() {
         super();
 
+        playSound("GameBGM", { loop: true, volume: 0.05 });
+
         this.world = new Container();
         this.addChild(this.world);
 
@@ -140,8 +145,41 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             .onComplete(this.arekToRight.bind(this));
         this.addChild(this.world);
 
+        // WATER
+        const waterData = [
+            // 0
+            {
+                type: "Tile",
+                width: 15,
+                height: 20,
+                posX: 250,
+                posY: 100,
+                sizeX: 1500,
+                sizeY: 680,
+            },
+        ];
+        for (let data of waterData) {
+            // Create a new platform with the data
+            let water = new Water(
+                data.type,
+                data.width,
+                data.height,
+                data.width,
+                data.height,
+                data.posX,
+                data.posY
+            );
+            // Set its position
+            water.position.x = data.sizeX;
+            water.position.y = data.sizeY;
+            // Add it to the world and the platforms array
+            water.name = `water${this.waters.length}`;
+            console.log('water.name', water.name);
+            this.world.addChild(water);
+            this.waters.push(water);
+        }
 
-        // An array of platform data
+        // PLATFORMS
         const platformData = [
             // 0
             {
@@ -151,47 +189,47 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 posX: 1200,
                 posY: 100,
                 sizeX: 600,
-                sizeY: 660,
+                sizeY: 670,
             },
             // 1
             {
                 type: "Tile",
                 width: 30,
                 height: 10,
-                posX: 195,
+                posX: 340,
                 posY: 185,
-                sizeX: 1520,
-                sizeY: 660,
+                sizeX: 1225,
+                sizeY: 625,
             },
             // 2
             {
                 type: "Tile",
                 width: 30,
                 height: 10,
-                posX: 135,
-                posY: 60,
-                sizeX: 2300,
-                sizeY: 540,
+                posX: 400,
+                posY: 80,
+                sizeX: 1550,
+                sizeY: 280,
             },
             // 3
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 415,
-                posY: 160,
-                sizeX: 2155,
-                sizeY: 640,
+                posX: 450,
+                posY: 400,
+                sizeX: 1800,
+                sizeY: 515,
             },
             // 4
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 500,
-                posY: 35,
-                sizeX: 2600,
-                sizeY: 700,
+                posX: 300,
+                posY: 120,
+                sizeX: 2100,
+                sizeY: 450,
             },
             // 5
             {
@@ -199,9 +237,9 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 width: 30,
                 height: 30,
                 posX: 305,
-                posY: 250,
-                sizeX: 3005,
-                sizeY: 600,
+                posY: 50,
+                sizeX: 2400,
+                sizeY: 500,
             },
             // 6
             {
@@ -274,9 +312,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 sizeY: 620,
             },
         ];
-        // A loop to create and position platforms
         for (let data of platformData) {
-            // Create a new platform with the data
             let plat = new Platform(
                 data.type,
                 data.width,
@@ -534,7 +570,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
 
         if (this.gotToChest) {
             this.player.initKeyboardEvents(false);
-            SceneManager.changeScene(new WinScene());
+            SceneManager.changeScene(new WinScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
             stopSounds(["GameBGM"]);
         }
 
@@ -567,15 +603,23 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
-            if (!this.player.hurted) {
-                console.log("drowning");
-                this.player.hurted = true;
-                this.player.animations.playState("hurted");
-
-                // this.gameOver = true;
-            }
         }
 
+        for (let water of this.waters) {
+            const overlap = checkCollision(this.player, water);
+            if (overlap != null) {
+                this.player.getPlayerHurt(0.1);
+                this.changePlayerHP();
+                
+                if (Player._hp <= 0){
+                    SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+                }
+                this.player.swimming = true;
+                break;
+            } else {
+                this.player.swimming = false;
+            }
+        }
         // LA COLISION PARA QUE TENGA SU FISICA Y NO CAIGA A TRAVES DE LAS PLATAFORMAS
         for (let platform of this.platforms) {
             const overlap = checkCollision(this.player, platform);
@@ -597,7 +641,6 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
         this.endStage();
         this.myOwnHp();
     }
-
     private checkDialog(): void {
         Keyboard.down.on("KeyE", () => {
             this.dialogBox.setStyle(LETRA4);
@@ -687,12 +730,13 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             this.changePlayerHP();
 
             if (Player._hp <= 0) {
-                this.player.fall();
+                SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+                // this.player.fall();
             }
 
-            if (this.player.hurted) {
-                this.player.getUp();
-            }
+            // if (this.player.hurted) {
+            //     this.player.getUp();
+            // }
         } else {
             this.arek.idleArek();
         }
@@ -915,5 +959,4 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
         stopSounds(["running", "bow"]);
         this.causingRangeDamage = false;
     }
-
 }

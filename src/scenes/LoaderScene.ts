@@ -5,7 +5,8 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { TRANSITION_TIME } from "../utils/constants";
-import { GameStartScene } from "./GameStartScene";
+// import { GameStartScene } from "./GameStartScene";
+import { LDTKScene2 } from "./LDTKScene2";
 
 export class LoaderScene extends SceneBase {
   public update(): void { }
@@ -15,23 +16,27 @@ export class LoaderScene extends SceneBase {
   constructor() {
     super();
 
-    const fondo: Sprite = Sprite.from("An adventurer's fate.png");
-    this.addChild(fondo);
-
+    const fondo: Sprite = Sprite.from("StartMenu/assetloadbar1.png");
+    fondo.anchor.set(0.175, 0.15)
+    // const screenRelation = SceneManager.HEIGHT / fondo.height;
+    // fondo.scale.set(screenRelation);
+  
+    
     this.loadbar = new Graphics();
     this.setBarPercent(0);
-
+    
     this.loadbar.x = SceneManager.WIDTH * 0.5;
     this.loadbar.y = SceneManager.HEIGHT * 0.5;
-
+    
     this.loadbar.pivot.x = this.loadbar.width / 2;
     this.loadbar.pivot.y = this.loadbar.height / 5;
-
+    
     this.addChild(this.loadbar);
+    this.addChild(fondo);
 
     this.downloadAssets();
   }
-
+  
   private downloadAssets() {
     Loader.registerPlugin(WebfontLoaderPlugin);
     Loader.shared.add(assets);
@@ -51,7 +56,7 @@ export class LoaderScene extends SceneBase {
     this.loadbar.drawRect(
       0,
       0,
-      SceneManager.WIDTH * 0.8 * factor,
+      SceneManager.WIDTH * 0.45 * factor,
       SceneManager.HEIGHT * 0.1
     );
     this.loadbar.endFill();
@@ -60,13 +65,13 @@ export class LoaderScene extends SceneBase {
     this.loadbar.drawRect(
       0,
       0,
-      SceneManager.WIDTH * 0.8,
+      SceneManager.WIDTH * 0.45,
       SceneManager.HEIGHT * 0.1
     );
     this.loadbar.endFill();
   }
 
   private whenLoadFinishes() {
-    SceneManager.changeScene(new GameStartScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    SceneManager.changeScene(new LDTKScene2(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
   }
 }

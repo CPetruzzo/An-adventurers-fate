@@ -5,24 +5,51 @@ import { ANIM_SPEED, PLAYER_SCALE } from "../utils/constants";
 export class PlayerAnimations extends StateAnimation {
     private static readonly JUMP_ANIMATION_TIME = 1450;
     private static readonly PUNCH_ANIMATION_TIME = 550;
-    private static readonly BOW_ANIMATION_TIME = 480;
+    private static readonly BOW_ANIMATION_TIME = 550;
     private static readonly JUMP_BOW_ANIMATION_TIME = 390;
 
     constructor() {
-        
+
         super();
         this.scale.set(PLAYER_SCALE);
         this.pivot.set(0.55, 17);
 
         this.addState(
+            "swim",
+            [
+                "swim1",
+                "swim2",
+                "swim3",
+                "swim4",
+            ],
+            ANIM_SPEED * 0.5,
+            true
+        );
+
+        this.addState(
+            "float",
+            [
+                "idleswim1",
+                "idleswim2",
+                "idleswim3",
+                "idleswim4",
+                "idleswim5",
+                "idleswim6",
+            ],
+            ANIM_SPEED * 0.5,
+            true
+        );
+
+        this.addState(
             "run",
             [
-                "adventurer-run2-00.png",
-                "adventurer-run2-01.png",
-                "adventurer-run2-02.png",
-                "adventurer-run2-03.png",
-                "adventurer-run2-04.png",
-                "adventurer-run2-05.png",
+                "run1",
+                "run2",
+                "run3",
+                "run4",
+                "run5",
+                "run6"
+
             ],
             ANIM_SPEED,
             true
@@ -82,7 +109,17 @@ export class PlayerAnimations extends StateAnimation {
             ANIM_SPEED,
             true
         );
-        this.addState("idle", ["adventurer-walk-00.png"], 0.05, true);
+
+        this.addState("idle", [
+            "idle1",
+            "idle2",
+            "idle3",
+            "idle4"
+        ],
+            0.08,
+            true
+        );
+
         this.addState(
             "crawl",
             [
@@ -104,7 +141,7 @@ export class PlayerAnimations extends StateAnimation {
                 "adventurer-drop-kick-02.png",
                 "adventurer-drop-kick-03.png",
             ],
-            0.02,
+            0.04,
             false
         );
         this.addState(
@@ -219,8 +256,16 @@ export class PlayerAnimations extends StateAnimation {
         this.playState("run", true);
     }
 
+    public swim(): void {
+        this.playState("swim");
+    }
+
     public idle(): void {
         this.playState("idle", true);
+    }
+
+    public float(): void {
+        this.playState("float");
     }
 
     public crawl(): void {

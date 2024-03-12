@@ -17,7 +17,7 @@ import { PlayerAnimations } from "./PlayerAnimations";
 import { setValue } from "../utils/FunctionManager";
 
 export class Player extends PhysicsContainer implements IHitBox {
-    private static readonly GRAVITY = 3000;
+    public static readonly GRAVITY = 3000;
     private static readonly MOVE_SPEED = 500;
     private jumpBowCooldown: number = 390; // Tiempo de animación del arco en milisegundos
     private bowCooldown: number = 480; // Tiempo de animación del arco en milisegundos
@@ -51,6 +51,7 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public animations: PlayerAnimations;
     public standing: boolean = false;
+    public swimming: boolean = false;
 
     public static getInstance(): Player {
         if (!Player._instance) {
@@ -163,8 +164,8 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     //  MOVIMIENTOS
-    public override update(deltaMS: number): void {
-        super.update(deltaMS / 100);
+    public override update(deltaMS: number, _terrain?: string): void {
+        super.update(deltaMS / 100, _terrain);
         this.animations.update(deltaMS / (1000 / 60));
     }
 
@@ -186,10 +187,14 @@ export class Player extends PhysicsContainer implements IHitBox {
                         this.runningPostJump
                     ) {
                         stopSFX("running");
-                        this.animations.run();
+                        if (!this.swimming) {
+                            this.animations.run();
+                        } else {
+                            this.animations.swim();
+                        }
                         playSFX("running", { loop: true, volume: 0.05 });
                     } else {
-                        this.animations.idle();
+                        this.idlePlayer();
                         stopSounds(["running"]);
                     }
                 });
@@ -209,19 +214,31 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public runLeft(): void {
-        stopSFX("running");
-        playSFX("running", { loop: true, volume: 0.05 });
-        this.speed.x = -Player.MOVE_SPEED;
-        this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
-        this.animations.run();
+        if (this.swimming) {
+            this.speed.x = -Player.MOVE_SPEED * 0.5;
+            this.animations.swim();
+            this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
+        } else {
+            stopSFX("running");
+            playSFX("running", { loop: true, volume: 0.05 });
+            this.speed.x = -Player.MOVE_SPEED;
+            this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
+            this.animations.run();
+        }
     }
 
     public runRight(): void {
-        stopSFX("running");
-        playSFX("running", { loop: true, volume: 0.05 });
-        this.speed.x = Player.MOVE_SPEED;
-        this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
-        this.animations.run();
+        if (this.swimming) {
+            this.speed.x = Player.MOVE_SPEED * 0.5;
+            this.animations.swim();
+            this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
+        } else {
+            stopSFX("running");
+            playSFX("running", { loop: true, volume: 0.05 });
+            this.speed.x = Player.MOVE_SPEED;
+            this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
+            this.animations.run();
+        }
     }
 
     public punch(): void {
@@ -249,11 +266,16 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public idlePlayer(): void {
-        stopAllSFX();
-        stopSounds(["running"]);
         this.speed.x = 0;
-        this.runningPostJump = false;
-        this.animations.idle();
+        if (this.swimming) {
+            this.animations.float();
+        } else {
+            stopAllSFX();
+            stopSounds(["running"]);
+            this.runningPostJump = false;
+            this.animations.idle();
+
+        }
     }
 
     public fall(): void {
@@ -313,13 +335,11 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     private stopJump(): void {
-        this.animations.idle();
-        stopSounds(["running"]);
+        this.idlePlayer();
     }
 
     private stopCrawl(): void {
-        this.animations.idle();
-        this.speed.x = 0;
+        this.idlePlayer();
         this.removeChild(this.hitbox);
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xff00ff, 0);
@@ -332,24 +352,24 @@ export class Player extends PhysicsContainer implements IHitBox {
         stopSounds(["running"]);
         this.speed.x = 0;
         this.scale.set(-PLAYER_SCALE, PLAYER_SCALE);
-        this.animations.idle();
+        this.idlePlayer();
     }
 
     private stopRunRight(): void {
+        stopSFX("running");
         stopSounds(["running"]);
         this.speed.x = 0;
         this.scale.set(PLAYER_SCALE, PLAYER_SCALE);
-        this.animations.idle();
-        stopSFX("running");
+        this.idlePlayer();
     }
 
     public stopPunch(): void {
+        this.idlePlayer();
         this.speed.x = this.speed.x / 2;
-        this.animations.idle();
     }
 
     public stopBow(): void {
-        this.animations.idle();
+        this.idlePlayer();
         this.canBow = true;
     }
 
@@ -363,11 +383,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         const fromBelow = this.y > platform.y;
         if (overlap.width < overlap.height) {
             // if (!fromBelow) {
-                if (this.x < platform.x) {
-                    this.x -= overlap.width;
-                } else if (this.x > platform.x) {
-                    this.x += overlap.width;
-                }
+            if (this.x < platform.x) {
+                this.x -= overlap.width;
+            } else if (this.x > platform.x) {
+                this.x += overlap.width;
+            }
             // }
         } else {
             if (fromBelow) {
@@ -382,6 +402,60 @@ export class Player extends PhysicsContainer implements IHitBox {
                 }
                 this.canJump = true;
             }
+        }
+    }
+
+    public slope(overlap: Rectangle, slope: ObservablePoint<any>, slopeHeight: number) {
+        if (overlap !== null) {
+            // Calcular el ángulo de la pendiente
+            const slopeAngle = Math.atan2(slopeHeight, overlap.width);
+
+            // Calcular la velocidad de ascenso o descenso del jugador
+            const slopeSpeed = Player.MOVE_SPEED * Math.sin(slopeAngle);
+
+            // Determinar si el jugador está subiendo o bajando por la pendiente
+            const slopeYCenter = slope.y + slopeHeight / 2;
+            const playerYCenter = this.y + this.height / 2;
+            const isSlopeUp = playerYCenter < slopeYCenter;
+
+            // Ajustar el movimiento del jugador según la inclinación de la pendiente y su dirección
+            if (this.speed.x != 0) {
+                if (isSlopeUp) {
+                    this.speed.y = -slopeSpeed; // Subiendo
+                } else {
+                    this.speed.y = slopeSpeed; // Bajando
+                }
+            } else {
+                this.speed.y = 0;
+            }
+
+            const fromBelow = this.y > slope.y;
+            if (fromBelow) {
+                this.standing = false;
+                // uncomment this if you want to hit ceilings from under them
+                this.y += overlap.height;
+                this.speed.y = 0;
+            } else if (this.y < slope.y) {
+                this.y -= overlap.height;
+                if (this.canJump) {
+                    this.speed.y = 0;
+                }
+                this.canJump = true;
+            }
+
+        }
+    }
+
+
+    //PARA SEPARAR JUGADORES DE SUS PLATAFORMAS
+    public floatingOnWater(overlap: Rectangle) {
+        if (overlap === null) {
+            if (this.swimming) {
+                this.swimming = false;
+            }
+        } else {
+            this.swimming = true;
+            this.getPlayerHurt(0.1);
         }
     }
     // Función de daño al jugador
