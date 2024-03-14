@@ -1,5 +1,6 @@
 import { Container, Graphics, NineSlicePlane, Rectangle, Texture, TextureSource } from "pixi.js";
 import { IHitBox } from "./IHitBox";
+import { DEBUG_ALPHA } from "../utils/constants";
 
 export class Platform extends Container implements IHitBox {
 
@@ -35,7 +36,11 @@ export class Platform extends Container implements IHitBox {
         // this.addChild(this.tile);
 
         this.hitbox = new Graphics();
-        this.hitbox.beginFill(0x00FF00, 0.3);
+        if (DEBUG_ALPHA) {
+            this.hitbox.beginFill(0x00FF00, 0.3);
+        } else {
+            this.hitbox.beginFill(0x00FF00, 0);
+        }
         this.hitbox.drawRect(-(width / 2), -(height / 2), width, height);
         this.hitbox.endFill();
         this.addChild(this.hitbox);

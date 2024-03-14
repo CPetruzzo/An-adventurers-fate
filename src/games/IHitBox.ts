@@ -1,4 +1,5 @@
 import { Container, Graphics, Rectangle } from "pixi.js";
+import { DEBUG_ALPHA } from "../utils/constants";
 
 export interface IHitBox {
     getHitBox(): Rectangle;
@@ -11,7 +12,11 @@ export class Slope extends Container implements IHitBox {
         super();
         this.hitbox = new Graphics();
         // this.hitbox.beginFill(0x00FF00, 0);
-        this.hitbox.beginFill(0x00FF00, 0.3);
+        if (DEBUG_ALPHA) {
+            this.hitbox.beginFill(0x00FF00, 0.3);
+        } else {
+            this.hitbox.beginFill(0x00FF00, 0);
+        }
         this.angle = angle;
         this.hitbox.drawRect(-(width / 2), -(height / 2), width, height);
         this.hitbox.endFill();

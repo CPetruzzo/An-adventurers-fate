@@ -7,6 +7,7 @@ export const DEBUG_SOUND: boolean = false;
 export const DEBUG_SFX: boolean = false;
 export const DEBUG_ALL_SOUNDS: boolean = false;
 export const GLOBAL_VOLUME: number = 0.3;
+export const DEBUG_ALPHA: boolean = false;
 
 /** Cantidad de flechas iniciales */
 export const INITIAL_ARROWS: number = 10;
@@ -90,7 +91,7 @@ export const LETRA4 = new TextStyle({
 });
 
 // change this to change level from ldtk
-export const CURRENT_LEVEL: number = 3;
+export const CURRENT_LEVEL: number = 1;
 export const PLAYER_WALK_SPEED: number = 0.05;
 export const LEVEL_SCALE: number = 3.5;
 export const PLAYER_SCALE: number = 2;
