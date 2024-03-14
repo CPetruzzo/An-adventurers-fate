@@ -4,7 +4,7 @@ import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneManager, Timer } from "../utils/SceneManager";
 import { MapScene } from "./MapScene";
-import { SoundNames, playSound, stopSounds } from "../utils/SoundParams";
+import { SoundNames, playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { Inventory, InventoryItem, Weapon } from "../games/Inventory";
 import { SpecialItem } from "../games/Items/SpecialItem";
@@ -20,6 +20,7 @@ export class WinScene extends Container {
 
     constructor() {
         super();
+        stopAllSFX();
         console.log("lalala", Level.Complete)
 
         const background = Sprite.from("EMPTY_BANNER");

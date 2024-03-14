@@ -8,7 +8,7 @@ import {
 import { Tween } from "tweedle.js";
 import { Arek } from "../games/Enemies/Arek";
 import { HealthBar } from "../games/HealthBar";
-import { checkCollision } from "../games/IHitBox";
+import { Slope, checkCollision } from "../games/IHitBox";
 import { Platform } from "../games/Platform";
 import { Player } from "../games/Player";
 import { Potion } from "../games/Potion";
@@ -102,6 +102,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
     private barra: GenericPanel;
     public pauseScene!: PauseScene;
     public causingRangeDamage: boolean = false;
+    private slopes: Slope[];
 
     constructor() {
         super();
@@ -179,6 +180,45 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             this.waters.push(water);
         }
 
+        
+        this.slopes = [];
+
+        for (let i = 0; i < 2; i++) {
+            const slope = new Slope(280, 50, -20);             
+            slope.position.set(1115 + i * 30, 621 + i * 30)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 2; i++) {
+            const slope = new Slope(200, 50, -22);             
+            slope.position.set(1400 + i * 50, 350 - i * 50)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+        
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, 22);             
+            slope.position.set(1550 + i * 30, 280 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+        
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, 22);             
+            slope.position.set(1870 + i * 30, 375 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 4; i++) {
+            const slope = new Slope(200, 50, 22);             
+            slope.position.set(2155 + i * 30, 450 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+
         // PLATFORMS
         const platformData = [
             // 0
@@ -199,26 +239,26 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 posX: 340,
                 posY: 185,
                 sizeX: 1225,
-                sizeY: 625,
+                sizeY: 645,
             },
             // 2
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 400,
-                posY: 80,
-                sizeX: 1550,
-                sizeY: 280,
-            },
+            // {
+            //     type: "Tile",
+            //     width: 30,
+            //     height: 10,
+            //     posX: 180,
+            //     posY: 50,
+            //     sizeX: 1550,
+            //     sizeY: 220,
+            // },
             // 3
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 450,
+                posX: 380,
                 posY: 400,
-                sizeX: 1800,
+                sizeX: 1760,
                 sizeY: 515,
             },
             // 4
@@ -618,6 +658,14 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 break;
             } else {
                 this.player.swimming = false;
+            }
+        }
+        
+        for (let slope of this.slopes) {
+            // En el código de detección de colisiones del jugador
+            const overlap = checkCollision(this.player, slope);
+            if (overlap != null) {
+                this.player.slope(overlap, slope.position, slope.height)
             }
         }
         // LA COLISION PARA QUE TENGA SU FISICA Y NO CAIGA A TRAVES DE LAS PLATAFORMAS

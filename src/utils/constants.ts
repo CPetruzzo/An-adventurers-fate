@@ -7,7 +7,7 @@ export const DEBUG_SOUND: boolean = false;
 export const DEBUG_SFX: boolean = false;
 export const DEBUG_ALL_SOUNDS: boolean = false;
 export const GLOBAL_VOLUME: number = 0.3;
-export const DEBUG_ALPHA: boolean = false;
+export const DEBUG_ALPHA: boolean = true; // true shows hitboxes
 
 /** Cantidad de flechas iniciales */
 export const INITIAL_ARROWS: number = 10;

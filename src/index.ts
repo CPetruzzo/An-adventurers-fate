@@ -1,5 +1,4 @@
 import { Capacitor } from "@capacitor/core";
-// import { LoaderScene } from "./scenes/LoaderScene";
 import { SceneManager } from "./utils/SceneManager";
 import { StatusBar } from "@capacitor/status-bar";
 import { KeepAwake } from "@capacitor-community/keep-awake";
@@ -54,3 +53,14 @@ if (Capacitor.isNativePlatform()) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const audioCtx = new AudioContext();
+  if (audioCtx.state === "running") {
+    audioCtx.suspend().then(() => {
+    });
+  } else if (audioCtx.state === "suspended") {
+    audioCtx.resume().then(() => {
+    });
+  }
+});

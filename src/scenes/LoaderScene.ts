@@ -5,7 +5,8 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { TRANSITION_TIME } from "../utils/constants";
-import { GameStartScene } from "./GameStartScene";
+// import { GameStartScene } from "./GameStartScene";
+import { LDTKScene3 } from "./LDTKScene3";
 
 export class LoaderScene extends SceneBase {
   public update(): void { }
@@ -71,6 +72,7 @@ export class LoaderScene extends SceneBase {
   }
 
   private whenLoadFinishes() {
-    SceneManager.changeScene(new GameStartScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    SceneManager.changeScene(new LDTKScene3(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    // SceneManager.changeScene(new GameStartScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
   }
 }

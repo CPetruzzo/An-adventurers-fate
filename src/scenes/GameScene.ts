@@ -557,6 +557,7 @@ export class GameScene extends SceneBase implements IUpdateable {
       playSound("PartingBGM", { loop: true, volume: 0.05 });
       SceneManager.changeScene(new GameOverScene());
       stopSounds(["GameBGM"]);
+      stopSounds(["running"]);
       this.player.initKeyboardEvents(false);
       return;
     }

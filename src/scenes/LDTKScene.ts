@@ -40,7 +40,7 @@ import {
 import { LevelPoints } from "../Logic/LevelPoints";
 import { CURRENT_LEVEL, LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER, TRANSITION_TIME } from "../utils/constants";
 import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
-import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
+import { playSound, stopAllSFX,  stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
 import { createPointButton } from "../utils/FunctionManager";
@@ -565,6 +565,7 @@ export class LDTKScene extends SceneBase implements IUpdateable {
             playSound("PartingBGM", { loop: true, volume: 0.05 });
             SceneManager.changeScene(new GameOverScene());
             stopSounds(["GameBGM"]);
+            stopAllSFX();
             this.player.initKeyboardEvents(false);
             return;
         }
