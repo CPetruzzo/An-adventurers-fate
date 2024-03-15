@@ -605,6 +605,9 @@ export class LDTKScene extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
+            if(!this.player.swimming) {
+                this.gameOver = true;
+            }
         }
 
         for (let water of this.waters) {

@@ -328,7 +328,7 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
                 posX: 500,
                 posY: 120,
                 sizeX: 6350,
-                sizeY: 660,
+                sizeY: 665,
             },
             // 12
             {
@@ -634,6 +634,9 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
+            if(!this.player.swimming) {
+                this.gameOver = true;
+            }
         }
 
         for (let water of this.waters) {

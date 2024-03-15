@@ -407,23 +407,19 @@ export class Player extends PhysicsContainer implements IHitBox {
 
     public slope(overlap: Rectangle, slope: ObservablePoint<any>, slopeHeight: number) {
         if (overlap !== null) {
-            // Calcular el ángulo de la pendiente
             const slopeAngle = Math.atan2(slopeHeight, overlap.width);
-
-            // Calcular la velocidad de ascenso o descenso del jugador
             const slopeSpeed = Player.MOVE_SPEED * Math.sin(slopeAngle);
 
-            // Determinar si el jugador está subiendo o bajando por la pendiente
+            // check if player is going up or down
             const slopeYCenter = slope.y + slopeHeight / 2;
             const playerYCenter = this.y + this.height / 2;
             const isSlopeUp = playerYCenter < slopeYCenter;
 
-            // Ajustar el movimiento del jugador según la inclinación de la pendiente y su dirección
             if (this.speed.x != 0) {
                 if (isSlopeUp) {
-                    this.speed.y = -slopeSpeed; // Subiendo
+                    this.speed.y = -slopeSpeed; // up
                 } else {
-                    this.speed.y = slopeSpeed; // Bajando
+                    this.speed.y = slopeSpeed; // down
                 }
             } else {
                 this.speed.y = 0;
@@ -442,12 +438,9 @@ export class Player extends PhysicsContainer implements IHitBox {
                 }
                 this.canJump = true;
             }
-
         }
     }
 
-
-    //PARA SEPARAR JUGADORES DE SUS PLATAFORMAS
     public floatingOnWater(overlap: Rectangle) {
         if (overlap === null) {
             if (this.swimming) {
@@ -458,6 +451,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.getPlayerHurt(0.1);
         }
     }
+    
     // Función de daño al jugador
     public getPlayerHurt(damage: number): void {
         Player._hp -= damage;

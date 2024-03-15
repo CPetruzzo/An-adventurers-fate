@@ -180,44 +180,99 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             this.waters.push(water);
         }
 
-        
+
         this.slopes = [];
 
         for (let i = 0; i < 2; i++) {
-            const slope = new Slope(280, 50, -20);             
+            const slope = new Slope(280, 50, -20);
             slope.position.set(1115 + i * 30, 621 + i * 30)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
 
         for (let i = 0; i < 2; i++) {
-            const slope = new Slope(200, 50, -22);             
+            const slope = new Slope(200, 50, -22);
             slope.position.set(1400 + i * 50, 350 - i * 50)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
-        
+
         for (let i = 0; i < 5; i++) {
-            const slope = new Slope(200, 50, 22);             
+            const slope = new Slope(200, 50, 22);
             slope.position.set(1550 + i * 30, 280 + i * 10)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
-        
+
         for (let i = 0; i < 5; i++) {
-            const slope = new Slope(200, 50, 22);             
+            const slope = new Slope(200, 50, 22);
             slope.position.set(1870 + i * 30, 375 + i * 10)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
 
         for (let i = 0; i < 4; i++) {
-            const slope = new Slope(200, 50, 22);             
+            const slope = new Slope(200, 50, 22);
             slope.position.set(2155 + i * 30, 450 + i * 10)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
 
+        for (let i = 0; i < 4; i++) {
+            const slope = new Slope(200, 50, 22);
+            slope.position.set(2495 + i * 30, 535 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 4; i++) {
+            const slope = new Slope(200, 50, 22);
+            slope.position.set(2785 + i * 30, 620 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, -12);
+            slope.position.set(3400 + i * 30, 330 - i * 5)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 4; i++) {
+            const slope = new Slope(200, 50, 22);
+            slope.position.set(3950 + i * 30, 310 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 2; i++) {
+            const slope = new Slope(280, 50, -20);
+            slope.position.set(1115 + i * 30, 621 + i * 30)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, -25);
+            slope.position.set(4920 + i * 30, 645 - i * 5)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 5; i++) {
+            const slope = new Slope(200, 50, -25);
+            slope.position.set(7100 + i * 30, 642 - i * 5)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
+
+        for (let i = 0; i < 4; i++) {
+            const slope = new Slope(200, 50, 22);
+            slope.position.set(5800 + i * 30, 620 + i * 10)
+            this.slopes.push(slope);
+            this.world.addChild(slope);
+        };
 
         // PLATFORMS
         const platformData = [
@@ -242,16 +297,6 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 sizeY: 645,
             },
             // 2
-            // {
-            //     type: "Tile",
-            //     width: 30,
-            //     height: 10,
-            //     posX: 180,
-            //     posY: 50,
-            //     sizeX: 1550,
-            //     sizeY: 220,
-            // },
-            // 3
             {
                 type: "Tile",
                 width: 30,
@@ -261,7 +306,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 sizeX: 1760,
                 sizeY: 515,
             },
-            // 4
+            // 3
             {
                 type: "Tile",
                 width: 30,
@@ -271,7 +316,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 sizeX: 2100,
                 sizeY: 450,
             },
-            // 5
+            // 4
             {
                 type: "Tile",
                 width: 30,
@@ -281,55 +326,65 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 sizeX: 2400,
                 sizeY: 500,
             },
+            // 5
+            {
+                type: "Tile",
+                width: 30,
+                height: 30,
+                posX: 150,
+                posY: 50,
+                sizeX: 2705,
+                sizeY: 590,
+            },
             // 6
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 450,
-                posY: 30,
-                sizeX: 3375,
-                sizeY: 620,
+                posX: 500,
+                posY: 20,
+                sizeX: 3730,
+                sizeY: 270,
             },
             // 7
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 140,
-                posY: 30,
-                sizeX: 3880,
-                sizeY: 475,
+                posX: 2000,
+                posY: 50,
+                sizeX: 3900,
+                sizeY: 660,
             },
             // 8
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 140,
-                posY: 30,
-                sizeX: 4290,
-                sizeY: 320,
+                posX: 850,
+                posY: 50,
+                sizeX: 5400,
+                sizeY: 585,
             },
             // 9
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 250,
-                posY: 90,
-                sizeX: 4550,
-                sizeY: 670,
+                posX: 1200,
+                posY: 30,
+                sizeX: 6500,
+                sizeY: 655,
             },
             // 10
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 140,
+                posX: 390,
                 posY: 30,
-                sizeX: 4655,
-                sizeY: 475,
+                sizeX: 6600,
+                sizeY: 435,
             },
             // 11
             {
@@ -337,19 +392,29 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 width: 30,
                 height: 30,
                 posX: 500,
-                posY: 120,
-                sizeX: 6350,
-                sizeY: 660,
+                posY: 30,
+                sizeX: 7400,
+                sizeY: 570,
             },
-            // 12
+            // 11
             {
                 type: "Tile",
                 width: 30,
                 height: 30,
-                posX: 1200,
+                posX: 180,
                 posY: 30,
-                sizeX: 5700,
-                sizeY: 620,
+                sizeX: 3230,
+                sizeY: 340,
+            },
+            // 11
+            {
+                type: "Tile",
+                width: 30,
+                height: 30,
+                posX: 180,
+                posY: 40,
+                sizeX: 4230,
+                sizeY: 350,
             },
         ];
         for (let data of platformData) {
@@ -643,6 +708,9 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
+            if(!this.player.swimming) {
+                this.gameOver = true;
+            }
         }
 
         for (let water of this.waters) {
@@ -650,8 +718,8 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             if (overlap != null) {
                 this.player.getPlayerHurt(0.1);
                 this.changePlayerHP();
-                
-                if (Player._hp <= 0){
+
+                if (Player._hp <= 0) {
                     SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
                 }
                 this.player.swimming = true;
@@ -660,7 +728,7 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
                 this.player.swimming = false;
             }
         }
-        
+
         for (let slope of this.slopes) {
             // En el código de detección de colisiones del jugador
             const overlap = checkCollision(this.player, slope);
