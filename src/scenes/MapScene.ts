@@ -18,7 +18,7 @@ import { Player } from "../games/Player";
 import { ScrollView } from "../utils/ScrollView";
 import { createSprite, createPointButton, getPlayerHeight } from "../utils/FunctionManager";
 import { Inventory } from "../games/Inventory";
-import { LDTKScene } from "./LDTKScene";
+import { LDTKScene1 } from "./LDTKScene";
 import { LDTKScene2 } from "./LDTKScene2";
 import { LDTKScene3 } from "./LDTKScene3";
 
@@ -426,7 +426,7 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onStageOneClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new LDTKScene());
+        SceneManager.changeScene(new LDTKScene1());
     }
 
     private onStageTwoClick(): void {
@@ -441,7 +441,7 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onStageFourClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new LDTKScene());
+        SceneManager.changeScene(new LDTKScene1());
     }
 
     private onMenu(): void {

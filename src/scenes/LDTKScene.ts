@@ -40,7 +40,7 @@ import {
 import { LevelPoints } from "../Logic/LevelPoints";
 import { CURRENT_LEVEL, LETRA1, LETRA4, PLAYER_SCALE, TEXT_TIME_LETTER_BY_LETTER, TRANSITION_TIME } from "../utils/constants";
 import { PopUpsNames, closePopUp, createPopUp } from "../utils/PopUps";
-import { playSound, stopAllSFX,  stopSounds } from "../utils/SoundParams";
+import { playSound, stopAllSFX, stopSounds } from "../utils/SoundParams";
 import { Level } from "../utils/Level";
 import { isMobileDevice } from "..";
 import { createPointButton } from "../utils/FunctionManager";
@@ -49,7 +49,9 @@ import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { WinScene } from "./WinScene";
 import { Water } from "../games/Water";
 
-export class LDTKScene extends SceneBase implements IUpdateable {
+import levelData from "../jsons/level1.json";
+
+export class LDTKScene1 extends SceneBase implements IUpdateable {
     private world: Container;
     private player: Player;
     private levelSprite: Sprite;
@@ -147,192 +149,16 @@ export class LDTKScene extends SceneBase implements IUpdateable {
             .onComplete(this.arekToRight.bind(this));
         this.addChild(this.world);
 
-        // WATER
-        const waterData = [
-
-            // 1
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 3800,
-                posY: 100,
-                sizeX: 4200,
-                sizeY: 680,
-            },
-            // 0
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 1000,
-                posY: 100,
-                sizeX: 1600,
-                sizeY: 680,
-            },
-        ];
-        for (let data of waterData) {
-            let water = new Water(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            water.position.x = data.sizeX;
-            water.position.y = data.sizeY;
-
-            water.name = `water${this.waters.length}`;
-            console.log('water.name', water.name);
-            this.world.addChild(water);
-            this.waters.push(water);
-        }
+        this.loadLevelData(levelData);
 
         this.slopes = [];
-
         for (let i = 0; i < 5; i++) {
-            const slope = new Slope(200, 50, 22);             
+            const slope = new Slope(200, 50, 22);
             slope.position.set(3250 + i * 30, 625 + i * 10)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
 
-        // An array of platform data
-        const platformData = [
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 930,
-                posY: 150,
-                sizeX: 700,
-                sizeY: 640,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 200,
-                posY: 190,
-                sizeX: 1465,
-                sizeY: 355,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 135,
-                posY: 120,
-                sizeX: 1980,
-                sizeY: 540,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 1250,
-                posY: 180,
-                sizeX: 2720,
-                sizeY: 650,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 250,
-                posY: 50,
-                sizeX: 2650,
-                sizeY: 180,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 620,
-                posY: 40,
-                sizeX: 2820,
-                sizeY: 420,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 300,
-                posY: 120,
-                sizeX: 3490,
-                sizeY: 665,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 150,
-                posY: 160,
-                sizeX: 4100,
-                sizeY: 667,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 110,
-                posY: 140,
-                sizeX: 4600,
-                sizeY: 667,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 120,
-                posY: 230,
-                sizeX: 4850,
-                sizeY: 600,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 130,
-                posY: 140,
-                sizeX: 5370,
-                sizeY: 645,
-            },
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 1100,
-                posY: 120,
-                sizeX: 6350,
-                sizeY: 660,
-            },
-        ];
-        // A loop to create and position platforms
-        for (let data of platformData) {
-            // Create a new platform with the data
-            let plat = new Platform(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            plat.position.x = data.sizeX;
-            plat.position.y = data.sizeY;
-            // Add it to the world and the platforms array
-            plat.name = `plat${this.platforms.length}`;
-            console.log('plat.name', plat.name)
-            this.world.addChild(plat);
-            this.platforms.push(plat);
-
-        }
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
 
@@ -502,6 +328,50 @@ export class LDTKScene extends SceneBase implements IUpdateable {
         }
     }
 
+    private loadLevelData(levelData: any): void {
+        console.log('levelData', levelData.level1.platforms)
+        // Carga las plataformas desde el archivo JSON
+        if (levelData.level1.platforms) {
+            for (const platformData of levelData.level1.platforms) {
+                let platform = new Platform(
+                    platformData.type,
+                    platformData.width,
+                    platformData.height,
+                    platformData.width,
+                    platformData.height,
+                    platformData.posX,
+                    platformData.posY
+                );
+                console.log('platform', platform)
+                platform.position.x = platformData.sizeX;
+                platform.position.y = platformData.sizeY;
+                platform.name = `plat${this.platforms.length}`;
+                this.world.addChild(platform);
+                this.platforms.push(platform);
+            }
+        }
+
+        // Carga las aguas desde el archivo JSON
+        if (levelData.level1.water) {
+            for (const waterData of levelData.level1.water) {
+                let water = new Water(
+                    waterData.type,
+                    waterData.width,
+                    waterData.height,
+                    waterData.width,
+                    waterData.height,
+                    waterData.posX,
+                    waterData.posY
+                );
+                water.position.x = waterData.sizeX;
+                water.position.y = waterData.sizeY;
+                water.name = `water${this.waters.length}`;
+                this.world.addChild(water);
+                this.waters.push(water);
+            }
+        }
+    }
+
     private getPlayerLevel(): void {
         this.myLevel.text = `Player's current level is: ${Player.getLevel()}`;
     }
@@ -575,7 +445,6 @@ export class LDTKScene extends SceneBase implements IUpdateable {
             SceneManager.changeScene(new WinScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
             stopSounds(["GameBGM"]);
         }
-        
         if (!this.gotToChest) {
             this.player.update(_deltaFrame, this.terrain);
         } else {
@@ -605,7 +474,7 @@ export class LDTKScene extends SceneBase implements IUpdateable {
         if (this.player.y > SceneManager.HEIGHT) {
             this.player.y = SceneManager.HEIGHT;
             this.player.canJump = true;
-            if(!this.player.swimming) {
+            if (!this.player.swimming) {
                 this.gameOver = true;
             }
         }
@@ -619,7 +488,6 @@ export class LDTKScene extends SceneBase implements IUpdateable {
                 if (Player._hp <= 0) {
                     SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
                 }
-                
                 this.player.swimming = true;
                 this.terrain = "WATER";
                 break;

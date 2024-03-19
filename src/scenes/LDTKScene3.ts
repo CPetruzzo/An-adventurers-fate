@@ -48,6 +48,7 @@ import { createPointButton } from "../utils/FunctionManager";
 import { DialogBox } from "../utils/DialogBox";
 import { Water } from "../games/Water";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
+import levelData from "../jsons/level3.json";
 
 export class LDTKScene3 extends SceneBase implements IUpdateable {
     private world: Container;
@@ -146,41 +147,6 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             .onComplete(this.arekToRight.bind(this));
         this.addChild(this.world);
 
-        // WATER
-        const waterData = [
-            // 0
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 250,
-                posY: 100,
-                sizeX: 1500,
-                sizeY: 680,
-            },
-        ];
-        for (let data of waterData) {
-            // Create a new platform with the data
-            let water = new Water(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            water.position.x = data.sizeX;
-            water.position.y = data.sizeY;
-            // Add it to the world and the platforms array
-            water.name = `water${this.waters.length}`;
-            console.log('water.name', water.name);
-            this.world.addChild(water);
-            this.waters.push(water);
-        }
-
-
         this.slopes = [];
 
         for (let i = 0; i < 2; i++) {
@@ -274,169 +240,8 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             this.world.addChild(slope);
         };
 
-        // PLATFORMS
-        const platformData = [
-            // 0
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 1200,
-                posY: 100,
-                sizeX: 600,
-                sizeY: 670,
-            },
-            // 1
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 340,
-                posY: 185,
-                sizeX: 1225,
-                sizeY: 645,
-            },
-            // 2
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 380,
-                posY: 400,
-                sizeX: 1760,
-                sizeY: 515,
-            },
-            // 3
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 300,
-                posY: 120,
-                sizeX: 2100,
-                sizeY: 450,
-            },
-            // 4
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 305,
-                posY: 50,
-                sizeX: 2400,
-                sizeY: 500,
-            },
-            // 5
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 150,
-                posY: 50,
-                sizeX: 2705,
-                sizeY: 590,
-            },
-            // 6
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 500,
-                posY: 20,
-                sizeX: 3730,
-                sizeY: 270,
-            },
-            // 7
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 2000,
-                posY: 50,
-                sizeX: 3900,
-                sizeY: 660,
-            },
-            // 8
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 850,
-                posY: 50,
-                sizeX: 5400,
-                sizeY: 585,
-            },
-            // 9
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 1200,
-                posY: 30,
-                sizeX: 6500,
-                sizeY: 655,
-            },
-            // 10
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 390,
-                posY: 30,
-                sizeX: 6600,
-                sizeY: 435,
-            },
-            // 11
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 500,
-                posY: 30,
-                sizeX: 7400,
-                sizeY: 570,
-            },
-            // 11
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 180,
-                posY: 30,
-                sizeX: 3230,
-                sizeY: 340,
-            },
-            // 11
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 180,
-                posY: 40,
-                sizeX: 4230,
-                sizeY: 350,
-            },
-        ];
-        for (let data of platformData) {
-            let plat = new Platform(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            plat.position.x = data.sizeX;
-            plat.position.y = data.sizeY;
-            // Add it to the world and the platforms array
-            plat.name = `plat${this.platforms.length}`;
-            console.log('plat.name', plat.name)
-            this.world.addChild(plat);
-            this.platforms.push(plat);
+        this.loadLevelData(levelData);
 
-        }
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
 
@@ -658,6 +463,52 @@ export class LDTKScene3 extends SceneBase implements IUpdateable {
             this.addChild(this.aljava);
         }
     }
+
+    private loadLevelData(levelData: any): void {
+        // Carga las plataformas desde el archivo JSON
+        console.log('levelData.level3.platforms', levelData.level3.platforms)
+        if (levelData.level3.platforms) {
+            for (const platformData of levelData.level3.platforms) {
+                let platform = new Platform(
+                    platformData.type,
+                    platformData.width,
+                    platformData.height,
+                    platformData.width,
+                    platformData.height,
+                    platformData.posX,
+                    platformData.posY
+                );
+                console.log('platform', platform)
+                platform.position.x = platformData.sizeX;
+                platform.position.y = platformData.sizeY;
+                platform.name = `plat${this.platforms.length}`;
+                this.world.addChild(platform);
+                this.platforms.push(platform);
+            }
+        }
+
+        // Carga las aguas desde el archivo JSON
+        if (levelData.level3.water) {
+            for (const waterData of levelData.level3.water) {
+                let water = new Water(
+                    waterData.type,
+                    waterData.width,
+                    waterData.height,
+                    waterData.width,
+                    waterData.height,
+                    waterData.posX,
+                    waterData.posY
+                );
+                water.position.x = waterData.sizeX;
+                water.position.y = waterData.sizeY;
+                water.name = `water${this.waters.length}`;
+                this.world.addChild(water);
+                this.waters.push(water);
+            }
+        }
+    }
+
+
 
     public override update(_deltaFrame: number): void {
         if (this.isPaused) {

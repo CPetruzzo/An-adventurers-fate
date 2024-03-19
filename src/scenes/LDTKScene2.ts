@@ -49,6 +49,8 @@ import { DialogBox } from "../utils/DialogBox";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { Water } from "../games/Water";
 
+import levelData from "../jsons/level2.json";
+
 export class LDTKScene2 extends SceneBase implements IUpdateable {
     private world: Container;
     private player: Player;
@@ -164,205 +166,8 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
             this.world.addChild(slope);
         };
 
-         // WATER
-         const waterData = [
+        this.loadLevelData(levelData);
 
-            // 1
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 500,
-                posY: 370,
-                sizeX: 2650,
-                sizeY: 680,
-            },
-            // 0
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 1500,
-                posY: 80,
-                sizeX: 4000,
-                sizeY: 690,
-            },
-        ];
-        for (let data of waterData) {
-            let water = new Water(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            water.position.x = data.sizeX;
-            water.position.y = data.sizeY;
-
-            water.name = `water${this.waters.length}`;
-            console.log('water.name', water.name);
-            this.world.addChild(water);
-            this.waters.push(water);
-        }
-
-        // An array of platform data
-        const platformData = [
-            // 0
-            {
-                type: "Tile",
-                width: 15,
-                height: 20,
-                posX: 1200,
-                posY: 100,
-                sizeX: 600,
-                sizeY: 660,
-            },
-            // 1
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 195,
-                posY: 185,
-                sizeX: 1520,
-                sizeY: 660,
-            },
-            // 2
-            {
-                type: "Tile",
-                width: 30,
-                height: 10,
-                posX: 135,
-                posY: 60,
-                sizeX: 2300,
-                sizeY: 540,
-            },
-            // 3
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 415,
-                posY: 160,
-                sizeX: 2155,
-                sizeY: 640,
-            },
-            // 4
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 500,
-                posY: 35,
-                sizeX: 2600,
-                sizeY: 700,
-            },
-            // 5
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 305,
-                posY: 250,
-                sizeX: 3005,
-                sizeY: 600,
-            },
-            // 6
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 450,
-                posY: 30,
-                sizeX: 3375,
-                sizeY: 620,
-            },
-            // 7
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 140,
-                posY: 30,
-                sizeX: 3880,
-                sizeY: 475,
-            },
-            // 8
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 140,
-                posY: 30,
-                sizeX: 4290,
-                sizeY: 320,
-            },
-            // 9
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 250,
-                posY: 90,
-                sizeX: 4550,
-                sizeY: 670,
-            },
-            // 10
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 140,
-                posY: 30,
-                sizeX: 4655,
-                sizeY: 475,
-            },
-            // 11
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 500,
-                posY: 120,
-                sizeX: 6350,
-                sizeY: 665,
-            },
-            // 12
-            {
-                type: "Tile",
-                width: 30,
-                height: 30,
-                posX: 1200,
-                posY: 30,
-                sizeX: 5700,
-                sizeY: 620,
-            },
-        ];
-        // A loop to create and position platforms
-        for (let data of platformData) {
-            // Create a new platform with the data
-            let plat = new Platform(
-                data.type,
-                data.width,
-                data.height,
-                data.width,
-                data.height,
-                data.posX,
-                data.posY
-            );
-            // Set its position
-            plat.position.x = data.sizeX;
-            plat.position.y = data.sizeY;
-            // Add it to the world and the platforms array
-            plat.name = `plat${this.platforms.length}`;
-            console.log('plat.name', plat.name)
-            this.world.addChild(plat);
-            this.platforms.push(plat);
-
-        }
         this.cartel = new GenericPanel("lineDark02.png", 35, 35, 35, 35);
         this.cartel.position.set(1050, 500);
 
@@ -529,6 +334,50 @@ export class LDTKScene2 extends SceneBase implements IUpdateable {
 
         if (!isMobileDevice) {
             this.removeButtons();
+        }
+    }
+
+    private loadLevelData(levelData: any): void {
+        console.log('levelData', levelData.level2.platforms)
+        // Carga las plataformas desde el archivo JSON
+        if (levelData.level2.platforms) {
+            for (const platformData of levelData.level2.platforms) {
+                let platform = new Platform(
+                    platformData.type,
+                    platformData.width,
+                    platformData.height,
+                    platformData.width,
+                    platformData.height,
+                    platformData.posX,
+                    platformData.posY
+                );
+                console.log('platform', platform)
+                platform.position.x = platformData.sizeX;
+                platform.position.y = platformData.sizeY;
+                platform.name = `plat${this.platforms.length}`;
+                this.world.addChild(platform);
+                this.platforms.push(platform);
+            }
+        }
+
+        // Carga las aguas desde el archivo JSON
+        if (levelData.level2.water) {
+            for (const waterData of levelData.level2.water) {
+                let water = new Water(
+                    waterData.type,
+                    waterData.width,
+                    waterData.height,
+                    waterData.width,
+                    waterData.height,
+                    waterData.posX,
+                    waterData.posY
+                );
+                water.position.x = waterData.sizeX;
+                water.position.y = waterData.sizeY;
+                water.name = `water${this.waters.length}`;
+                this.world.addChild(water);
+                this.waters.push(water);
+            }
         }
     }
 
