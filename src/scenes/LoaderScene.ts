@@ -15,32 +15,28 @@ export class LoaderScene extends SceneBase {
   constructor() {
     super();
 
-    const fondo: Sprite = Sprite.from("StartMenu/assetloadbar1.png");
-    fondo.anchor.set(0.175, 0.15)
-    // const screenRelation = SceneManager.HEIGHT / fondo.height;
-    // fondo.scale.set(screenRelation);
-  
-    
+    const fondo: Sprite = Sprite.from("StartMenu/assetloadbar2.png");
+    const screenRelation = 0.71;
+    fondo.scale.set(screenRelation);
+
     this.loadbar = new Graphics();
     this.setBarPercent(0);
-    
+
     this.loadbar.x = SceneManager.WIDTH * 0.5;
     this.loadbar.y = SceneManager.HEIGHT * 0.5;
-    
+
     this.loadbar.pivot.x = this.loadbar.width / 2;
     this.loadbar.pivot.y = this.loadbar.height / 5;
-    
+
     this.addChild(this.loadbar);
     this.addChild(fondo);
 
     this.downloadAssets();
   }
-  
+
   private downloadAssets() {
     Loader.registerPlugin(WebfontLoaderPlugin);
     Loader.shared.add(assets);
-    // Loader.shared.add({ name: 'From Google 2', url: 'https://fonts.googleapis.com/css2?family=Tangerine&display=swap' });
-    // Loader.shared.add({ name: 'From Google 3', url: 'https://fonts.googleapis.com/css2?family=Quintessential&display=swap' });
     Loader.shared.onComplete.once(this.whenLoadFinishes.bind(this));
     Loader.shared.load();
     Loader.shared.onProgress.add((Loader: { progress: number }) =>
@@ -71,7 +67,6 @@ export class LoaderScene extends SceneBase {
   }
 
   private whenLoadFinishes() {
-    // SceneManager.changeScene(new LDTKScene3(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     SceneManager.changeScene(new GameStartScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
   }
 }
