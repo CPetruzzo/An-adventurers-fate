@@ -8,6 +8,7 @@ import { GLOBAL_VOLUME } from "./utils/constants";
 import { Player } from "./games/Player";
 import { getValue, setValue } from "./utils/FunctionManager";
 import { LoaderScene } from "./scenes/LoaderScene";
+import { Characters } from "./games/PhysicsContainer";
 
 SceneManager.initialize();
 
@@ -64,3 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+const spreadsheetId = "1CfLNKIOOWvek-sqCQA9i4kxEvVC2Fx0cZe9TYtmVXvs";
+const tabName = "Characters";
+const apiUrl = `https://opensheet.elk.sh/${spreadsheetId}/${tabName}`;
+
+export let sheetData: Characters;
+fetch(apiUrl)
+  .then((response) => response.json())
+  .then((data) => {
+    // console.log("Datos obtenidos:", data);
+    sheetData = data;
+    console.log(`${tabName}`, sheetData);
+  })
+  .catch((error) => {
+    console.error("Error al obtener datos:", error);
+  });
+

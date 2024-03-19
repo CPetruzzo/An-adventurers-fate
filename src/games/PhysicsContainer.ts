@@ -6,6 +6,17 @@ export interface TerrainType {
     GROUND: "GROUND",
 }
 
+export interface Characters {
+    Type: string;
+    Attack: number;
+    Defense?: number;
+    Bow?: number;
+    HP: number;
+    Punch?: number;
+    Sword?: number;
+    Speed?: number;
+}
+
 export class PhysicsContainer extends Container {
 
     public speed: Point = new Point();
@@ -17,10 +28,9 @@ export class PhysicsContainer extends Container {
         this.y += this.speed.y * deltaSeconds + 1 / 2 * this.acceleration.y * Math.pow(deltaSeconds, 2)
 
         this.speed.x += this.acceleration.x * deltaSeconds;
- 
         switch (_terrain) {
             case "WATER":
-                this.speed.y -= this.acceleration.y * Math.random() * 0.15 * deltaSeconds;        
+                this.speed.y -= this.acceleration.y * Math.random() * 0.15 * deltaSeconds;
                 break;
             default:
                 this.speed.y += this.acceleration.y * deltaSeconds;
