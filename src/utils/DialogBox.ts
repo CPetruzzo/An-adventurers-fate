@@ -15,7 +15,7 @@ export class DialogBox extends Container {
     this.position.set(x, y);
 
     this.style = style || new TextStyle({
-      fontFamily: "Arial",
+      fontFamily: "Letra6",
       fontSize: 16,
       fill: "white",
       wordWrap: true,
@@ -75,7 +75,7 @@ export class DialogBox extends Container {
     const subtexto = text.split('');
     let partialText = '';
 
-    let delay = _textSpeed ? _textSpeed : 100;
+    let delay = _textSpeed ? _textSpeed : 75;
     let totalDelay = 0;
 
     for (let i = 0; i < subtexto.length; i++) {

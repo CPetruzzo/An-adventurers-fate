@@ -1,0 +1,416 @@
+{
+  "level1": {
+    "platforms": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 930,
+        "posY": 150,
+        "sizeX": 700,
+        "sizeY": 640
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 10,
+        "posX": 200,
+        "posY": 190,
+        "sizeX": 1465,
+        "sizeY": 355
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 10,
+        "posX": 135,
+        "posY": 120,
+        "sizeX": 1980,
+        "sizeY": 540
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 1250,
+        "posY": 180,
+        "sizeX": 2720,
+        "sizeY": 650
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 250,
+        "posY": 50,
+        "sizeX": 2650,
+        "sizeY": 180
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 620,
+        "posY": 40,
+        "sizeX": 2820,
+        "sizeY": 420
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 300,
+        "posY": 120,
+        "sizeX": 3490,
+        "sizeY": 665
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 150,
+        "posY": 160,
+        "sizeX": 4100,
+        "sizeY": 667
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 110,
+        "posY": 140,
+        "sizeX": 4600,
+        "sizeY": 667
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 120,
+        "posY": 230,
+        "sizeX": 4850,
+        "sizeY": 600
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 130,
+        "posY": 140,
+        "sizeX": 5370,
+        "sizeY": 645
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 1100,
+        "posY": 120,
+        "sizeX": 6350,
+        "sizeY": 660
+      }
+    ],
+    "water": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 3800,
+        "posY": 100,
+        "sizeX": 4200,
+        "sizeY": 680
+      },
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 1000,
+        "posY": 100,
+        "sizeX": 1600,
+        "sizeY": 680
+      }
+    ]
+  },
+  "level2": {
+    "platforms": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 1200,
+        "posY": 100,
+        "sizeX": 600,
+        "sizeY": 660
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 10,
+        "posX": 195,
+        "posY": 185,
+        "sizeX": 1520,
+        "sizeY": 660
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 10,
+        "posX": 135,
+        "posY": 60,
+        "sizeX": 2300,
+        "sizeY": 540
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 415,
+        "posY": 160,
+        "sizeX": 2155,
+        "sizeY": 640
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 500,
+        "posY": 35,
+        "sizeX": 2600,
+        "sizeY": 700
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 305,
+        "posY": 250,
+        "sizeX": 3005,
+        "sizeY": 600
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 450,
+        "posY": 30,
+        "sizeX": 3375,
+        "sizeY": 620
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 140,
+        "posY": 30,
+        "sizeX": 3880,
+        "sizeY": 475
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 140,
+        "posY": 30,
+        "sizeX": 4290,
+        "sizeY": 320
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 250,
+        "posY": 90,
+        "sizeX": 4550,
+        "sizeY": 670
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 140,
+        "posY": 30,
+        "sizeX": 4655,
+        "sizeY": 475
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 500,
+        "posY": 120,
+        "sizeX": 6350,
+        "sizeY": 665
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 1200,
+        "posY": 30,
+        "sizeX": 5700,
+        "sizeY": 620
+      }
+    ],
+    "water": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 500,
+        "posY": 370,
+        "sizeX": 2650,
+        "sizeY": 680
+      },
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 1500,
+        "posY": 80,
+        "sizeX": 4000,
+        "sizeY": 690
+      }
+    ]
+  },
+  "level3": {
+    "platforms": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 1200,
+        "posY": 100,
+        "sizeX": 600,
+        "sizeY": 670
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 10,
+        "posX": 340,
+        "posY": 185,
+        "sizeX": 1225,
+        "sizeY": 645
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 380,
+        "posY": 400,
+        "sizeX": 1760,
+        "sizeY": 515
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 300,
+        "posY": 120,
+        "sizeX": 2100,
+        "sizeY": 450
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 305,
+        "posY": 50,
+        "sizeX": 2400,
+        "sizeY": 500
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 150,
+        "posY": 50,
+        "sizeX": 2705,
+        "sizeY": 590
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 500,
+        "posY": 20,
+        "sizeX": 3730,
+        "sizeY": 270
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 2000,
+        "posY": 50,
+        "sizeX": 3900,
+        "sizeY": 660
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 850,
+        "posY": 50,
+        "sizeX": 5400,
+        "sizeY": 585
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 1200,
+        "posY": 30,
+        "sizeX": 6500,
+        "sizeY": 655
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 390,
+        "posY": 30,
+        "sizeX": 6600,
+        "sizeY": 435
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 500,
+        "posY": 30,
+        "sizeX": 7400,
+        "sizeY": 570
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 180,
+        "posY": 30,
+        "sizeX": 3230,
+        "sizeY": 340
+      },
+      {
+        "type": "Tile",
+        "width": 30,
+        "height": 30,
+        "posX": 180,
+        "posY": 40,
+        "sizeX": 4230,
+        "sizeY": 350
+      }
+    ],
+    "water": [
+      {
+        "type": "Tile",
+        "width": 15,
+        "height": 20,
+        "posX": 250,
+        "posY": 100,
+        "sizeX": 1500,
+        "sizeY": 680
+      }
+    ]
+  }
+}

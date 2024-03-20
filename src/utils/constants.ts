@@ -32,7 +32,7 @@ export const TRANSITION_TIME: number = 500;
 
 // dialogbox alpha
 export const DIALOG_ALPHA: number = 0.8;
-export const TEXT_TIME_LETTER_BY_LETTER: number = 100;
+export const TEXT_TIME_LETTER_BY_LETTER: number = 50;
 
 // FONTS
 export const LETRA1 = new TextStyle({
@@ -88,6 +88,38 @@ export const LETRA4 = new TextStyle({
   strokeThickness: 3,
   wordWrap: true,
   wordWrapWidth: 700,
+});
+
+export const LETRA6 = new TextStyle({
+  fontFamily: "Letra6",
+  fontSize: 130,
+  fill: 0xFFFFFF,
+  lineJoin: "round",
+  dropShadow: true,
+  dropShadowAlpha: 0.6,
+  dropShadowBlur: 3,
+  dropShadowDistance: 10,
+  letterSpacing: 12,
+  stroke: "#0008ff",
+  strokeThickness: 3,
+  wordWrap: true,
+  align: "center",
+  wordWrapWidth: 900,
+});
+
+export const LETRA7 = new TextStyle({
+  fontFamily: "Letra6",
+  fontSize: 30,
+  wordWrap: true,
+  wordWrapWidth: 600,
+  fill: "#ffffff"
+});
+
+export const LETRA8 = new TextStyle({
+  fontFamily: "Letra6",
+  fontSize: 30,
+  wordWrap: true,
+  wordWrapWidth: 600,
 });
 
 // change this to change level from ldtk

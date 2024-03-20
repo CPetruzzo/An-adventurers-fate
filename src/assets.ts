@@ -109,6 +109,7 @@ export const assets = [
     { url: "./aljava.png", name: "aljava" },
     { url: "./hpFrame.png", name: "hpFrame" },
     { url: "./hpFrame2.png", name: "hpFrame2" },
+    { url: "./hp-bar2.png", name: "hpFrame3" },
 
     // FONTS
     { url: "./fonts/ST02R.TTF", name: "Letra1" },
@@ -116,6 +117,7 @@ export const assets = [
     { url: "./fonts/GelPenUpright.ttf", name: "Letra3" },
     { url: "./fonts/GelPenUprightHeavy.ttf", name: "Letra4" },
     { url: "./fonts/GelPenUprightLight.ttf", name: "Letra5" },
+    { url: "./fonts/Retron2000.ttf", name: "Letra6" },
 
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
 

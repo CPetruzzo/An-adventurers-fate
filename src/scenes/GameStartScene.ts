@@ -16,7 +16,7 @@ import {
   stopAllSounds,
 } from "../utils/SoundParams";
 import { createText } from "../utils/TextParams";
-import { LETRA3, TRANSITION_TIME, timeBGUPDOWN, yBGUPDOWN } from "../utils/constants";
+import { LETRA6, TRANSITION_TIME, timeBGUPDOWN, yBGUPDOWN } from "../utils/constants";
 import { Config } from "./Config";
 import { MapScene } from "./MapScene";
 import { TextScene } from "./TextScene";
@@ -84,7 +84,7 @@ export class GameStartScene extends SceneBase {
 
     this.titulo = createText({
       text: "An adventurer's fate",
-      style: LETRA3,
+      style: LETRA6,
       position: { x: SceneManager.WIDTH / 4, y: 200 },
     });
 
