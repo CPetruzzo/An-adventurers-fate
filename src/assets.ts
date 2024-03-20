@@ -20,7 +20,6 @@ export const assets = [
     { url: "./game-text-explanation.png", name: "EMPTY_BANNER" },
     { url: "./StartMenu/assetloadbar1.png", name: "LOAD_BAR" },
 
-
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
     { url: "./StageOne/B2.png", name: "B2" },
@@ -72,13 +71,8 @@ export const assets = [
     { url: "./Player/adventurer-water-tread-04-1.3.png", name: "idleswim5" },
     { url: "./Player/adventurer-water-tread-05-1.3.png", name: "idleswim6" },
 
+    { url: "./playerFace.png", name: "playerFace" },
     
-    
-    
-    
-    
-    
-
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
     { url: "./StageOne/FinalBattle.mp3", name: "GameBGM", },
@@ -106,7 +100,8 @@ export const assets = [
     //health bar
     { url: "./HealthBar.png", name: "HealthBar" },
     { url: "./GreenHealthBar.png", name: "GreenHealthBar" },
-    { url: "./aljava.png", name: "aljava" },
+    { url: "./bowIcon.png", name: "aljava" },
+    { url: "./aljava.png", name: "aljavaArrows" },
     { url: "./hpFrame.png", name: "hpFrame" },
     { url: "./hpFrame2.png", name: "hpFrame2" },
     { url: "./hp-bar2.png", name: "hpFrame3" },

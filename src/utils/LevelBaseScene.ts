@@ -53,7 +53,7 @@ import levelData from "../jsons/levels.json";
 
 export class LevelBaseScene extends SceneBase implements IUpdateable {
     public world: Container;
-    private player: Player;
+    public player: Player;
     private levelSprite: Sprite;
     private platforms: Platform[] = [];
     public potions: Potion[] = [];
@@ -106,6 +106,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
     public slopes: Slope[] = [];
     private terrain: string = "GROUND";
     public levelData: any;
+    private playerBGIMG: Sprite;
 
     constructor(levelNumber: number) {
         super();
@@ -174,23 +175,35 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
         this.chest.alpha = 0;
         this.world.addChild(this.chest);
 
+        this.playerBGIMG = Sprite.from("TINY_EMPTY_BUTTON");
+        this.playerBGIMG.scale.set(0.08)
+        this.playerBGIMG.anchor.set(0.5);
+        this.playerBGIMG.position.set(this.playerBGIMG.width / 2, this.playerBGIMG.height / 2)
+        this.addChild(this.playerBGIMG);
+
+        const playerFace = Sprite.from("playerFace");
+        playerFace.anchor.set(0.5);
+        playerFace.scale.set(0.7)
+        playerFace.position.set(this.playerBGIMG.x, this.playerBGIMG.y)
+        this.addChild(playerFace);
+        
         this.aljava = Sprite.from("aljava");
-        this.aljava.position.set(400, 40);
-        this.aljava.scale.set(0.1);
+        this.aljava.position.set(430, 40);
+        this.aljava.scale.set(0.08);
         this.aljava.anchor.set(0.5);
         this.addChild(this.aljava);
 
         let arrowsAvailable = this.player.arrowsAvailable;
         this.arrowsOnScreen = new Text(`${arrowsAvailable}`, {
-            fontSize: 20,
-            fontFamily: "Letra3",
+            fontSize: 15,
+            fontFamily: "Letra6",
         });
-        this.arrowsOnScreen.position.set(400, 55);
+        this.arrowsOnScreen.position.set(458, 58);
         this.addChild(this.arrowsOnScreen);
 
         this.myLevel = new Text("", LETRA8);
         this.getPlayerLevel();
-        this.myLevel.position.set(15, 85);
+        this.myLevel.position.set(20, 75);
         this.addChild(this.myLevel);
 
         // Contador de flechas en pantalla
@@ -198,10 +211,10 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             this.removeChild(this.arrowsOnScreen);
             let arrowsAvailable = this.player.arrowsAvailable;
             this.arrowsOnScreen = new Text(`${arrowsAvailable}`, {
-                fontSize: 20,
-                fontFamily: "Letra3",
+                fontSize: 15,
+                fontFamily: "Letra6",
             });
-            this.arrowsOnScreen.position.set(400, 55);
+            this.arrowsOnScreen.position.set(458, 58);
             this.addChild(this.arrowsOnScreen);
         });
 
@@ -280,11 +293,11 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             60
         );
         console.log("Player._hp", Player._hp);
-        this.HPbar.position.set(0, -20);
+        this.HPbar.position.set(this.playerBGIMG.width, -20);
         this.addChild(this.HPbar);
         this.barra = new GenericPanel("hpFrame3", 40, 40, 40, 40);
         this.barra.scale.set(0.45);
-        // this.barra.position.set(-10, -77);
+        this.barra.position.set(this.playerBGIMG.width, 0);
         this.addChild(this.barra);
 
         // Enemy's hpbar
@@ -321,7 +334,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
 
 
     private getPlayerLevel(): void {
-        this.myLevel.text = `Player's level: ${Player.getLevel()}`;
+        this.myLevel.text = `Lvl: ${Player.getLevel()}`;
     }
 
     /** Función de disparo de las flechas */
@@ -357,8 +370,8 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             this.removeChild(this.aljava);
             this.aljava = Sprite.from("aljava");
             this.aljava.alpha = 0.3;
-            this.aljava.position.set(400, 40);
-            this.aljava.scale.set(0.1);
+            this.aljava.position.set(430, 40);
+            this.aljava.scale.set(0.08);
             this.aljava.anchor.set(0.5);
             this.addChild(this.aljava);
         } else {
@@ -366,8 +379,8 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             this.removeChild(this.aljava);
             this.aljava = Sprite.from("aljava");
             this.aljava.alpha = 0.3;
-            this.aljava.position.set(400, 40);
-            this.aljava.scale.set(0.1);
+            this.aljava.position.set(430, 40);
+            this.aljava.scale.set(0.08);
             this.aljava.anchor.set(0.5);
             this.addChild(this.aljava);
         }
@@ -658,11 +671,11 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             250 * (Player._hp / Player._maxHealth),
             60
         );
-        this.HPbar.position.set(0, -20);
+        this.HPbar.position.set(this.playerBGIMG.width, -20);
         this.addChild(this.HPbar);
         this.barra = new GenericPanel("hpFrame3", 40, 40, 40, 40);
         this.barra.scale.set(0.45);
-        // this.barra.position.set(-10, -77);
+        this.barra.position.set(this.playerBGIMG.width, 0);
         this.addChild(this.barra);
     }
     /** Movimiento del enemigo hacia la izquierda */

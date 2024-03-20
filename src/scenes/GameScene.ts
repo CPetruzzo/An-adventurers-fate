@@ -340,7 +340,7 @@ export class GameScene extends SceneBase implements IUpdateable {
     let arrowsAvailable = this.player.arrowsAvailable;
     this.arrowsOnScreen = new Text(`${arrowsAvailable}`, {
       fontSize: 20,
-      fontFamily: "Letra3",
+      fontFamily: "Letra6",
     });
     this.arrowsOnScreen.position.set(400, 55);
     this.addChild(this.arrowsOnScreen);
@@ -356,7 +356,7 @@ export class GameScene extends SceneBase implements IUpdateable {
       let arrowsAvailable = this.player.arrowsAvailable;
       this.arrowsOnScreen = new Text(`${arrowsAvailable}`, {
         fontSize: 20,
-        fontFamily: "Letra3",
+        fontFamily: "Letra6",
       });
       this.arrowsOnScreen.position.set(400, 55);
       this.addChild(this.arrowsOnScreen);

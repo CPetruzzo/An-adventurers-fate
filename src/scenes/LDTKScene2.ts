@@ -10,15 +10,17 @@ export class LDTKScene2 extends LevelBaseScene {
 
         this.slopes = [];
 
+        this.player.position.set(550, 550);
+
         for (let i = 0; i < 2; i++) {
-            const slope = new Slope(200, 50, -12);             
+            const slope = new Slope(200, 50, -12);
             slope.position.set(1100 + i * 30, 620 + i * 30)
             this.slopes.push(slope);
             this.world.addChild(slope);
         };
 
         for (let i = 0; i < 1; i++) {
-            const slope = new Slope(150, 30, -35);             
+            const slope = new Slope(150, 30, -35);
             slope.position.set(2250 + i * 30, 570 + i * 30)
             this.slopes.push(slope);
             this.world.addChild(slope);

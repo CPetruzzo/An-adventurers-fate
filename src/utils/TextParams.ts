@@ -1,6 +1,7 @@
 import { Text, TextStyle } from "pixi.js";
-import { LETRA2, LETRA4 } from "./constants";
+import {  LETRA7 } from "./constants";
 import { Player } from "../games/Player";
+import { SceneManager } from "./SceneManager";
 
 // Función para obtener el nombre del jugador desde el almacenamiento local
 export function getPlayerName(): string {
@@ -30,42 +31,42 @@ export function createText(params: TextParams): Text {
 
 export const PStrenghtParams: TextParams = {
     text: `Punch: ${Player._punchDamage}`,
-    style: LETRA2,
+    style: LETRA7,
     position: { x: 320, y: 325 },
 };
 
 export const BStrenghtParams: TextParams = {
     text: `Bow: ${Player._bowDamage}`,
-    style: LETRA2,
+    style: LETRA7,
     position: { x: 320, y: 375 },
 };
 
 export const salirParams: TextParams = {
     text: "¿Desea Salir?",
-    style: LETRA4,
-    position: { x: 455, y: 270 },
+    style: LETRA7,
+    position: { x: SceneManager.WIDTH / 2 - 200, y: 270 },
 };
 
 export const salirSiParams: TextParams = {
     text: "Si",
-    style: LETRA4,
+    style: LETRA7,
     position: { x: 605, y: 330 },
 };
 
 export const salirNoParams: TextParams = {
     text: "No",
-    style: LETRA4,
-    position: { x: 600, y: 405 },
+    style: LETRA7,
+    position: { x: 599, y: 408 },
 };
 
 export const levelParams: TextParams = {
     text: `Level: ${Player.getLevel()}`,
-    style: LETRA2,
+    style: LETRA7,
     position: { x: 350, y: 510 },
 };
 
 export const HpParams: TextParams = {
     text: `Max hp: ${Player._maxHealth}`,
-    style: LETRA2,
+    style: LETRA7,
     position: { x: 320, y: 275 },
 };

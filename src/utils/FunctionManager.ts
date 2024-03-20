@@ -1,4 +1,4 @@
-import { Sprite, Text, Texture } from "pixi.js";
+import { ITextStyle, Sprite, Text, Texture } from "pixi.js";
 import { PointButton } from "../ui/PointButton";
 import { Player } from "../games/Player";
 import { LETRA3 } from "./constants";
@@ -31,7 +31,7 @@ export interface SpriteParams {
  * @param _event name of the event, for example, pointer down
  * @param _callback void function that's applyied when the pointerbutton launches it's event
  */
-export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any, text?: string): PointButton {
+export function createPointButton(params: ButtonParams, event: string | symbol, fn: VoidFunction, context?: any, text?: string, _textStyle?: ITextStyle): PointButton {
     const button = new PointButton(
         Texture.from(params.textureNameDef),
         Texture.from(params.textureOver),
@@ -45,6 +45,9 @@ export function createPointButton(params: ButtonParams, event: string | symbol, 
         const texto = new Text(text, LETRA3);
         texto.anchor.set(0.5);
         button.addChild(texto);
+        if (_textStyle){
+            texto.style = _textStyle;
+        }
     }
 
     // Añadir eventos al botón

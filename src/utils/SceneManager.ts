@@ -4,7 +4,7 @@ import { Keyboard } from "./Keyboard";
 import { SceneBase } from "./SceneBase";
 
 export namespace SceneManager {
-  export const WIDTH = 1280;
+  export const WIDTH = 1280; // 1560 fullscreen cel
   export const HEIGHT = 720;
   export let currentScene: SceneBase;
   let app: Application;

@@ -167,6 +167,11 @@ export class Player extends PhysicsContainer implements IHitBox {
     public override update(deltaMS: number, _terrain?: string): void {
         super.update(deltaMS / 100, _terrain);
         this.animations.update(deltaMS / (1000 / 60));
+        if (_terrain === "WATER") {
+            this.alpha = 0.5;
+        } else {
+            this.alpha = 1;
+        }
     }
 
     /** Función para el salto (Función auxiliar, si no está separada no puedo borrarla cuando elimine a player) */
@@ -451,7 +456,7 @@ export class Player extends PhysicsContainer implements IHitBox {
             this.getPlayerHurt(0.1);
         }
     }
-    
+
     // Función de daño al jugador
     public getPlayerHurt(damage: number): void {
         Player._hp -= damage;

@@ -111,13 +111,22 @@ export const LETRA7 = new TextStyle({
   fontFamily: "Letra6",
   fontSize: 30,
   wordWrap: true,
-  wordWrapWidth: 600,
-  fill: "#ffffff"
+  fill: "#ffffff",
+  lineJoin: "round",
+  dropShadow: true,
+  dropShadowAlpha: 0.6,
+  dropShadowBlur: 3,
+  dropShadowDistance: 2,
+  letterSpacing: 12,
+  stroke: "#0008ff",
+  strokeThickness: 3,
+  align: "left",
+  wordWrapWidth: 900,
 });
 
 export const LETRA8 = new TextStyle({
   fontFamily: "Letra6",
-  fontSize: 30,
+  fontSize: 15,
   wordWrap: true,
   wordWrapWidth: 600,
 });

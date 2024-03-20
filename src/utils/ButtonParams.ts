@@ -301,7 +301,7 @@ export const configParams: ButtonParams = {
     textureNameDef: "EMPTY_BUTTON",
     textureOver: "EMPTY_BUTTON",
     textureClick: "EMPTY_BUTTON",
-    x: 650,
+    x: SceneManager.WIDTH / 2,
     y: 600,
     scale: 0.2,
 };
@@ -310,7 +310,7 @@ export const startParams: ButtonParams = {
     textureNameDef: "EMPTY_BUTTON",
     textureOver: "EMPTY_BUTTON",
     textureClick: "EMPTY_BUTTON",
-    x: 450,
+    x: SceneManager.WIDTH / 2 - 200,
     y: 600,
     scale: 0.2,
 };
@@ -319,7 +319,7 @@ export const textSceneParams: ButtonParams = {
     textureNameDef: "EMPTY_BUTTON" ,
     textureOver: "EMPTY_BUTTON" ,
     textureClick: "EMPTY_BUTTON"  ,
-    x: 850,
+    x: SceneManager.WIDTH / 2 + 200,
     y: 600,
     scale: 0.2,
 };

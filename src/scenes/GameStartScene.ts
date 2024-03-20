@@ -55,15 +55,15 @@ export class GameStartScene extends SceneBase {
 
     this.buttons = [];
     this.start = createPointButton(startParams, "pointerClick", () =>
-      this.onStartClick(), this, "Start"
+      this.onStartClick(), this, "Start", LETRA6
     );
     this.start.name = "start";
     this.config = createPointButton(configParams, "pointerClick", () =>
-      this.onConfigClick(), this, "Config"
+      this.onConfigClick(), this, "Config", LETRA6
     );
     this.config.name = "settings";
     this.textscene = createPointButton(textSceneParams, "pointerClick", () =>
-      this.onTextClick(), this, "About"
+      this.onTextClick(), this, "About", LETRA6
     );
     this.textscene.name = "about";
     this.buttons.push(this.start, this.config, this.textscene);

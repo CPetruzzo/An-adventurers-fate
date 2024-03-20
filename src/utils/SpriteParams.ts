@@ -102,9 +102,9 @@ export const itemWeapon3Params: SpriteParams = {
 };
 
 export const itemBowParams: SpriteParams = {
-    texture: "itemBow",
+    texture: "aljava",
     position: { x: itemWeapon1Params.position.x, y: itemWeapon1Params.position.y },
-    scale: { x: 0.07, y: 0.07 },
+    scale: { x: 0.12, y: 0.12 },
     anchor: { x: 0.5, y: 0.5 },
 };
 

@@ -5,7 +5,7 @@ import {
   //  Texture 
 } from "pixi.js";
 import { createText } from "../utils/TextParams";
-import { LETRA4 } from "../utils/constants";
+import { LETRA7 } from "../utils/constants";
 import { getGlobalVolume, setVolume } from "../utils/SoundParams";
 import { Player, setPlayerHeight } from "../games/Player";
 import { createSprite, getPlayerHeight, setValue } from "../utils/FunctionManager";
@@ -43,20 +43,20 @@ export class ConfigInfo extends Container {
 
     this.textTitle = createText({
       text: this.paramName,
-      style: LETRA4,
+      style: LETRA7,
       position: { x: 150, y: -200 },
     });
     this.textTitle.anchor.set(0.5);
 
     this.minText = createText({
       text: this.min.toString(),
-      style: LETRA4,
+      style: LETRA7,
       position: { x: -115, y: 15 },
     });
 
     this.maxText = createText({
       text: this.max.toString(),
-      style: LETRA4,
+      style: LETRA7,
       position: { x: 400, y: 15 },
     });
 
