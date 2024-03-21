@@ -107,6 +107,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
     private terrain: string = "GROUND";
     public levelData: any;
     private playerBGIMG: Sprite;
+    public alreadyIn: boolean = false;
 
     constructor(levelNumber: number) {
         super();
@@ -146,8 +147,17 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
 
         this.player = new Player();
         this.player.scale.set(PLAYER_SCALE);
-        this.player.position.set(600, 200);
+        this.player.position.set(500, 650);
         this.world.addChild(this.player);
+
+        new Tween(this.player).from({ x: 470 }).to({ x: 600 }, 500).start();
+        new Tween(this.player.animations.playState("run"))
+            .to({}, 500)
+            .start()
+            .onComplete(() => {
+                this.player.animations.playState("idle");
+                this.alreadyIn = true;
+            });
 
         Level.CurrentLevel = levelNumber;
         console.log("Current Level: ", Player.getLevel());
@@ -411,6 +421,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             this.player.initKeyboardEvents(false);
             SceneManager.changeScene(new WinScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
             stopSounds(["GameBGM"]);
+            return;
         }
 
         if (!this.gotToChest) {
@@ -438,16 +449,14 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             }
         }
 
-
-
-
         if (Level.CurrentLevel >= 4) {
-            this.world.y = -this.player.y * this.worldTransform.a + offset;
+            this.world.y = -this.player.y * this.worldTransform.a + offset * 1.35;
             // LIMITE INFERIOR
             if (this.player.y > SceneManager.HEIGHT * 2) {
                 this.player.y = SceneManager.HEIGHT * 2;
                 this.player.canJump = true;
                 if (!this.player.swimming) {
+                    this.player.speed.y = 0;
                     // this.gameOver = true;
                 }
             }
@@ -457,7 +466,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
                 this.player.y = SceneManager.HEIGHT;
                 this.player.canJump = true;
                 if (!this.player.swimming) {
-                    // this.gameOver = true;
+                    this.gameOver = true;
                 }
             }
         }
@@ -737,7 +746,6 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             .start()
             .onComplete(this.arekIdleLeft.bind(this));
     }
-
 
     /** Pausado de la escena */
     private onPause(): void {

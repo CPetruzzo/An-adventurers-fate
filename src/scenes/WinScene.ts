@@ -76,6 +76,12 @@ export class WinScene extends Container {
                 this.award.scale.set(0.7);
                 this.award.alpha = 0;
                 break;
+            case 4:
+                this.award = new Sprite(Texture.from("itemSword"));
+                this.award.position.set(500, 230);
+                this.award.scale.set(0.2);
+                this.award.alpha = 0;
+                break;
             default:
                 this.award = new Sprite(Texture.from("itemSword"));
                 this.award.position.set(500, 230);

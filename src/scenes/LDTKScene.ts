@@ -7,7 +7,6 @@ export class LDTKScene1 extends LevelBaseScene {
         super(1);
 
         this.loadLevelData();
-
         this.player.position.set(550, 550);
 
         this.slopes = [];

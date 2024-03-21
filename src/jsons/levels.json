@@ -419,28 +419,19 @@
         "type": "Tile",
         "width": 15,
         "height": 20,
-        "posX": 1200,
+        "posX": 5000,
         "posY": 100,
         "sizeX": 600,
-        "sizeY": 1270
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 10,
-        "posX": 340,
-        "posY": 185,
-        "sizeX": 1225,
-        "sizeY": 645
+        "sizeY": 1350
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 380,
-        "posY": 400,
-        "sizeX": 1760,
-        "sizeY": 515
+        "posX": 5000,
+        "posY": 100,
+        "sizeX": 5000,
+        "sizeY": 1350
       },
       {
         "type": "Tile",

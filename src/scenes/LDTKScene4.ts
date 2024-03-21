@@ -14,7 +14,7 @@ export class LDTKScene4 extends LevelBaseScene {
 
         this.loadLevelData();
 
-        this.player.position.set(500, 1250)
+        this.player.position.set(500, 1250);
 
         this.chest.position.set(6650, 550);
 
