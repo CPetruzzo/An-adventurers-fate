@@ -121,6 +121,9 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             case 3:
                 this.levelData = levelData.level3;
                 break;
+            case 4:
+                this.levelData = levelData.level4;
+                break;
             default:
                 this.levelData = levelData;
                 break;
@@ -133,7 +136,11 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
         this.addChild(this.world);
 
         this.levelSprite = Sprite.from(`Level_${levelNumber - 1}`);
-        const screenRelation = SceneManager.HEIGHT / this.levelSprite.height;
+        console.log('`Level_${levelNumber - 1}`', `Level_${levelNumber - 1}`)
+        let screenRelation = SceneManager.HEIGHT / this.levelSprite.height;
+        if (levelNumber === 4) {
+            screenRelation = SceneManager.HEIGHT * 2 / this.levelSprite.height;
+        }
         this.levelSprite.scale.set(screenRelation);
         this.world.addChild(this.levelSprite);
 
@@ -186,7 +193,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
         playerFace.scale.set(0.7)
         playerFace.position.set(this.playerBGIMG.x, this.playerBGIMG.y)
         this.addChild(playerFace);
-        
+
         this.aljava = Sprite.from("aljava");
         this.aljava.position.set(430, 40);
         this.aljava.scale.set(0.08);
@@ -431,12 +438,27 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             }
         }
 
-        // LIMITE INFERIOR
-        if (this.player.y > SceneManager.HEIGHT) {
-            this.player.y = SceneManager.HEIGHT;
-            this.player.canJump = true;
-            if (!this.player.swimming) {
-                this.gameOver = true;
+
+
+
+        if (Level.CurrentLevel >= 4) {
+            this.world.y = -this.player.y * this.worldTransform.a + offset;
+            // LIMITE INFERIOR
+            if (this.player.y > SceneManager.HEIGHT * 2) {
+                this.player.y = SceneManager.HEIGHT * 2;
+                this.player.canJump = true;
+                if (!this.player.swimming) {
+                    // this.gameOver = true;
+                }
+            }
+        } else {
+            // LIMITE INFERIOR
+            if (this.player.y > SceneManager.HEIGHT) {
+                this.player.y = SceneManager.HEIGHT;
+                this.player.canJump = true;
+                if (!this.player.swimming) {
+                    // this.gameOver = true;
+                }
             }
         }
 
@@ -817,6 +839,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
 
     public loadLevelData(): void {
         // Carga las plataformas desde el archivo JSON
+        console.log('this.levelData.platforms', this.levelData.platforms)
         if (this.levelData.platforms) {
             for (const platformData of this.levelData.platforms) {
                 let platform = new Platform(

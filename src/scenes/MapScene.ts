@@ -21,6 +21,7 @@ import { Inventory } from "../games/Inventory";
 import { LDTKScene1 } from "./LDTKScene";
 import { LDTKScene2 } from "./LDTKScene2";
 import { LDTKScene3 } from "./LDTKScene3";
+import { LDTKScene4 } from "./LDTKScene4";
 
 const RED = 0xAA0000;
 
@@ -110,6 +111,7 @@ export class MapScene extends SceneBase implements IUpdateable {
         const pointOnMap4 = createSprite(pointOnMap4Params);
         this.map.addChild(pointOnMap1, pointOnMap2, pointOnMap3, pointOnMap4);
 
+        Level.Complete = 4;
         if (1 <= Level.Complete) {
             const stageOneButton = createPointButton(stageOne, "pointerClick", () => this.onStageOneClick());
             // this.map.removeChild(pointOnMap1);
@@ -174,7 +176,7 @@ export class MapScene extends SceneBase implements IUpdateable {
             { ref: 'bagClose', params: shieldCloseParams, onClick: () => this.onMenuBagStopClick() },
         ];
         // ACA SEPARO/DECLARO GRUPOS, DEPENDE COMO QUIERA MANEJARLOS
-        this.buttonsBackMenuClose = [ 'button2', 'button1'];
+        this.buttonsBackMenuClose = ['button2', 'button1'];
         this.buttonsCloseBook = ['closeBook'];
         this.buttonsCloseShield = ['shieldClose', 'bagClose'];
         this.buttonsUI = ['book', 'shield', 'menuBag', 'backMenu'];
@@ -441,7 +443,7 @@ export class MapScene extends SceneBase implements IUpdateable {
 
     private onStageFourClick(): void {
         stopAllSounds();
-        SceneManager.changeScene(new LDTKScene1());
+        SceneManager.changeScene(new LDTKScene4());
     }
 
     private onMenu(): void {

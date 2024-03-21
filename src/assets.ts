@@ -157,5 +157,7 @@ export const assets = [
     { url: "./LDTKassets/Level_0.png", name: "Level_0" },
     { url: "./LDTKassets/Level_1.png", name: "Level_1" },
     { url: "./LDTKassets/Level_2.png", name: "Level_2" },
+    { url: "./LDTKassets/Level_3.png", name: "Level_3" },
+    { url: "./LDTKassets/Level_4.png", name: "Level_4" },
 
 ]
