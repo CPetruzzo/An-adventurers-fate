@@ -145,36 +145,36 @@ export const stageOne: ButtonParams = {
     x: 580,
     y: 750,
     scale: STAGE_SCALE,
-    textureNameDef: "lineDark23.png",
-    textureOver: "lineLight26.png",
-    textureClick: "lineLight23.png",
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const stageTwo: ButtonParams = {
-    x: 282,
-    y: 132,
+    x: 102,
+    y: 482,
     scale: STAGE_SCALE,
-    textureNameDef: "lineDark23.png",
-    textureOver: "lineLight26.png",
-    textureClick: "lineLight23.png",
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const stageThree: ButtonParams = {
     x: 1022,
     y: 432,
     scale: STAGE_SCALE,
-    textureNameDef: "lineDark23.png",
-    textureOver: "lineLight26.png",
-    textureClick: "lineLight23.png",
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const stageFour: ButtonParams = {
-    x: 102,
-    y: 482,
+    x: 680,
+    y: 190,
     scale: STAGE_SCALE,
-    textureNameDef: "lineDark23.png",
-    textureOver: "lineLight26.png",
-    textureClick: "lineLight23.png",
+    textureNameDef: "minus",
+    textureOver: "minus",
+    textureClick: "minus",
 };
 
 export const book: ButtonParams = {

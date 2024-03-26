@@ -15,7 +15,7 @@ import {
   playSound,
   stopAllSounds,
 } from "../utils/SoundParams";
-import { createText } from "../utils/TextParams";
+import { createText, playername } from "../utils/TextParams";
 import { LETRA6, TRANSITION_TIME, timeBGUPDOWN, yBGUPDOWN } from "../utils/constants";
 import { Config } from "./Config";
 import { MapScene } from "./MapScene";
@@ -23,6 +23,7 @@ import { TextScene } from "./TextScene";
 import { Text } from "pixi.js";
 import { createPointButton, createSprite } from "../utils/FunctionManager";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
+import { HistoryScene } from "./HistoryScene";
 
 export class GameStartScene extends SceneBase {
   private titulo: Text;
@@ -41,7 +42,6 @@ export class GameStartScene extends SceneBase {
     this.name = "START";
 
     const globalvolume = getGlobalVolume();
-    console.log("globalvolume", globalvolume);
     if (globalvolume != undefined) {
       playSound(MusicNames.BEGIN, { loop: true, volume: 0.05 });
     }
@@ -70,7 +70,6 @@ export class GameStartScene extends SceneBase {
 
     this.currentButton = 0;
 
-    // Sound ON-OFF
     this.buttonSound = new ToggleButton(
       Texture.from("TINY_SOUND_BUTTON"),
       Texture.from("TINY_SOUND_BUTTON_OFF")
@@ -130,7 +129,6 @@ export class GameStartScene extends SceneBase {
       const blurScale = 1 - Math.abs(blurAmount);
       // @ts-ignore
       this.titulo.filters[0].blur = blurScale * 30;
-
     }
   }
 
@@ -141,7 +139,6 @@ export class GameStartScene extends SceneBase {
   }
 
   private onTextClick(): void {
-    console.log("Apreté Config", this);
     stopAllSounds();
     SceneManager.changeScene(new TextScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
     console.log(SceneManager.currentScene.name);
@@ -155,7 +152,11 @@ export class GameStartScene extends SceneBase {
 
   private onStartClick(): void {
     stopAllSounds();
-    SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    if (playername != (undefined || null)) {
+      SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    } else {
+      SceneManager.changeScene(new HistoryScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+    }
     console.log(SceneManager.currentScene.name);
   }
 

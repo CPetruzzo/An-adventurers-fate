@@ -18,7 +18,7 @@ export const START_SCALE = 1.2;
 export const MOVEMENTS_SCALE = 1.8;
 export const UI_SCALE = 1.45;
 export const UI_CONFIG = 0.5;
-export const STAGE_SCALE = 0.8;
+export const STAGE_SCALE = 0.1;
 
 export const MASK_TIME: number = 3000;
 export const MASK_TIME_LINE_BY_LINE: number = 1000;

@@ -4,7 +4,8 @@ export const assets = [
     { url: "./spritesheet (5).json", name: "UILight" },
     { url: "./spritesheet (7).json", name: "MenuButtons" },
     { url: "./PauseMenu/PAUSA.png", name: "PAUSA" },
-    { url: "./StageOne/Lose.png", name: "LOSE" },
+    // { url: "./StageOne/Lose.png", name: "LOSE" },
+    { url: "./loseBackground.jpg", name: "LOSE" },
     { url: "./READ.png", name: "READ" },
     { url: "./boton.png", name: "genericButton" },
     { url: "./plus.png", name: "plus" },
@@ -19,6 +20,7 @@ export const assets = [
     { url: "./tinyButton.png", name: "TINY_EMPTY_BUTTON" },
     { url: "./game-text-explanation.png", name: "EMPTY_BANNER" },
     { url: "./StartMenu/assetloadbar1.png", name: "LOAD_BAR" },
+    { url: "./backgroundpetruzzo.png", name: "PETRUZZO" },
 
     // BACKGROUND
     { url: "./StageOne/B1.png", name: "B1" },
@@ -38,6 +40,13 @@ export const assets = [
     // SUELO
     { url: "./texture.json", name: "Suelo" },
     { url: "./tileset.png", name: "Tile" },
+
+    { url: "./WINDOW.png", name: "WINDOW" },
+    { url: "./cristal.png", name: "CRISTAL1" },
+    { url: "./cristal2.png", name: "CRISTAL2" },
+    { url: "./bag.png", name: "BAG" },
+    { url: "./OIG1 (4).jpg", name: "WINDOWSCENE" },
+    
 
     //AREK THE ABSOLUTE
     { url: "./spritesheet (8).json", name: "Arek" },
@@ -72,7 +81,7 @@ export const assets = [
     { url: "./Player/adventurer-water-tread-05-1.3.png", name: "idleswim6" },
 
     { url: "./playerFace.png", name: "playerFace" },
-    
+
     // MUSIQUITA
     { url: "./StartMenu/StartOfAJourney.mp3", name: "StartBGM", },
     { url: "./StageOne/FinalBattle.mp3", name: "GameBGM", },
@@ -117,6 +126,7 @@ export const assets = [
     // {url: "./fonts/Supertext02.xml", name: "Supertext02"},
 
     //MAPS
+    { url: "./historycharacter.jpg", name: "HISTORY1" },
     { url: "./StartMenu/castle1.png", name: "Castle1" },
     { url: "./StartMenu/castle2.png", name: "Castle2" },
     { url: "./Maps/Map1.jpg", name: "Map1" },
@@ -148,7 +158,7 @@ export const assets = [
     { url: "./RingsSwordsPotions.json", name: "RingsSwordsPotions" },
     { url: "./openBag.png", name: "openBag" },
     { url: "./scroll.png", name: "scroll" },
-    
+
 
     // LDTK
     { url: "./LDTKassets/Props-Rocks.png", name: "Rocks" },

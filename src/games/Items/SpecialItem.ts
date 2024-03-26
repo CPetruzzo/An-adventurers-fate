@@ -1,10 +1,16 @@
 import { InventoryItem } from "../Inventory";
 
-// Subclase para otros objetos especiales
 export class SpecialItem extends InventoryItem {
-    constructor(quantity: number = 1) {
-        super('Special Item', 'Description of the special item', quantity);
+    constructor(quantity: number = 1, description?: string, itemName?: string) {
+        if (description != undefined) {
+            super('Special Item', description, quantity);
+        } else {
+            super('Special Item', 'Description of the special item', quantity);
+        }
+
+        if (itemName) {
+            this.name = itemName;
+        }
     }
 
-    // Puedes agregar métodos específicos para los objetos especiales aquí
 }

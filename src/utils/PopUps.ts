@@ -1,8 +1,6 @@
-import {
-    // Container, 
-    DisplayObject, Sprite
-} from "pixi.js";
+import { DisplayObject, Sprite } from "pixi.js";
 import { Easing, Tween } from "tweedle.js";
+import { Timer } from "./SceneManager";
 
 export interface PopUpParams {
     name: string,
@@ -24,28 +22,29 @@ export function createPopUp(
     name: string,
     objectsToRemove: any[][],
     objectsToAdd: any[][],
-    // objectsToRemove: DisplayObject[][],
-    // objectsToAdd: DisplayObject[][],
     context: any,
     background: Sprite, // Se agrega el fondo como un parámetro
     popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][]; background: Sprite } }
 ): void {
     closeOpenedPopUps(popups, context);
 
-    // // Crear el fondo no interactivo
-    // const background = Sprite.from("EMPTY_BANNER");
     background.width = context.width;
     background.height = context.height;
     background.interactive = true;
     background.alpha = 0;
     context.addChild(background);
 
+    // Agregar event listener al background para cerrar el popup al hacer clic fuera de él
+    background.on("pointerdown", () => {
+        Timer(1000, () => closePopUp(name, context, popups));
+    });
+
 
     if (!popups[name]) {
         popups[name] = {
             objectsToAdd: objectsToAdd,
             objectsToRemove: objectsToRemove,
-            background: background // Se guarda el fondo no interactivo en el mapa de popups
+            background: background
         };
     }
 
@@ -60,44 +59,11 @@ export function createPopUp(
     objectsToAdd.forEach((group) => {
         group.forEach((obj) => {
             context.addChild(obj);
-            // obj.pivot.set(obj.width, obj.height)
             obj.alpha = 0;
             new Tween(obj).from({ scale: { x: 0, y: 0 } }).to({ scale: { x: obj.scale.x, y: obj.scale.y }, alpha: 1 }, 1000).easing(Easing.Elastic.InOut).start();
         });
     });
 }
-
-// // to change to: 
-// export interface PopUpParams {
-//     name: string,
-//     objectsToRemove: any[][],
-//     objectsToAdd: any[][],
-//     context: any,
-//     popups: { [name: string]: { objectsToRemove: DisplayObject[][]; objectsToAdd: DisplayObject[][] } }
-// }
-
-// export function createPopUp2(popUpParams: PopUpParams): void {
-//     closeOpenedPopUps(popUpParams.popups, popUpParams.context);
-//     if (!popUpParams.popups[popUpParams.name]) {
-//         popUpParams.popups[popUpParams.name] = {
-//             objectsToAdd: popUpParams.objectsToAdd,
-//             objectsToRemove: popUpParams.objectsToRemove,
-//         };
-//     }
-
-//     popUpParams.objectsToRemove.forEach((group) => {
-//         group.forEach((obj) => {
-//             popUpParams.context.removeChild(obj);
-//         });
-//     });
-
-//     popUpParams.objectsToAdd.forEach((group) => {
-//         group.forEach((obj) => {
-//             popUpParams.context.addChild(obj);
-//         });
-//     });
-// }
-// ///
 
 export function closePopUp(
     name: string,

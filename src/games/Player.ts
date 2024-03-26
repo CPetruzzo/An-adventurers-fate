@@ -155,15 +155,11 @@ export class Player extends PhysicsContainer implements IHitBox {
         }
     }
 
-    // ESTO ES PARA QUE CUANDO DESTRUYA EL PLAYER TAMBIÉN SE BORRE EL MÉTODO DE SALTAR KEYBOARD DOWN ARROW UP ----> THIS.JUMP
-    public override destroy(
-        options: boolean | IDestroyOptions | undefined
-    ): void {
+    public override destroy(options: boolean | IDestroyOptions | undefined): void {
         super.destroy(options);
         this.initKeyboardEvents(false);
     }
 
-    //  MOVIMIENTOS
     public override update(deltaMS: number, _terrain?: string): void {
         super.update(deltaMS / 100, _terrain);
         this.animations.update(deltaMS / (1000 / 60));
@@ -369,8 +365,24 @@ export class Player extends PhysicsContainer implements IHitBox {
     }
 
     public stopPunch(): void {
-        this.idlePlayer();
         this.speed.x = this.speed.x / 2;
+        if (this.speed.x != 0) {
+            if (this.canJump) {
+                if (this.swimming) {
+                    this.animations.playState("swim");
+                } else {
+                    this.animations.playState("run");
+                }
+            } else {
+                this.animations.playState("jump");
+            }
+        } else {
+            if (this.swimming) {
+                this.animations.playState("float");
+            } else {
+                this.animations.playState("idle");
+            }
+        }
     }
 
     public stopBow(): void {

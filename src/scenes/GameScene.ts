@@ -703,8 +703,8 @@ export class GameScene extends SceneBase implements IUpdateable {
     const fin = checkCollision(this.player, this.chest);
     if (fin != null) {
       this.gotToChest = true;
-      if (Level.Complete === 1) {
-        Level.Complete = 2;
+      if (Level.CanPlay === 1) {
+        Level.CanPlay = 2;
       }
       this.chest.destroy();
       this.addChild(this.win);

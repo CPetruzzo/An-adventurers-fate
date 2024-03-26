@@ -1,107 +1,56 @@
-import { Graphics, Text, TextStyle, Texture } from "pixi.js";
+import { Sprite, Text } from "pixi.js";
 import { Tween } from "tweedle.js";
 import { PointButton } from "../ui/PointButton";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
-import { SoundNames, playSFX, stopSFX } from "../utils/SoundParams";
+import { SoundNames, stopSFX } from "../utils/SoundParams";
 import { sound } from "@pixi/sound";
+import { LETRA6, LETRA7 } from "../utils/constants";
+import { createPointButton } from "../utils/FunctionManager";
+import { createText } from "../utils/TextParams";
 
 export class TextScene extends SceneBase {
   private buttonMouse: PointButton;
   public mostrarEscrito: boolean = false;
-  public buttonText: PointButton;
-  public fondo: Graphics;
 
-  public title: Text;
-  public title2: Text;
   public title3: Text = new Text("");
-
-  public panelTexto: Graphics;
-  public panelTexto2: Graphics;
 
   constructor() {
     super();
 
-    this.fondo = new Graphics();
-    this.fondo.beginFill(0xff3, 1);
-    this.fondo.drawRect(0, SceneManager.HEIGHT - 350, SceneManager.WIDTH, 350);
-    this.fondo.endFill();
+    const background = Sprite.from("PETRUZZO");
+    background.anchor.set(0.5);
+    background.scale.set(SceneManager.HEIGHT / background.height)
+    background.position.set(SceneManager.WIDTH / 2, SceneManager.HEIGHT / 2)
+    this.addChild(background);
 
-    const TangerineTitle = new TextStyle({
-      fontFamily: "Letra5",
-      fontSize: 60,
-      fill: 0x111,
-    });
+    this.buttonMouse = createPointButton({ scale: 0.2, textureClick: "EMPTY_BUTTON", textureNameDef: "EMPTY_BUTTON", textureOver: "EMPTY_BUTTON", x: SceneManager.WIDTH - 100, y: 50 }, "pointerClick", this.onButtonClick, this, "Return", LETRA6);
 
-    this.buttonMouse = new PointButton(
-      Texture.from("BACK.png"),
-      Texture.from("BACK hundido.png"),
-      Texture.from("BACK.png")
-    );
-    this.buttonMouse.x = SceneManager.WIDTH - this.buttonMouse.width / 4;
-    this.buttonMouse.y = this.buttonMouse.height / 4;
-    this.buttonMouse.scale.x = 0.5;
-    this.buttonMouse.scale.y = 0.5;
-    this.buttonMouse.on("pointerClick", this.onButtonClick, this);
+    const myInfoES = createText({ text: `Este juego fue \ndesarrollado por \nFacundo Wegher`, style: LETRA7, position: { x: SceneManager.WIDTH * 0.5 - 225, y: 505 } });
+    myInfoES.style.align = "center";
+    myInfoES.alpha = 0;
+    const myInfoEN = createText({ text: `This game was \ndeveloped by \nFacundo Wegher`, style: LETRA7, position: { x: SceneManager.WIDTH * 0.5 - 200, y: 505 } });
+    myInfoEN.style.align = "center";
+    this.addChild(myInfoEN, myInfoES);
 
-    this.buttonText = new PointButton(
-      Texture.from("READ"),
-      Texture.from("READ hundido.png"),
-      Texture.from("READ.png")
-    );
-    this.buttonText.scale.x = 0.5;
-    this.buttonText.scale.y = 0.5;
-    this.buttonText.x = this.fondo.width - this.buttonText.width / 2;
-    this.buttonText.y =
-      SceneManager.HEIGHT - this.fondo.height + this.buttonText.height / 2;
-    // this.buttonText.on("pointerClick", this.showText, this);
-    this.buttonText.on("pointerClick", this.onButtonText, this);
+    new Tween(myInfoEN)
+      .delay(2500)
+      .repeatDelay(2500)
+      .to({ alpha: 0 }, 1500)
+      .start()
+      .yoyo(true)
+      .repeat(Infinity)
 
-
-    // "This is Arek the great's story, the one that nobody",
-    this.title = new Text(
-      "This is a way that tweens alpha value",
-      TangerineTitle
-    );
-    this.title.position.x = SceneManager.WIDTH / 2 - this.title.width / 2;
-    this.title.position.x = 0;
-    this.title.position.y = SceneManager.HEIGHT - 300;
-
-    this.title2 = new Text(
-      "This is another way that tweens mask position",
-      TangerineTitle
-    );
-    this.title2.position.x = 0;
-    this.title2.position.y = this.title.y + this.title.height;
-
-    this.title3 = new Text(
-      "",
-      TangerineTitle
-    );
-    this.title3.position.x = 0;
-    this.title3.position.y = this.title2.y + this.title2.height;
-
-    this.panelTexto = new Graphics();
-    this.panelTexto.beginFill(0xff3, 1);
-    this.panelTexto.drawRect(
-      this.title.position.x + this.title.width,
-      this.title.position.y,
-      -this.title.width,
-      this.title.height
-    );
-    this.panelTexto.endFill();
-
-    this.panelTexto2 = new Graphics();
-    this.panelTexto2.beginFill(0xff3, 1);
-    this.panelTexto2.drawRect(
-      this.title2.position.x + this.title2.width,
-      this.title2.position.y,
-      -this.title2.width,
-      this.title.height
-    );
-    this.panelTexto2.endFill();
+    new Tween(myInfoES)
+      .delay(2500)
+      .repeatDelay(2500)
+      .from({ alpha: 0 })
+      .to({ alpha: 1 }, 1500)
+      .start()
+      .yoyo(true)
+      .repeat(Infinity)
 
     Keyboard.down.on("Backspace", () => {
       this.onButtonClick();
@@ -109,15 +58,10 @@ export class TextScene extends SceneBase {
 
     Keyboard.down.off("Backspace", () => { });
 
+    this.title3.style = LETRA6
     this.addChild(
-      this.fondo,
-      this.title,
-      this.title2,
       this.title3,
       this.buttonMouse,
-      this.panelTexto,
-      this.panelTexto2,
-      this.buttonText
     );
   }
 
@@ -129,36 +73,6 @@ export class TextScene extends SceneBase {
     } else {
       Keyboard.down.off("Backspace", () => { });
     }
-  }
-
-  public onButtonText() {
-    this.soundWriting();
-    new Tween(this.panelTexto)
-      // .to({ x: 1280 }, 3500)
-      .to({ alpha: 0 }, 2500)
-      .start()
-      .onComplete(this.onButtonText2.bind(this));
-  }
-
-  private soundWriting(): void {
-    playSFX(SoundNames.WRITE, {});
-  }
-
-  private onButtonText2(): void {
-    new Tween(this.title).to({ alpha: 0 }, 2500).start();
-    new Tween(this.panelTexto2)
-      .to({ x: this.title2.width }, 2500)
-      .start()
-      .onComplete(this.onButtonTextStop.bind(this));
-  }
-
-  private onButtonTextStop(): void {
-    new Tween(this.title2)
-      .to({ alpha: 0 }, 2000)
-      .start()
-      .onComplete(() => {
-        this.showText();
-      });
   }
 
   public update(): void { }
@@ -189,7 +103,7 @@ export class TextScene extends SceneBase {
             .onUpdate(() => {
               const partialText = subtexto.slice(0, i + 1).join('');
               this.title3.text = partialText;
-              console.log('this.title.text', this.title.text)
+              console.log('this.title.text', this.title3.text)
             })
             .start()
             .onComplete(() => {
@@ -198,7 +112,7 @@ export class TextScene extends SceneBase {
                 stopSFX(SoundNames.WRITE);
               }
             });
-          sound.play(SoundNames.JUMP, { speed: 2, volume: 0.2});
+          sound.play(SoundNames.JUMP, { speed: 2, volume: 0.2 });
         }, delay);
         delay += 50;
       }

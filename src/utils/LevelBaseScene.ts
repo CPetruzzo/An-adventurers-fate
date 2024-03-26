@@ -137,7 +137,6 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
         this.addChild(this.world);
 
         this.levelSprite = Sprite.from(`Level_${levelNumber - 1}`);
-        console.log('`Level_${levelNumber - 1}`', `Level_${levelNumber - 1}`)
         let screenRelation = SceneManager.HEIGHT / this.levelSprite.height;
         if (levelNumber === 4) {
             screenRelation = SceneManager.HEIGHT * 2 / this.levelSprite.height;
@@ -160,6 +159,7 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             });
 
         Level.CurrentLevel = levelNumber;
+        Player._hp = Player._maxHealth;
         console.log("Current Level: ", Player.getLevel());
         console.log(
             "this.playerBardo.levelPoints.requiredPoints",
@@ -410,10 +410,12 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
 
         if (this.gameOver) {
             stopAllSFX();
-            playSound("PartingBGM", { loop: true, volume: 0.05 });
-            SceneManager.changeScene(new GameOverScene());
             stopSounds(["GameBGM"]);
             this.player.initKeyboardEvents(false);
+            if (Player._hp <= 0) {
+                playSound("PartingBGM", { loop: true, volume: 0.05 });
+                SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+            }
             return;
         }
 
@@ -476,11 +478,6 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
             if (overlap != null) {
                 this.player.getPlayerHurt(0.1);
                 this.changePlayerHP();
-
-                if (Player._hp <= 0) {
-                    SceneManager.changeScene(new GameOverScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
-                }
-
                 this.player.swimming = true;
                 this.terrain = "WATER";
                 break;
@@ -590,17 +587,22 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
     private endStage(): void {
         const fin = checkCollision(this.player, this.chest);
         if (fin != null) {
-            if (Level.Complete === 3) {
-                Level.Complete = 4;
-                console.log(Level.CurrentLevel);
-            }
-            if (Level.Complete === 2) {
-                Level.Complete = 3;
-                console.log(Level.CurrentLevel);
-            }
-            if (Level.Complete === 1) {
-                Level.Complete = 2;
-                console.log(Level.CurrentLevel);
+            switch (Level.CanPlay) {
+                case 1:
+                    Level.CanPlay = 2;
+                    break;
+                case 2:
+                    Level.CanPlay = 3;
+                    break;
+                case 3:
+                    Level.CanPlay = 4;
+                    break;
+                case 4:
+                    Level.CanPlay = 4;
+                    break;
+                default:
+                    Level.CanPlay = 1;
+                    break;
             }
             this.gotToChest = true;
             this.chest.destroy();
@@ -708,6 +710,11 @@ export class LevelBaseScene extends SceneBase implements IUpdateable {
         this.barra.scale.set(0.45);
         this.barra.position.set(this.playerBGIMG.width, 0);
         this.addChild(this.barra);
+
+        if (Player._hp <= 0) {
+            this.gameOver = true;
+            console.log('this.gameOver', this.gameOver)
+        }
     }
     /** Movimiento del enemigo hacia la izquierda */
     private arekToLeft(): void {

@@ -10,6 +10,7 @@ import { Inventory, InventoryItem, Weapon } from "../games/Inventory";
 import { SpecialItem } from "../games/Items/SpecialItem";
 import { TransitionScene, TransitionTypes } from "../utils/TransitionScene";
 import { TRANSITION_TIME } from "../utils/constants";
+import { EndStoryScene } from "./EndStoryScene";
 
 export class WinScene extends Container {
     private box: PointButton;
@@ -21,7 +22,7 @@ export class WinScene extends Container {
     constructor() {
         super();
         stopAllSFX();
-        console.log("lalala", Level.Complete)
+        console.log("lalala", Level.CanPlay)
 
         const background = Sprite.from("EMPTY_BANNER");
         background.anchor.set(0.5);
@@ -139,12 +140,12 @@ export class WinScene extends Container {
                 console.log('item', item);
                 break;
             case 3:
-                item = new SpecialItem(1);
-                console.log('item', item);
+                item = new SpecialItem(1, "you can now fly through water", "wings");
+                console.log('item', item.name);
                 break;
             default:
                 item = new SpecialItem(1);
-                console.log('item', item);
+                console.log('item', item.name);
                 break;
         }
         Inventory.getInstance().addItem(item);
@@ -156,7 +157,11 @@ export class WinScene extends Container {
     public nextStage(): void {
         sound.stop("GameBGM");
         sound.stop("ItemBGM");
-        SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+        if (Level.CurrentLevel === 4) {
+            SceneManager.changeScene(new EndStoryScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+        } else {
+            SceneManager.changeScene(new MapScene(), new TransitionScene(TRANSITION_TIME, TransitionTypes.FADE));
+        }
     }
 }
 

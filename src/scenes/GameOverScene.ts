@@ -6,6 +6,9 @@ import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
 import { GameStartScene } from "./GameStartScene";
 import { Keyboard } from "../utils/Keyboard";
+import { createPointButton, createSprite } from "../utils/FunctionManager";
+import { createText } from "../utils/TextParams";
+import { LETRA7 } from "../utils/constants";
 
 export class GameOverScene extends SceneBase {
   private buttonSound: ToggleButton;
@@ -16,7 +19,12 @@ export class GameOverScene extends SceneBase {
     super();
 
     //Habillity Circle
-    this.BG = new Sprite(Texture.from("LOSE"));
+
+    this.BG = createSprite({ texture: "LOSE", anchor: { x: 0.5, y: 0.5 }, scale: { x: 1.25, y: 1.25 }, position: { x: SceneManager.WIDTH * 0.5, y: SceneManager.HEIGHT * 0.11 } })
+
+    const tryAgain = createText({text: "Don't give up, try again, you can do it", style: LETRA7, position: {x: SceneManager.WIDTH * 0.5, y: SceneManager.HEIGHT * 0.2}})
+    tryAgain.anchor.set(0.5);
+    tryAgain.style.align = "center";
 
     // Sound ON-OFF
     this.buttonSound = new ToggleButton(
@@ -31,20 +39,11 @@ export class GameOverScene extends SceneBase {
       console.log("toggle changed to:", newState);
     });
 
-    this.lose = new PointButton(
-      Texture.from("BACK.png"),
-      Texture.from("BACK hundido.png"),
-      Texture.from("BACK.png")
-    );
-    this.lose.x = 650;
-    this.lose.y = 400;
-    this.lose.scale.x = 0.5;
-    this.lose.scale.y = 0.5;
-    this.lose.on("pointerClick", this.onLoseClick, this);
+    this.lose = createPointButton({ textureClick: "EMPTY_BUTTON", textureNameDef: "EMPTY_BUTTON", textureOver: "EMPTY_BUTTON", x: 200, y: 500, scale: 0.2 }, "pointerClick", this.onLoseClick, this, "Go Back")
 
     Keyboard.down.on("Enter", () => this.onLoseClick());
 
-    this.addChild(this.BG, this.buttonSound, this.lose);
+    this.addChild(this.BG, tryAgain, this.buttonSound, this.lose);
   }
 
   public onLoseClick(): void {
@@ -53,5 +52,5 @@ export class GameOverScene extends SceneBase {
     sound.stop("PartingBGM");
   }
 
-  public update(): void {}
+  public update(): void { }
 }

@@ -4,16 +4,16 @@ import { Player } from "../games/Player";
 import { SceneManager } from "./SceneManager";
 
 // Función para obtener el nombre del jugador desde el almacenamiento local
+export let playername: string; 
 export function getPlayerName(): string {
     const storedName = localStorage.getItem("playerName");
-    let playerName: string;
     if (storedName === null || storedName === "") {
-        playerName = prompt("Introduce tu nombre") || "Jugador";
-        localStorage.setItem("playerName", playerName);
+        playername = prompt("Introduce tu nombre") || "Jugador";
+        localStorage.setItem("playerName", playername);
     } else {
-        playerName = storedName;
+        playername = storedName;
     }
-    return playerName;
+    return playername;
 }
 
 export interface TextParams {

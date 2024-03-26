@@ -419,109 +419,55 @@
         "type": "Tile",
         "width": 15,
         "height": 20,
-        "posX": 5000,
-        "posY": 100,
-        "sizeX": 600,
-        "sizeY": 1350
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 5000,
-        "posY": 100,
-        "sizeX": 5000,
-        "sizeY": 1350
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 300,
+        "posX": 1000,
         "posY": 120,
-        "sizeX": 2100,
-        "sizeY": 450
+        "sizeX": 520,
+        "sizeY": 1375
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 305,
-        "posY": 50,
-        "sizeX": 2400,
-        "sizeY": 500
+        "posX": 5000,
+        "posY": 100,
+        "sizeX": 4250,
+        "sizeY": 1375
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 150,
-        "posY": 50,
-        "sizeX": 2705,
-        "sizeY": 590
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 500,
-        "posY": 20,
-        "sizeX": 3730,
-        "sizeY": 270
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 2000,
-        "posY": 50,
-        "sizeX": 3900,
-        "sizeY": 660
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 850,
-        "posY": 50,
-        "sizeX": 5400,
-        "sizeY": 585
-      },
-      {
-        "type": "Tile",
-        "width": 30,
-        "height": 30,
-        "posX": 1200,
-        "posY": 30,
+        "posX": 400,
+        "posY": 100,
         "sizeX": 6500,
-        "sizeY": 655
+        "sizeY": 1200
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 390,
-        "posY": 30,
-        "sizeX": 6600,
-        "sizeY": 435
+        "posX": 70,
+        "posY": 100,
+        "sizeX": 7100,
+        "sizeY": 1025
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 500,
-        "posY": 30,
-        "sizeX": 7400,
-        "sizeY": 570
+        "posX": 2200,
+        "posY": 100,
+        "sizeX": 8200,
+        "sizeY": 1330
       },
       {
         "type": "Tile",
         "width": 30,
         "height": 30,
-        "posX": 180,
-        "posY": 30,
-        "sizeX": 3230,
-        "sizeY": 340
+        "posX": 100,
+        "posY": 300,
+        "sizeX": 1375,
+        "sizeY": 1290
       },
       {
         "type": "Tile",
