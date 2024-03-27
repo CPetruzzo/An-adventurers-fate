@@ -1,0 +1,1 @@
+If you're interested in using this repo as a template you can do it with the "Use this as template" button. Feel free to use it, to share your usage and to send PR to improve it. Hope you like it! Thanks!
